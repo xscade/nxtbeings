@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
 :root {
+  /* Light mode defaults (can be used for sections) */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  
+  /* Brand Colors - Deep Blue/Indigo "AI" theme */
+  --primary: #2563eb; /* Royal Blue */
+  --primary-foreground: #ffffff;
+  
+  --secondary: #f8fafc;
+  --secondary-foreground: #0f172a;
+
+  --accent: #4f46e5; /* Indigo */
+  --accent-foreground: #ffffff;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617; /* Very dark slate/blue */
+    --foreground: #f8fafc;
+
+    --primary: #3b82f6; /* Brighter blue for dark mode */
+    --primary-foreground: #ffffff;
+
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+
+    --accent: #6366f1;
+    --accent-foreground: #ffffff;
+
+    --muted: #0f172a;
+    --muted-foreground: #94a3b8;
+
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
