@@ -125,9 +125,9 @@ export function IndustryNetworkSection() {
             viewport={{ once: true }}
             className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6"
           >
-            Connecting Companies with AI Talent <br />
+            We connect companies with <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              Across Every Industry
+              AI Literate Professionals
             </span>
           </motion.h2>
           <p className="text-slate-500 text-lg">
