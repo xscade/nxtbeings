@@ -1,59 +1,111 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Brain, Code2, Cpu, Globe, Sparkles, Users } from 'lucide-react';
-
-const features = [
-  {
-    name: 'AI-Native Portfolios',
-    description: 'Showcase your LLM projects, RAG implementations, and model fine-tuning with specialized portfolio widgets.',
-    icon: Brain,
-  },
-  {
-    name: 'Verified Skills',
-    description: 'Algorithmic skill verification ensures the talent you see is the talent you get. No fluff.',
-    icon: Code2,
-  },
-  {
-    name: 'Global Talent Pool',
-    description: 'Access a borderless network of researchers and engineers from top institutions and tech hubs.',
-    icon: Globe,
-  },
-];
+import React from "react";
+import { Aperture, BarChart3, LayoutGrid, Activity, Layers } from "lucide-react";
 
 export function Features() {
   return (
-    <div className="py-24 bg-white relative">
-       <div className="absolute inset-0 bg-grid-slate-200/[0.5] bg-[length:50px_50px]" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Why NxtBeing?</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto">
-            Traditional platforms aren't built for the nuances of AI engineering. We are.
-          </p>
-        </div>
+    <div className="relative w-full bg-background text-foreground transition-colors duration-500">
+      <div className="relative mx-auto max-w-6xl px-6 py-20">
+        <header className="mb-10 flex flex-col gap-6 border-b border-border pb-6 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-2">
+            <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
+              Core Features
+            </span>
+            <h2 className="text-3xl font-black tracking-tight md:text-5xl">
+              Built for the Intelligence Age
+            </h2>
+          </div>
+          <div className="flex flex-col items-start gap-4 md:items-end">
+            <p className="max-w-sm text-sm text-muted-foreground md:text-base">
+              A platform designed to showcase the skills that matter most in the new era of technology.
+            </p>
+          </div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-lg bg-sky-100 flex items-center justify-center mb-6">
-                <feature.icon className="w-6 h-6 text-sky-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">{feature.name}</h3>
-              <p className="text-slate-600 leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 gap-3 md:auto-rows-[minmax(120px,auto)] md:grid-cols-6">
+          <FeatureItem
+            title="Verified Skills"
+            blurb="AI-verified credentials ensure that every profile you see represents real, tested expertise."
+            meta="Trust"
+            icon={Aperture}
+            span="md:col-span-4 md:row-span-2"
+          />
+          <FeatureItem
+            title="Global Talent"
+            blurb="Access a worldwide network of engineers and researchers."
+            meta="Reach"
+            icon={LayoutGrid}
+            span="md:col-span-2 md:row-span-1"
+          />
+          <FeatureItem
+            title="Instant Hire"
+            blurb="Direct messaging and contract tools built-in."
+            meta="Speed"
+            icon={Activity}
+            span="md:col-span-2 md:row-span-1"
+          />
+          <FeatureItem
+            title="Project Showcase"
+            blurb="Rich media portfolios to demonstrate complex AI implementations."
+            meta="Depth"
+            icon={Layers}
+            span="md:col-span-3 md:row-span-1"
+          />
+          <FeatureItem
+            title="Smart Matching"
+            blurb="Our algorithms match your needs with the perfect candidate."
+            meta="Match"
+            icon={BarChart3}
+            span="md:col-span-3 md:row-span-1"
+          />
         </div>
       </div>
     </div>
   );
 }
+
+function FeatureItem({ 
+  title, 
+  blurb, 
+  meta, 
+  icon: Icon, 
+  span = "" 
+}: { 
+  title: string, 
+  blurb: string, 
+  meta: string, 
+  icon: any, 
+  span?: string 
+}) {
+  return (
+    <article
+      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-md ${span}`}
+    >
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background">
+          <Icon
+            className="h-6 w-6 text-foreground"
+            strokeWidth={1.5}
+          />
+        </div>
+        <div className="flex-1">
+          <header className="flex items-start gap-3">
+            <h3 className="text-base font-semibold uppercase tracking-wide text-foreground">
+              {title}
+            </h3>
+            {meta && (
+              <span className="ml-auto rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                {meta}
+              </span>
+            )}
+          </header>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {blurb}
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+}
+

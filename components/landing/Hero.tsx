@@ -1,80 +1,91 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/Button';
-import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
 
 export function Hero() {
   return (
-    <div className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24 lg:pb-32 bg-gradient-to-b from-[#020617] to-[#172554]">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]" />
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-20 overflow-hidden bg-background">
+      {/* Background Effects - Subtle for Light Mode */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
       </div>
 
-      <div className="absolute inset-0 -z-10">
-         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full opacity-50 pointer-events-none" />
-         <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-cyan-500/10 blur-[100px] rounded-full opacity-30 pointer-events-none" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary backdrop-blur-md font-medium"
         >
-          <span className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium bg-white/5 border border-white/10 text-cyan-300 mb-8 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 mr-2 animate-pulse" />
-            The World's First AI-Native Talent Network
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
+          The World's First AI-Native Talent Network
         </motion.div>
-        
-        <motion.h1 
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-8"
+
+        {/* Headline */}
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-5xl md:text-7xl font-bold tracking-tight text-foreground"
         >
-          Hire the Builders of the <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Intelligence Age</span>
+          Hire the Builders of the <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
+            Intelligence Age
+          </span>
         </motion.h1>
-        
-        <motion.p 
-          className="max-w-2xl mx-auto text-xl text-gray-400 mb-10"
+
+        {/* Subheadline */}
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
         >
-          NxtBeing is the premium directory for AI engineers, researchers, and creative technologists. Verified skills, enterprise-grade portfolios.
+          NxtBeing is the premium directory for AI engineers, researchers, and creative
+          technologists. Verified skills, enterprise-grade portfolios.
         </motion.p>
-        
-        <motion.div 
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+
+        {/* CTA Buttons */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-col sm:flex-row gap-4 w-full justify-center"
         >
-          <Button size="lg" className="min-w-[160px]">Find Talent</Button>
-          <Button variant="outline" size="lg" className="min-w-[160px]">Create Portfolio</Button>
+          <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
+            Find Talent
+          </Button>
+          <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
+            Create Portfolio
+          </Button>
         </motion.div>
 
-        <motion.div 
-           className="mt-16 flex justify-center gap-8 text-sm text-gray-500"
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 1 }}
-           transition={{ duration: 1, delay: 0.5 }}
+        {/* Footer Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex flex-wrap justify-center gap-8 pt-8 text-sm text-muted-foreground font-medium"
         >
-           <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Verified Credentials
-           </div>
-           <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Top 1% AI Talent
-           </div>
-           <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Enterprise Ready
-           </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-primary" />
+            <span>Verified Credentials</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-primary" />
+            <span>Top 1% AI Talent</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-primary" />
+            <span>Enterprise Ready</span>
+          </div>
         </motion.div>
       </div>
     </div>
