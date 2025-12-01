@@ -7,7 +7,7 @@ export function Navbar() {
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
           <Link href="/" className="text-xl font-bold tracking-tight text-foreground">
-            NxtBeing
+            NxtBeings
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
             <Link href="#" className="hover:text-primary transition-colors">

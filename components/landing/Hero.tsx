@@ -8,18 +8,52 @@ export function Hero() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-20 overflow-hidden bg-background">
       {/* Background Effects - Subtle for Light Mode */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Main Center Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
+        
+        {/* Floating Gradients */}
+        <motion.div 
+          animate={{ 
+            y: [0, -50, 0],
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity,
+            ease: "easeInOut" 
+          }}
+          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-blue-400/20 rounded-full blur-[80px]"
+        />
+        <motion.div 
+          animate={{ 
+            y: [0, 50, 0],
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{ 
+            duration: 15, 
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[100px]"
+        />
+        
+        {/* Glassmorphic Overlay Effect */}
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px]" />
+        
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8 pointer-events-none">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary backdrop-blur-md font-medium"
+          className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary backdrop-blur-md font-medium pointer-events-auto"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -35,9 +69,9 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-5xl md:text-7xl font-bold tracking-tight text-foreground"
         >
-          Hire the Builders of the <br />
+          Hire Professionals with<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
-            Intelligence Age
+          AI Skills
           </span>
         </motion.h1>
 
@@ -57,7 +91,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-4 w-full justify-center"
+          className="flex flex-col sm:flex-row gap-4 w-full justify-center pointer-events-auto"
         >
           <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
             Find Talent
@@ -91,4 +125,3 @@ export function Hero() {
     </div>
   );
 }
-

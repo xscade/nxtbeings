@@ -5,19 +5,19 @@ import { Aperture, BarChart3, LayoutGrid, Activity, Layers } from "lucide-react"
 
 export function Features() {
   return (
-    <div className="relative w-full bg-background text-foreground transition-colors duration-500">
+    <div className="relative w-full bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 text-white transition-colors duration-500">
       <div className="relative mx-auto max-w-6xl px-6 py-20">
-        <header className="mb-10 flex flex-col gap-6 border-b border-border pb-6 md:flex-row md:items-end md:justify-between">
+        <header className="mb-10 flex flex-col gap-6 border-b border-white/20 pb-6 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-2">
-            <span className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
+            <span className="text-xs uppercase tracking-[0.35em] text-blue-100/80">
               Core Features
             </span>
-            <h2 className="text-3xl font-black tracking-tight md:text-5xl">
+            <h2 className="text-3xl font-black tracking-tight md:text-5xl text-white">
               Built for the Intelligence Age
             </h2>
           </div>
           <div className="flex flex-col items-start gap-4 md:items-end">
-            <p className="max-w-sm text-sm text-muted-foreground md:text-base">
+            <p className="max-w-sm text-sm text-blue-100 md:text-base">
               A platform designed to showcase the skills that matter most in the new era of technology.
             </p>
           </div>
@@ -80,27 +80,27 @@ function FeatureItem({
 }) {
   return (
     <article
-      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-md ${span}`}
+      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/10 p-5 shadow-sm transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-md backdrop-blur-sm ${span}`}
     >
       <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10">
           <Icon
-            className="h-6 w-6 text-foreground"
+            className="h-6 w-6 text-white"
             strokeWidth={1.5}
           />
         </div>
         <div className="flex-1">
           <header className="flex items-start gap-3">
-            <h3 className="text-base font-semibold uppercase tracking-wide text-foreground">
+            <h3 className="text-base font-semibold uppercase tracking-wide text-white">
               {title}
             </h3>
             {meta && (
-              <span className="ml-auto rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+              <span className="ml-auto rounded-full border border-white/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.3em] text-blue-100/80">
                 {meta}
               </span>
             )}
           </header>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-2 text-sm leading-relaxed text-blue-100">
             {blurb}
           </p>
         </div>
