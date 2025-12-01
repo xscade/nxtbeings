@@ -254,7 +254,7 @@ export function TalentDiscoverySection() {
                   Discover 20,000+ <br /> More Talent
                 </h3>
                 <p className="text-blue-100 mb-8">
-                  in the NxtBeing Network
+                  in the NxtBeings Network
                 </p>
                 <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold w-full">
                   Discover Talent
