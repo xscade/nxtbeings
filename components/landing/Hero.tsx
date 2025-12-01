@@ -82,7 +82,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
         >
-          NxtBeing is the premium directory for AI engineers, researchers, and creative
+          Nxtbeings is the premium directory for AI engineers, researchers, and creative
           technologists. Verified skills, enterprise-grade portfolios.
         </motion.p>
 

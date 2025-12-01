@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold tracking-tight">NxtBeing</h3>
+            <h3 className="text-lg font-bold tracking-tight">Nxtbeings</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               The premium directory for AI engineers, researchers, and creative technologists.
               Building the future, one connection at a time.
@@ -61,7 +61,7 @@ export function Footer() {
         
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} NxtBeing. All rights reserved.
+            © {new Date().getFullYear()} Nxtbeings. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>Made with</span>
@@ -73,4 +73,3 @@ export function Footer() {
     </footer>
   );
 }
-
