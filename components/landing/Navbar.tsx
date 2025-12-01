@@ -34,6 +34,12 @@ const companyServices = [
   { name: "Enterprise", icon: Building2, href: "#", description: "Custom solutions for large teams" },
 ];
 
+const talentServices = [
+  { name: "Join as Talent", icon: Sparkles, href: "/for-talent", description: "Get verified and access premium projects" },
+  { name: "Create Portfolio", icon: Palette, href: "#", description: "Showcase your AI expertise" },
+  { name: "Upskill Yourself", icon: GraduationCap, href: "/upskill", description: "Learn cutting-edge AI skills" },
+];
+
 const whyNxtbeings = [
   { name: "Verified Professionals", icon: ShieldCheck, href: "#" },
   { name: "Global Talent Pool", icon: Globe2, href: "#" },
@@ -188,6 +194,48 @@ export function Navbar() {
                 </AnimatePresence>
               </div>
 
+              {/* For Talent Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setActiveMenu("talent-services")}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100/80">
+                  For Talent
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeMenu === "talent-services" ? "rotate-180" : ""}`} />
+                </button>
+
+                <AnimatePresence>
+                  {activeMenu === "talent-services" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute top-full left-0 pt-2"
+                    >
+                      <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 p-2 w-80">
+                        {talentServices.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                              <item.icon className="w-5 h-5" strokeWidth={1.5} />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-slate-900">{item.name}</div>
+                              <div className="text-xs text-slate-500">{item.description}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {/* Simple Links */}
               <Link href="#" className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100/80">
                 Blog
@@ -258,6 +306,23 @@ export function Navbar() {
                     <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">For Companies</div>
                     <div className="space-y-1">
                       {companyServices.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <item.icon className="w-5 h-5 text-slate-400" />
+                          <span className="text-sm font-medium text-slate-700">{item.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">For Talent</div>
+                    <div className="space-y-1">
+                      {talentServices.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
