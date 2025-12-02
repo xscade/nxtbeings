@@ -22,10 +22,10 @@ import {
 } from "lucide-react";
 
 const talentCategories = [
-  { name: "Developers", icon: Code2, href: "#", description: "AI Engineers, ML Ops, Full Stack" },
-  { name: "Designers", icon: Palette, href: "#", description: "UX/UI, Product, Generative Art" },
-  { name: "Data Scientists", icon: TrendingUp, href: "#", description: "Analytics, Research, NLP" },
-  { name: "Consultants", icon: Briefcase, href: "#", description: "Strategy, Implementation, Ethics" },
+  { name: "Developers", icon: Code2, href: "/browse?category=development", description: "AI Engineers, ML Ops, Full Stack" },
+  { name: "Designers", icon: Palette, href: "/browse?category=design", description: "UX/UI, Product, Generative Art" },
+  { name: "Data Scientists", icon: TrendingUp, href: "/browse?category=ai", description: "Analytics, Research, NLP" },
+  { name: "Consultants", icon: Briefcase, href: "/browse?category=support", description: "Strategy, Implementation, Ethics" },
 ];
 
 const companyServices = [
@@ -35,8 +35,8 @@ const companyServices = [
 ];
 
 const talentServices = [
-  { name: "Join as Talent", icon: Sparkles, href: "/for-talent", description: "Get verified and access premium projects" },
-  { name: "Create Portfolio", icon: Palette, href: "#", description: "Showcase your AI expertise" },
+  { name: "Join as Talent", icon: Sparkles, href: "/get-started", description: "Get verified and access premium projects" },
+  { name: "Create Portfolio", icon: Palette, href: "/get-started", description: "Showcase your AI expertise" },
   { name: "Upskill Yourself", icon: GraduationCap, href: "/upskill", description: "Learn cutting-edge AI skills" },
 ];
 
@@ -100,7 +100,7 @@ export function Navbar() {
                         ))}
                         <div className="border-t border-slate-100 mt-2 pt-2">
                           <Link
-                            href="#"
+                            href="/browse"
                             className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors text-sm font-medium text-blue-600"
                           >
                             Browse All Talent
