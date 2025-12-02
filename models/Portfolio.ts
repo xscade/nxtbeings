@@ -5,12 +5,14 @@ export type LinkType = "github" | "linkedin" | "website" | "twitter" | "dribbble
 export type FileType = "video" | "pdf" | "image" | "document" | "other";
 
 export interface IPortfolioLink {
+  _id?: mongoose.Types.ObjectId;
   type: LinkType;
   url: string;
   title?: string;
 }
 
 export interface IPortfolioProject {
+  _id?: mongoose.Types.ObjectId;
   title: string;
   description?: string;
   techStack?: string[];
@@ -21,6 +23,7 @@ export interface IPortfolioProject {
 }
 
 export interface IPortfolioFile {
+  _id?: mongoose.Types.ObjectId;
   fileType: FileType;
   fileName: string;
   fileUrl: string;
