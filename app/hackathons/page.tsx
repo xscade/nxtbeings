@@ -798,13 +798,13 @@ export default function HackathonsPage() {
           </div>
 
           {/* Orbital Display */}
-          <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
+          <div className="relative max-w-4xl mx-auto h-[550px] md:h-[650px]">
             {/* SVG Semi-Circle Arcs - Stacked Downward */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 600" fill="none" preserveAspectRatio="xMidYMax meet">
-              {/* Arc 1 - Outermost */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 650" fill="none" preserveAspectRatio="xMidYMax meet">
+              {/* Arc 1 - Outermost (New) */}
               <motion.path
-                d="M 50 600 A 350 350 0 0 1 750 600"
-                stroke="rgba(255, 255, 255, 0.15)"
+                d="M 0 650 A 400 400 0 0 1 800 650"
+                stroke="rgba(255, 255, 255, 0.18)"
                 strokeWidth="1"
                 fill="none"
                 initial={{ pathLength: 0 }}
@@ -812,10 +812,21 @@ export default function HackathonsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
               />
-              {/* Arc 2 */}
+              {/* Arc 2 - Second Outermost (New) */}
               <motion.path
-                d="M 120 600 A 280 280 0 0 1 680 600"
-                stroke="rgba(255, 255, 255, 0.12)"
+                d="M 15 650 A 385 385 0 0 1 785 650"
+                stroke="rgba(255, 255, 255, 0.16)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
+              />
+              {/* Arc 3 - Original Outermost */}
+              <motion.path
+                d="M 50 650 A 350 350 0 0 1 750 650"
+                stroke="rgba(255, 255, 255, 0.15)"
                 strokeWidth="1"
                 fill="none"
                 initial={{ pathLength: 0 }}
@@ -823,9 +834,20 @@ export default function HackathonsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
               />
-              {/* Arc 3 */}
+              {/* Arc 4 - Original Middle */}
               <motion.path
-                d="M 200 600 A 200 200 0 0 1 600 600"
+                d="M 120 650 A 280 280 0 0 1 680 650"
+                stroke="rgba(255, 255, 255, 0.12)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
+              />
+              {/* Arc 5 - Original Innermost */}
+              <motion.path
+                d="M 200 650 A 200 200 0 0 1 600 650"
                 stroke="rgba(255, 255, 255, 0.1)"
                 strokeWidth="1"
                 fill="none"
@@ -834,37 +856,15 @@ export default function HackathonsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
               />
-              {/* Arc 4 */}
-              <motion.path
-                d="M 260 600 A 140 140 0 0 1 540 600"
-                stroke="rgba(255, 255, 255, 0.08)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
-              />
-              {/* Arc 5 - Innermost */}
-              <motion.path
-                d="M 310 600 A 90 90 0 0 1 490 600"
-                stroke="rgba(255, 255, 255, 0.06)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
-              />
             </svg>
 
-            {/* Orbiting Icons - 5 icons total, one per ring */}
+            {/* Orbiting Icons - 5 icons total on different arcs */}
             {[
-              { icon: Brain, radiusRatio: 0.583, startAngle: -60, duration: 20, delay: 0 },      // Ring 1 (outermost)
-              { icon: Globe, radiusRatio: 0.467, startAngle: 20, duration: 25, delay: 0.2 },     // Ring 2
-              { icon: Code, radiusRatio: 0.333, startAngle: -40, duration: 18, delay: 0.4 },    // Ring 3
-              { icon: Rocket, radiusRatio: 0.233, startAngle: 30, duration: 22, delay: 0.6 },   // Ring 4
-              { icon: Sparkles, radiusRatio: 0.15, startAngle: 0, duration: 15, delay: 0.8 },  // Ring 5 (innermost)
+              { icon: Brain, radiusRatio: 0.583, startAngle: -60, duration: 20, delay: 0 },
+              { icon: Globe, radiusRatio: 0.583, startAngle: 20, duration: 25, delay: 0.2 },
+              { icon: Code, radiusRatio: 0.467, startAngle: -40, duration: 18, delay: 0.4 },
+              { icon: Rocket, radiusRatio: 0.467, startAngle: 30, duration: 22, delay: 0.6 },
+              { icon: Sparkles, radiusRatio: 0.333, startAngle: 0, duration: 15, delay: 0.8 },
             ].map((item, i) => {
               const Icon = item.icon;
               const radiusRatio = item.radiusRatio;
