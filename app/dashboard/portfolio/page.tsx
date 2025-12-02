@@ -74,7 +74,7 @@ const fileTypes = [
 
 // Get icon for link type
 function getLinkIcon(type: string) {
-  const linkType = linkTypes.find(l => l.type === type || l.value === type);
+  const linkType = linkTypes.find(l => l.value === type);
   return linkType?.icon || LinkIcon;
 }
 
