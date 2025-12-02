@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
@@ -93,12 +94,16 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 w-full justify-center pointer-events-auto"
         >
-          <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
-            Find Talent
-          </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
-            Create Portfolio
-          </Button>
+          <Link href="/browse">
+            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
+              Find Talent
+            </Button>
+          </Link>
+          <Link href="/get-started">
+            <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
+              Create Portfolio
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Footer Badges */}

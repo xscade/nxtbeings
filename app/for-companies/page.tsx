@@ -120,10 +120,12 @@ export default function ForCompaniesPage() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 w-full justify-center"
           >
-            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
-              Browse Talent
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+            <a href="/browse">
+              <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
+                Browse Talent
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
             <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
               Book a Demo
             </Button>

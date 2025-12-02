@@ -32,10 +32,10 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Platform</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Find Talent</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Post a Job</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Pricing</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Success Stories</a></li>
+              <li><a href="/browse" className="hover:text-foreground transition-colors">Find Talent</a></li>
+              <li><a href="/for-companies" className="hover:text-foreground transition-colors">For Companies</a></li>
+              <li><a href="/upskill" className="hover:text-foreground transition-colors">Upskill</a></li>
+              <li><a href="/get-started" className="hover:text-foreground transition-colors">Get Started</a></li>
             </ul>
           </div>
 
