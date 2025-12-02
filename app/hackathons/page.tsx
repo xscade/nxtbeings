@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, animate } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
@@ -202,6 +202,151 @@ const faqs = [
   { q: "Do I need a team?", a: "You can go solo or form a team of up to 4. We have a Discord channel for team formation." },
   { q: "What resources are provided?", a: "Free API credits from OpenAI, Google, AWS. Cloud compute. 24/7 mentor access. All the tools you need." },
 ];
+
+// Orbiting Icon Component - Follows Arc Path
+function OrbitingIcon({ 
+  Icon, 
+  radiusRatio, 
+  startAngle, 
+  duration, 
+  delay 
+}: { 
+  Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  radiusRatio: number;
+  startAngle: number;
+  duration: number;
+  delay: number;
+}) {
+  const angle = useMotionValue(startAngle);
+  
+  // Transform angle to x and y positions along arc
+  const x = useTransform(angle, (a) => {
+    const angleRad = (a * Math.PI) / 180;
+    return radiusRatio * 100 * Math.sin(angleRad);
+  });
+  
+  const y = useTransform(angle, (a) => {
+    const angleRad = (a * Math.PI) / 180;
+    return radiusRatio * 100 * (1 - Math.cos(angleRad));
+  });
+  
+  // Animate angle along arc (semi-circle: 180° sweep)
+  React.useEffect(() => {
+    const controls = animate(angle, startAngle + 180, {
+      duration: duration,
+      repeat: Infinity,
+      repeatType: "reverse",
+      ease: "linear",
+    });
+    return () => controls.stop();
+  }, [angle, startAngle, duration]);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay, type: "spring", stiffness: 200 }}
+      className="absolute w-12 h-12 md:w-14 md:h-14"
+      style={{
+        left: '50%',
+        bottom: 0,
+        x: useTransform(x, (val) => `${val}%`),
+        y: useTransform(y, (val) => `-${val}%`),
+      }}
+    >
+      <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
+        <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
+      </div>
+    </motion.div>
+  );
+}
+
+// Responsive Orbital Display Component
+function OrbitalDisplay() {
+  // Mathematical Formula for Responsive Arc Calculation
+  // Formula: radius[i] = maxRadius - (i * spacingRatio)
+  // where spacingRatio = (maxRadius - minRadius) / (numArcs - 1)
+  // This ensures evenly spaced arcs regardless of screen size
+  const calculateArcs = () => {
+    const numArcs = 5;
+    const minRadiusRatio = 0.125;  // 12.5% of container height (innermost)
+    const maxRadiusRatio = 0.625; // 62.5% of container height (outermost)
+    const radiusRange = maxRadiusRatio - minRadiusRatio;
+    const spacingRatio = radiusRange / (numArcs - 1);
+    
+    // Calculate evenly spaced radii (outer to inner)
+    return Array.from({ length: numArcs }, (_, i) => {
+      return maxRadiusRatio - (i * spacingRatio);
+    });
+  };
+  
+  const arcRadii = calculateArcs();
+  
+  // Calculate SVG arc path - responsive to viewBox
+  const getArcPath = (radiusRatio: number) => {
+    const radius = radiusRatio * 600; // viewBox height is 600
+    const centerX = 400; // Center of viewBox width
+    const startX = centerX - radius;
+    const endX = centerX + radius;
+    return `M ${startX} 600 A ${radius} ${radius} 0 0 1 ${endX} 600`;
+  };
+  
+  // Icon configuration - evenly distributed angles along arcs
+  const iconConfig = [
+    { icon: Brain, arcIndex: 0, startAngle: -70, duration: 20, delay: 0 },
+    { icon: Globe, arcIndex: 1, startAngle: -35, duration: 25, delay: 0.2 },
+    { icon: Code, arcIndex: 2, startAngle: 0, duration: 18, delay: 0.4 },
+    { icon: Rocket, arcIndex: 3, startAngle: 35, duration: 22, delay: 0.6 },
+    { icon: Sparkles, arcIndex: 4, startAngle: 70, duration: 15, delay: 0.8 },
+  ];
+  
+  return (
+    <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
+      {/* SVG Semi-Circle Arcs - Responsive */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 600" fill="none" preserveAspectRatio="xMidYMax meet">
+        {arcRadii.map((radiusRatio, i) => (
+          <motion.path
+            key={`arc-${i}`}
+            d={getArcPath(radiusRatio)}
+            stroke="rgba(255, 255, 255, 0.15)"
+            strokeWidth="1"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: "easeOut", delay: i * 0.15 }}
+          />
+        ))}
+      </svg>
+
+      {/* Orbiting Icons - Following Arc Paths */}
+      {iconConfig.map((config, i) => (
+        <OrbitingIcon
+          key={`orbit-${i}`}
+          Icon={config.icon}
+          radiusRatio={arcRadii[config.arcIndex]}
+          startAngle={config.startAngle}
+          duration={config.duration}
+          delay={config.delay}
+        />
+      ))}
+
+      {/* Center Logo - At Focal Point (where all arcs converge) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 1, type: "spring", stiffness: 200 }}
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+      >
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center">
+          <span className="text-base md:text-lg font-bold text-blue-600">N</span>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function HackathonsPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -797,140 +942,8 @@ export default function HackathonsPage() {
             </p>
           </div>
 
-          {/* Orbital Display */}
-          <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
-            {/* SVG Semi-Circle Arcs - Stacked Downward - 5 Evenly Spaced Rings */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 600" fill="none" preserveAspectRatio="xMidYMax meet">
-              {/* Arc 1 - Outermost (radius: 375) */}
-              <motion.path
-                d="M 25 600 A 375 375 0 0 1 775 600"
-                stroke="rgba(255, 255, 255, 0.15)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-              />
-              {/* Arc 2 (radius: 300) */}
-              <motion.path
-                d="M 100 600 A 300 300 0 0 1 700 600"
-                stroke="rgba(255, 255, 255, 0.13)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.15 }}
-              />
-              {/* Arc 3 (radius: 225) */}
-              <motion.path
-                d="M 175 600 A 225 225 0 0 1 625 600"
-                stroke="rgba(255, 255, 255, 0.11)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-              />
-              {/* Arc 4 (radius: 150) */}
-              <motion.path
-                d="M 250 600 A 150 150 0 0 1 550 600"
-                stroke="rgba(255, 255, 255, 0.09)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.45 }}
-              />
-              {/* Arc 5 - Innermost (radius: 75) */}
-              <motion.path
-                d="M 325 600 A 75 75 0 0 1 475 600"
-                stroke="rgba(255, 255, 255, 0.07)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
-              />
-            </svg>
-
-            {/* Orbiting Icons - 5 icons total, one on each ring */}
-            {[
-              { icon: Brain, radiusRatio: 0.625, startAngle: -60, duration: 20, delay: 0 },      // Arc 1 (outermost)
-              { icon: Globe, radiusRatio: 0.5, startAngle: 20, duration: 25, delay: 0.2 },      // Arc 2
-              { icon: Code, radiusRatio: 0.375, startAngle: -40, duration: 18, delay: 0.4 },     // Arc 3
-              { icon: Rocket, radiusRatio: 0.25, startAngle: 30, duration: 22, delay: 0.6 },    // Arc 4
-              { icon: Sparkles, radiusRatio: 0.125, startAngle: 0, duration: 15, delay: 0.8 },  // Arc 5 (innermost)
-            ].map((item, i) => {
-              const Icon = item.icon;
-              const radiusRatio = item.radiusRatio;
-              const startAngle = item.startAngle;
-              
-              return (
-                <motion.div
-                  key={`orbit-${i}`}
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: item.delay, type: "spring", stiffness: 200 }}
-                  className="absolute inset-0"
-                  style={{
-                    transformOrigin: '50% 100%',
-                  }}
-                  animate={{
-                    rotate: [startAngle, startAngle + 360],
-                  }}
-                  transition={{
-                    rotate: {
-                      duration: item.duration,
-                      repeat: Infinity,
-                      ease: "linear",
-                    },
-                  }}
-                >
-                  <motion.div
-                    className="absolute w-12 h-12 md:w-14 md:h-14"
-                    style={{
-                      bottom: `${(1 - radiusRatio) * 100}%`,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                    }}
-                    animate={{
-                      rotate: -360,
-                    }}
-                    transition={{
-                      rotate: {
-                        duration: item.duration,
-                        repeat: Infinity,
-                        ease: "linear",
-                      },
-                    }}
-                  >
-                    <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
-                      <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
-                    </div>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-
-            {/* Center Logo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1, type: "spring", stiffness: 200 }}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            >
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center">
-                <span className="text-base md:text-lg font-bold text-blue-600">N</span>
-              </div>
-            </motion.div>
-          </div>
+          {/* Orbital Display - Responsive Calculation */}
+          <OrbitalDisplay />
 
           {/* Sponsor Names */}
           <motion.div
