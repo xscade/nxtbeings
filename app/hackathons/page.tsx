@@ -264,28 +264,41 @@ function OrbitalDisplay() {
     return minRadius + (i * spacingRatio);
   }).reverse(); // Reverse to get outer to inner
 
-  // Icon configuration - distribute 5 icons across 5 arcs (1 per arc)
-  const icons = [
-    { icon: Brain, arcIndex: 0 },
-    { icon: Globe, arcIndex: 1 },
-    { icon: Code, arcIndex: 2 },
-    { icon: Rocket, arcIndex: 3 },
-    { icon: Sparkles, arcIndex: 4 },
+  // Icon configuration - redistribute across rings
+  // Outer ring (arcIndex 0): 3 icons
+  // Third last ring (arcIndex 2): 2 icons
+  // Second last ring (arcIndex 3): 4 icons
+  // All in northern semi-circle (angles from -45° to +45°)
+  const iconDistribution = [
+    // Outer ring - 3 icons
+    { icon: Brain, arcIndex: 0, positionIndex: 0, totalOnArc: 3 },
+    { icon: Globe, arcIndex: 0, positionIndex: 1, totalOnArc: 3 },
+    { icon: Code, arcIndex: 0, positionIndex: 2, totalOnArc: 3 },
+    // Third last ring - 2 icons
+    { icon: Rocket, arcIndex: 2, positionIndex: 0, totalOnArc: 2 },
+    { icon: Sparkles, arcIndex: 2, positionIndex: 1, totalOnArc: 2 },
+    // Second last ring - 4 icons (reusing some icons)
+    { icon: Brain, arcIndex: 3, positionIndex: 0, totalOnArc: 4 },
+    { icon: Globe, arcIndex: 3, positionIndex: 1, totalOnArc: 4 },
+    { icon: Code, arcIndex: 3, positionIndex: 2, totalOnArc: 4 },
+    { icon: Rocket, arcIndex: 3, positionIndex: 3, totalOnArc: 4 },
   ];
 
   // Calculate icon positions using parametric distribution
   const iconElements: React.ReactElement[] = [];
   
-  icons.forEach((iconConfig, iconIndex) => {
+  iconDistribution.forEach((iconConfig, iconIndex) => {
     const R = arcRadii[iconConfig.arcIndex];
     const Icon = iconConfig.icon;
     
-    // Even angle distribution for single icon per arc
-    // Spread icons from -80° to +80° (160° range)
-    const angleRange = 160; // degrees
-    const startAngle = -80; // degrees
-    const angleStep = angleRange / (numArcs - 1);
-    const angleDeg = startAngle + (iconConfig.arcIndex * angleStep);
+    // Northern semi-circle: angles from -45° to +45° (90° range)
+    const angleRange = 90; // degrees
+    const startAngle = -45; // degrees (left side of northern arc)
+    
+    // Even angle distribution within the arc
+    // For multiple icons on same arc, distribute evenly
+    const angleStep = angleRange / (iconConfig.totalOnArc + 1);
+    const angleDeg = startAngle + ((iconConfig.positionIndex + 1) * angleStep);
     const angleRad = (angleDeg * Math.PI) / 180;
     
     // Convert polar to cartesian coordinates
@@ -293,7 +306,7 @@ function OrbitalDisplay() {
     
     iconElements.push(
       <motion.div
-        key={`icon-${iconIndex}`}
+        key={`icon-${iconConfig.arcIndex}-${iconConfig.positionIndex}`}
         initial={{ opacity: 0, scale: 0 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
