@@ -166,6 +166,137 @@ className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm"
 
 ---
 
+## Parametric Positioning for Orbital/Arc Layouts
+
+### Overview
+For layouts with icons/elements positioned along semi-circle arcs (radar-style, orbital displays), use **parametric positioning** based on container dimensions for true responsiveness.
+
+### Mathematical Formula
+
+**Arc Radius Calculation:**
+```
+R[i] = minRadius + (i × spacingRatio)
+where spacingRatio = (maxRadius - minRadius) / (numArcs - 1)
+```
+
+**Angle Distribution:**
+```
+angle = startAngle + (arcIndex × angleStep)
+angleStep = angleRange / (numArcs - 1)
+```
+
+**Polar to Cartesian Conversion:**
+```
+x = Cx + R × cos(angleRad)
+y = Cy - R × sin(angleRad)
+```
+
+### Implementation Pattern
+
+```jsx
+function OrbitalDisplay() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    function updateSize() {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setSize({ width: rect.width, height: rect.height });
+      }
+    }
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  if (!size.width) return <div ref={containerRef} className="..." />;
+
+  // Responsive calculations
+  const W = size.width;
+  const H = size.height;
+  const Cx = W / 2;  // Center X
+  const Cy = H;      // Center Y (bottom for semi-circle)
+
+  // Calculate arc radii (evenly spaced)
+  const numArcs = 5;
+  const minRadius = 0.12 * W;  // 12% of width
+  const maxRadius = 0.60 * W;   // 60% of width
+  const radiusRange = maxRadius - minRadius;
+  const spacingRatio = radiusRange / (numArcs - 1);
+  
+  const arcRadii = Array.from({ length: numArcs }, (_, i) => {
+    return minRadius + (i * spacingRatio);
+  }).reverse(); // Outer to inner
+
+  // Distribute icons across arcs
+  icons.forEach((iconConfig, iconIndex) => {
+    const R = arcRadii[iconConfig.arcIndex];
+    const angleRange = 160; // degrees
+    const startAngle = -80; // degrees
+    const angleStep = angleRange / (numArcs - 1);
+    const angleDeg = startAngle + (iconConfig.arcIndex * angleStep);
+    const angleRad = (angleDeg * Math.PI) / 180;
+    
+    // Polar to cartesian
+    const x = Cx + R * Math.cos(angleRad);
+    const y = Cy - R * Math.sin(angleRad);
+    
+    // Position element
+    return (
+      <div
+        style={{
+          left: `${x - iconSize/2}px`,
+          top: `${y - iconSize/2}px`,
+        }}
+      />
+    );
+  });
+}
+```
+
+### Helper Functions
+
+```jsx
+// Polar to Cartesian conversion
+function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy - r * Math.sin(angleRad),
+  };
+}
+
+// Describe SVG arc path
+function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
+  const startPos = polarToCartesian(cx, cy, r, (endDeg * Math.PI) / 180);
+  const endPos = polarToCartesian(cx, cy, r, (startDeg * Math.PI) / 180);
+  const largeArc = endDeg - startDeg <= 180 ? 0 : 1;
+  return [
+    "M", startPos.x, startPos.y,
+    "A", r, r, 0, largeArc, 0, endPos.x, endPos.y
+  ].join(" ");
+}
+```
+
+### Best Practices
+
+1. **Always use container ref** - Don't rely on window dimensions, use actual container size
+2. **Recalculate on resize** - Add resize listener for true responsiveness
+3. **Use pixel coordinates** - Convert percentages to pixels for precise positioning
+4. **Even angle distribution** - Spread elements evenly across the arc range
+5. **Even radius spacing** - Use mathematical formula for consistent arc spacing
+6. **Handle loading state** - Return early if size not calculated yet
+7. **Convert degrees to radians** - Always convert: `angleRad = (angleDeg * Math.PI) / 180`
+
+### Use Cases
+- Sponsor/orbital displays
+- Radar-style layouts
+- Semi-circle arc distributions
+- Network/ecosystem visualizations
+- Any layout requiring elements along curved paths
+
+---
+
 ## Code Conventions
 
 ### File Structure
