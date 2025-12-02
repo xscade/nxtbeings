@@ -63,10 +63,16 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Nxtbeings. All rights reserved.
           </p>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>Made with</span>
-            <span className="text-red-500">♥</span>
-            <span>for AI</span>
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span>Subsidiary of</span>
+            <a 
+              href="https://www.xscade.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Xscade
+            </a>
           </div>
         </div>
       </div>
