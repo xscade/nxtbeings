@@ -261,13 +261,11 @@ export default function HackathonsPage() {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
             >
-              <Button size="lg" className="rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 px-8 h-14 text-lg">
-                Register Now — Free
-                <ArrowRight className="w-5 h-5 ml-2" />
+              <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
+                Register Now
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg group">
-                <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                Watch 2024 Highlights
+              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
+                Watch Highlights
               </Button>
             </motion.div>
 
@@ -753,44 +751,24 @@ export default function HackathonsPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:32px_32px]" />
-        
-        {/* Floating Elements */}
-        <motion.div
-          animate={{ y: [0, -30, 0], rotate: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-[10%] w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center"
-        >
-          <Code className="w-10 h-10 text-white/50" />
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-20 right-[10%] w-16 h-16 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center"
-        >
-          <Rocket className="w-8 h-8 text-white/50" />
-        </motion.div>
+      <section className="py-32 bg-background relative overflow-hidden">
+        {/* Subtle Background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
+        </div>
 
-        <div className="container relative z-10 mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-sm mx-auto mb-8 flex items-center justify-center border border-white/30"
-          >
-            <PartyPopper className="w-12 h-12" />
-          </motion.div>
-          
+        <div className="container relative z-10 mx-auto px-6 text-center max-w-3xl">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold mb-6"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight"
           >
-            Ready to Build
+            Ready to build
             <br />
-            Something Amazing?
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
+              something amazing?
+            </span>
           </motion.h2>
           
           <motion.p
@@ -798,9 +776,9 @@ export default function HackathonsPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-white/80 text-lg max-w-2xl mx-auto mb-10"
+            className="text-muted-foreground text-lg max-w-xl mx-auto mb-10"
           >
-            Join 5,000+ innovators. $50K+ in prizes. 48 hours. One opportunity.
+            Join 5,000+ innovators competing for $50K+ in prizes. 
             Registration is free and takes less than 2 minutes.
           </motion.p>
 
@@ -809,30 +787,36 @@ export default function HackathonsPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-14 rounded-xl bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-white/40 focus:ring-white/20"
-            />
-            <Button size="lg" className="h-14 px-8 rounded-xl bg-white text-blue-600 hover:bg-white/90 font-semibold shadow-lg shadow-black/20">
+            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
               Register Now
-              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
+              Learn More
             </Button>
           </motion.div>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-white/50 text-sm mt-6"
+            className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-muted-foreground"
           >
-            By registering, you agree to our Terms of Service and Code of Conduct
-          </motion.p>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <span>Free to join</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <span>$50K+ in prizes</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <span>World-class mentors</span>
+            </div>
+          </motion.div>
         </div>
       </section>
 
