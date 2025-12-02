@@ -423,13 +423,11 @@ export default function ForCompaniesPage() {
                 Start Hiring Now
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 rounded-full px-10 h-14 text-base"
+              <button 
+                className="h-14 px-10 rounded-full text-base font-medium border border-white/30 text-white hover:bg-white/10 transition-colors"
               >
                 Schedule a Call
-              </Button>
+              </button>
             </div>
           </motion.div>
         </div>
