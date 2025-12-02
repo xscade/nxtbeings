@@ -834,15 +834,37 @@ export default function HackathonsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
               />
+              {/* Arc 4 */}
+              <motion.path
+                d="M 260 600 A 140 140 0 0 1 540 600"
+                stroke="rgba(255, 255, 255, 0.08)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
+              />
+              {/* Arc 5 - Innermost */}
+              <motion.path
+                d="M 310 600 A 90 90 0 0 1 490 600"
+                stroke="rgba(255, 255, 255, 0.06)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
+              />
             </svg>
 
-            {/* Orbiting Icons - 5 icons total on different arcs */}
+            {/* Orbiting Icons - 5 icons total, one per ring */}
             {[
-              { icon: Brain, radiusRatio: 0.583, startAngle: -60, duration: 20, delay: 0 },
-              { icon: Globe, radiusRatio: 0.583, startAngle: 20, duration: 25, delay: 0.2 },
-              { icon: Code, radiusRatio: 0.467, startAngle: -40, duration: 18, delay: 0.4 },
-              { icon: Rocket, radiusRatio: 0.467, startAngle: 30, duration: 22, delay: 0.6 },
-              { icon: Sparkles, radiusRatio: 0.333, startAngle: 0, duration: 15, delay: 0.8 },
+              { icon: Brain, radiusRatio: 0.583, startAngle: -60, duration: 20, delay: 0 },      // Ring 1 (outermost)
+              { icon: Globe, radiusRatio: 0.467, startAngle: 20, duration: 25, delay: 0.2 },     // Ring 2
+              { icon: Code, radiusRatio: 0.333, startAngle: -40, duration: 18, delay: 0.4 },    // Ring 3
+              { icon: Rocket, radiusRatio: 0.233, startAngle: 30, duration: 22, delay: 0.6 },   // Ring 4
+              { icon: Sparkles, radiusRatio: 0.15, startAngle: 0, duration: 15, delay: 0.8 },  // Ring 5 (innermost)
             ].map((item, i) => {
               const Icon = item.icon;
               const radiusRatio = item.radiusRatio;
