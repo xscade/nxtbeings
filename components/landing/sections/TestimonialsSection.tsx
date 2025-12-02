@@ -172,11 +172,13 @@ export function TestimonialsSection() {
           transition={{ delay: 0.3 }}
           className="flex justify-center mb-12"
         >
-          <div className="p-1.5 bg-muted rounded-full inline-flex relative">
+          <div className="p-1 bg-muted rounded-full inline-flex gap-1">
             <button
               onClick={() => { setActiveTab("company"); setCurrentIndex(0); }}
-              className={`relative z-10 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                activeTab === "company" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                activeTab === "company" 
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Building2 className="w-4 h-4" />
@@ -184,25 +186,15 @@ export function TestimonialsSection() {
             </button>
             <button
               onClick={() => { setActiveTab("talent"); setCurrentIndex(0); }}
-              className={`relative z-10 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                activeTab === "talent" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                activeTab === "talent" 
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Sparkles className="w-4 h-4" />
               For Talent
             </button>
-            
-            {/* Animated Background */}
-            <motion.div
-              className="absolute top-1.5 bottom-1.5 bg-primary rounded-full shadow-lg shadow-primary/20"
-              initial={false}
-              animate={{
-                x: activeTab === "company" ? 6 : "100%",
-                left: activeTab === "company" ? 0 : -6,
-                width: activeTab === "company" ? "calc(50% - 6px)" : "calc(50% - 6px)"
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
           </div>
         </motion.div>
 
