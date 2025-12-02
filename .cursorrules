@@ -1,0 +1,208 @@
+# Nxtbeings Project Rules
+
+## Project Overview
+Nxtbeings is a premium AI talent network platform connecting companies with AI professionals. The platform has two user roles: **Company** (hiring) and **Talent** (professionals).
+
+## Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **Authentication**: NextAuth.js v5 (Auth.js) with credentials provider
+- **Database**: MongoDB with Mongoose ODM
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **UI Components**: shadcn/ui
+
+---
+
+## UI/UX Design System
+
+### Color Philosophy
+- Use **solid colors** from the design system - **NO gradients** in UI elements
+- Primary color is a professional blue (defined in CSS variables)
+- Maintain a **minimal, elegant, corporate** aesthetic throughout
+
+### Color Usage
+```
+Background:       bg-background
+Cards:            bg-card
+Primary:          bg-primary, text-primary
+Foreground:       text-foreground
+Muted:            text-muted-foreground, bg-muted
+Borders:          border-border, border-primary/20
+```
+
+### Opacity Scales for Backgrounds
+```
+Subtle:           bg-primary/5
+Light:            bg-primary/10
+Medium:           bg-primary/20
+```
+
+### Glassmorphic Effects
+- Use `backdrop-blur-xl` or `backdrop-blur-sm` for glass effect
+- Combine with semi-transparent backgrounds: `bg-white/70`
+- Add subtle borders: `border-white/20` or `border-primary/20`
+- Example: `bg-white/70 backdrop-blur-xl border-r border-white/20`
+
+### Shadows
+- Always tint shadows with primary color for cohesion
+- Standard: `shadow-lg shadow-primary/20`
+- Subtle: `shadow-sm shadow-primary/10`
+- Cards: `shadow-xl shadow-primary/5`
+
+### Border Radius
+- Buttons: `rounded-full` (pill) or `rounded-xl`
+- Cards: `rounded-2xl`
+- Inputs: `rounded-xl`
+- Small elements: `rounded-lg`
+- Icons containers: `rounded-xl`
+
+### Typography
+- Headlines: `text-foreground font-bold`
+- Body text: `text-muted-foreground`
+- Links/accents: `text-primary`
+- Small text: `text-sm text-muted-foreground`
+
+### Button Styles
+```jsx
+// Primary Button
+className="rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+
+// Outline Button
+className="rounded-xl border border-border hover:bg-primary/10 hover:text-primary"
+
+// Ghost/Text Button
+className="text-muted-foreground hover:text-primary"
+```
+
+### Card Patterns
+```jsx
+// Standard Card
+className="bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-md transition-all"
+
+// Highlighted Card
+className="bg-primary/5 rounded-2xl border border-primary/20 p-6"
+
+// Empty State Card
+className="bg-card rounded-2xl border border-border p-8 text-center"
+```
+
+### Icon Containers
+```jsx
+// Standard icon box
+className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"
+<Icon className="w-5 h-5 text-primary" />
+
+// Large icon box
+className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground"
+```
+
+### Navigation Items (Active/Inactive)
+```jsx
+// Active
+className="bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+
+// Inactive
+className="text-muted-foreground hover:bg-primary/10 hover:text-primary"
+```
+
+### Form Inputs
+```jsx
+className="rounded-xl border border-input bg-background focus:border-primary focus:ring-1 focus:ring-primary"
+```
+
+### Modals
+```jsx
+// Backdrop
+className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+
+// Modal Container
+className="bg-card rounded-2xl border border-border shadow-xl p-6"
+```
+
+### Hover States
+- Cards: `hover:border-primary/30 hover:shadow-md transition-all`
+- Buttons: `hover:bg-primary/10 hover:text-primary`
+- Links: `hover:text-primary` or `hover:underline`
+- Always include `transition-all` or `transition-colors`
+
+### Animation Guidelines (Framer Motion)
+```jsx
+// Page/Section entrance
+initial={{ opacity: 0, y: 20 }}
+animate={{ opacity: 1, y: 0 }}
+transition={{ duration: 0.5 }}
+
+// Staggered children
+transition={{ duration: 0.5, delay: 0.1 * index }}
+
+// Exit animations (for modals)
+exit={{ opacity: 0, scale: 0.95, y: 20 }}
+```
+
+---
+
+## Component Patterns
+
+### Dashboard Layout
+- Sidebar: Fixed left, 72 (w-72), glassmorphic background
+- Main content: Left padding for sidebar (lg:pl-72)
+- Background: Subtle primary glow effects
+
+### Empty States
+- Centered icon in primary/10 background
+- Descriptive text in muted-foreground
+- Optional CTA button
+
+### Loading States
+- Use Loader2 icon with `animate-spin`
+- Color: `text-primary`
+
+### Tags/Badges
+```jsx
+className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-xs"
+// or for primary
+className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm"
+```
+
+---
+
+## Code Conventions
+
+### File Structure
+- Pages: `app/[route]/page.tsx`
+- API Routes: `app/api/[route]/route.ts`
+- Components: `components/[category]/ComponentName.tsx`
+- Models: `models/ModelName.ts`
+
+### Client Components
+- Add `"use client";` at the top
+- Use for interactivity, hooks, browser APIs
+
+### API Routes
+- Always check authentication: `const session = await auth();`
+- Return proper status codes and JSON responses
+- Use try-catch for error handling
+
+### Database
+- Use `connectToDatabase()` from `@/lib/mongodb`
+- Models use Mongoose schemas with TypeScript interfaces
+- Always handle connection errors
+
+---
+
+## Don'ts
+- ❌ Don't use gradient backgrounds in buttons, cards, or UI elements
+- ❌ Don't use indigo/violet directly - use the `primary` CSS variable
+- ❌ Don't use inline colors - use Tailwind classes
+- ❌ Don't skip loading states
+- ❌ Don't forget hover/focus states
+- ❌ Don't use sharp corners - always round them
+
+## Do's
+- ✅ Use solid primary colors consistently
+- ✅ Add subtle shadows with primary color tints
+- ✅ Include smooth transitions on interactive elements
+- ✅ Use glassmorphic effects for overlays and sidebars
+- ✅ Maintain consistent spacing (p-4, p-6, gap-3, gap-4)
+- ✅ Use semantic color classes (text-foreground, bg-card, etc.)
+
