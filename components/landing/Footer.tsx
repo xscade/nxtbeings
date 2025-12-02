@@ -108,13 +108,13 @@ export function Footer() {
       <div className="relative z-10">
         {/* Newsletter Section */}
         <div className="border-b border-white/10">
-          <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-12">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
               <div className="text-center lg:text-left">
                 <h3 className="text-2xl font-bold mb-2">Stay in the loop</h3>
                 <p className="text-white/70 max-w-md">
                   Get updates on events, new features, and community highlights. No spam, unsubscribe anytime.
-                </p>
+            </p>
               </div>
               <form onSubmit={handleSubscribe} className="flex w-full max-w-md gap-2">
                 <Input
@@ -197,10 +197,10 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+          </div>
 
             {/* Community Activities */}
-            <div>
+          <div>
               <h4 className="font-semibold text-sm uppercase tracking-wider text-white/50 mb-4">Community</h4>
               <ul className="space-y-3">
                 {communityActivities[0].items.map((item) => (
@@ -210,11 +210,11 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
-              </ul>
-            </div>
+            </ul>
+          </div>
 
             {/* Company Links */}
-            <div>
+          <div>
               <h4 className="font-semibold text-sm uppercase tracking-wider text-white/50 mb-4">Company</h4>
               <ul className="space-y-3">
                 {quickLinks.company.map((link) => (
@@ -224,11 +224,11 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
-              </ul>
-            </div>
+            </ul>
+          </div>
 
             {/* Legal Links */}
-            <div>
+          <div>
               <h4 className="font-semibold text-sm uppercase tracking-wider text-white/50 mb-4">Legal</h4>
               <ul className="space-y-3">
                 {quickLinks.legal.map((link) => (
@@ -238,7 +238,7 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
-              </ul>
+            </ul>
             </div>
           </div>
 
@@ -275,14 +275,14 @@ export function Footer() {
             </div>
           </div>
         </div>
-
+        
         {/* Bottom Bar */}
         <div className="border-t border-white/10">
           <div className="container mx-auto px-6 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-xs text-white/50">
-                © {new Date().getFullYear()} Nxtbeings. All rights reserved.
-              </p>
+            © {new Date().getFullYear()} Nxtbeings. All rights reserved.
+          </p>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-1.5 text-xs text-white/50">
                   <span>Subsidiary of</span>

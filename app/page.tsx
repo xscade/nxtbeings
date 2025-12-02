@@ -8,6 +8,7 @@ import { AIAdvantageSection } from "@/components/landing/sections/AIAdvantageSec
 // import { ValuePropSection } from "@/components/landing/sections/ValuePropSection";
 import { IndustryNetworkSection } from "@/components/landing/sections/IndustryNetworkSection";
 import { TalentDiscoverySection } from "@/components/landing/sections/TalentDiscoverySection";
+import { TestimonialsSection } from "@/components/landing/sections/TestimonialsSection";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <IndustryNetworkSection />
       <TalentDiscoverySection />
       <Features />
+      <TestimonialsSection />
       <Footer />
     </main>
   );
