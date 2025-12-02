@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Star, 
@@ -22,7 +23,7 @@ const companyTestimonials = [
     author: "Sarah Chen",
     role: "CTO",
     company: "TechCorp AI",
-    avatar: "SC",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "3 days to hire",
     industry: "AI/ML",
@@ -33,7 +34,7 @@ const companyTestimonials = [
     author: "Michael Roberts",
     role: "VP of Engineering",
     company: "DataFlow Systems",
-    avatar: "MR",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "12 hires this year",
     industry: "Enterprise",
@@ -44,7 +45,7 @@ const companyTestimonials = [
     author: "Priya Sharma",
     role: "Founder & CEO",
     company: "VisionAI Labs",
-    avatar: "PS",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "Series A secured",
     industry: "Computer Vision",
@@ -55,7 +56,7 @@ const companyTestimonials = [
     author: "James Wilson",
     role: "Head of Product",
     company: "FinanceHub",
-    avatar: "JW",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "40% productivity boost",
     industry: "FinTech",
@@ -70,7 +71,7 @@ const talentTestimonials = [
     author: "Alex Thompson",
     role: "Senior ML Engineer",
     specialization: "NLP & LLMs",
-    avatar: "AT",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "2 weeks to dream job",
     previousCompany: "Now at OpenAI",
@@ -81,7 +82,7 @@ const talentTestimonials = [
     author: "Maria Garcia",
     role: "AI Consultant",
     specialization: "MLOps",
-    avatar: "MG",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "3x income increase",
     previousCompany: "Ex-Google",
@@ -92,7 +93,7 @@ const talentTestimonials = [
     author: "David Kim",
     role: "Full Stack AI Developer",
     specialization: "Generative AI",
-    avatar: "DK",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "Won 2 hackathons",
     previousCompany: "Ex-Meta",
@@ -103,7 +104,7 @@ const talentTestimonials = [
     author: "Fatima Ahmed",
     role: "Data Scientist",
     specialization: "Computer Vision",
-    avatar: "FA",
+    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "Self-taught to FAANG",
     previousCompany: "Now at Microsoft",
@@ -207,7 +208,7 @@ export function TestimonialsSection() {
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Featured Testimonial */}
+          {/* Featured Testimonial with Background Image */}
           <AnimatePresence mode="wait">
             <motion.div
               key={`${activeTab}-${currentIndex}`}
@@ -215,24 +216,38 @@ export function TestimonialsSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
-              className="bg-primary rounded-3xl p-8 text-white relative overflow-hidden"
+              className="rounded-3xl text-white relative overflow-hidden min-h-[420px]"
             >
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,white_1px,transparent_1px)] bg-[size:40px_40px]" />
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                <Image
+                  src={testimonials[currentIndex].image}
+                  alt={testimonials[currentIndex].author}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                {/* Dark to Blue Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/95 to-black/60" />
               </div>
               
-              <div className="relative z-10">
-                <Quote className="w-12 h-12 text-white/20 mb-6" />
+              <div className="relative z-10 p-8 h-full flex flex-col justify-end">
+                <Quote className="w-12 h-12 text-white/30 mb-4" />
                 
-                <p className="text-lg md:text-xl font-medium leading-relaxed mb-8">
-                  "{testimonials[currentIndex].quote}"
+                <p className="text-lg md:text-xl font-medium leading-relaxed mb-6">
+                  &ldquo;{testimonials[currentIndex].quote}&rdquo;
                 </p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-xl font-bold">
-                      {testimonials[currentIndex].avatar}
+                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/30 shrink-0">
+                      <Image
+                        src={testimonials[currentIndex].image}
+                        alt={testimonials[currentIndex].author}
+                        width={56}
+                        height={56}
+                        className="object-cover w-full h-full"
+                      />
                     </div>
                     <div>
                       <p className="font-semibold text-lg">{testimonials[currentIndex].author}</p>
@@ -252,7 +267,7 @@ export function TestimonialsSection() {
                 </div>
 
                 {/* Rating */}
-                <div className="flex gap-1 mt-6">
+                <div className="flex gap-1 mt-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
@@ -278,12 +293,18 @@ export function TestimonialsSection() {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 ${
+                  <div className={`w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 ${
                     currentIndex === index 
-                      ? "bg-primary text-white" 
-                      : "bg-primary/10 text-primary"
+                      ? "border-primary" 
+                      : "border-transparent"
                   }`}>
-                    {testimonial.avatar}
+                    <Image
+                      src={testimonial.image}
+                      alt={testimonial.author}
+                      width={48}
+                      height={48}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
@@ -302,7 +323,7 @@ export function TestimonialsSection() {
                       }
                     </p>
                     <p className="text-sm text-foreground mt-2 line-clamp-2">
-                      "{testimonial.quote.substring(0, 80)}..."
+                      &ldquo;{testimonial.quote.substring(0, 80)}...&rdquo;
                     </p>
                   </div>
                 </div>
@@ -356,4 +377,3 @@ export function TestimonialsSection() {
     </section>
   );
 }
-
