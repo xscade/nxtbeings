@@ -779,8 +779,8 @@ export default function HackathonsPage() {
         </div>
       </section>
 
-      {/* Sponsors Section - Minimal Radar Style */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      {/* Sponsors Section - Orbiting Icons */}
+      <section className="py-24 bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-600 relative overflow-hidden">
         <div className="container relative z-10 mx-auto px-6">
           {/* Header */}
           <div className="text-center mb-20">
@@ -788,23 +788,23 @@ export default function HackathonsPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+              className="text-4xl md:text-5xl font-bold text-white mb-4"
             >
               Trusted by AI-Driven Companies
             </motion.h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
+            <p className="text-blue-100 max-w-xl mx-auto">
               Backed by industry leaders who believe in the future of AI innovation
             </p>
           </div>
 
-          {/* Radar-Style Semi-Circle Display */}
+          {/* Orbital Display */}
           <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
             {/* SVG Semi-Circle Arcs - Stacked Downward */}
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 600" fill="none" preserveAspectRatio="xMidYMax meet">
               {/* Arc 1 - Outermost */}
               <motion.path
                 d="M 50 600 A 350 350 0 0 1 750 600"
-                stroke="rgba(59, 130, 246, 0.12)"
+                stroke="rgba(255, 255, 255, 0.15)"
                 strokeWidth="1"
                 fill="none"
                 initial={{ pathLength: 0 }}
@@ -815,7 +815,7 @@ export default function HackathonsPage() {
               {/* Arc 2 */}
               <motion.path
                 d="M 120 600 A 280 280 0 0 1 680 600"
-                stroke="rgba(59, 130, 246, 0.1)"
+                stroke="rgba(255, 255, 255, 0.12)"
                 strokeWidth="1"
                 fill="none"
                 initial={{ pathLength: 0 }}
@@ -826,7 +826,7 @@ export default function HackathonsPage() {
               {/* Arc 3 */}
               <motion.path
                 d="M 200 600 A 200 200 0 0 1 600 600"
-                stroke="rgba(59, 130, 246, 0.08)"
+                stroke="rgba(255, 255, 255, 0.1)"
                 strokeWidth="1"
                 fill="none"
                 initial={{ pathLength: 0 }}
@@ -834,111 +834,64 @@ export default function HackathonsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
               />
-              {/* Arc 4 - Innermost */}
-              <motion.path
-                d="M 280 600 A 120 120 0 0 1 520 600"
-                stroke="rgba(59, 130, 246, 0.06)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
-              />
             </svg>
 
-            {/* Icons on Arc 1 (Outermost) - 5 icons */}
-            {[0, 1, 2, 3, 4].map((i) => {
-              const icons = [Brain, Globe, Code, Rocket, Sparkles];
-              const Icon = icons[i];
-              const angle = -75 + (i * 150) / 4;
-              const rad = (angle * Math.PI) / 180;
-              const radius = 350;
-              const centerX = 400;
-              const centerY = 600;
-              const x = centerX + radius * Math.sin(rad);
-              const y = centerY - radius * Math.cos(rad);
+            {/* Orbiting Icons - 5 icons total on different arcs */}
+            {[
+              { icon: Brain, radiusRatio: 0.583, startAngle: -60, duration: 20, delay: 0 },
+              { icon: Globe, radiusRatio: 0.583, startAngle: 20, duration: 25, delay: 0.2 },
+              { icon: Code, radiusRatio: 0.467, startAngle: -40, duration: 18, delay: 0.4 },
+              { icon: Rocket, radiusRatio: 0.467, startAngle: 30, duration: 22, delay: 0.6 },
+              { icon: Sparkles, radiusRatio: 0.333, startAngle: 0, duration: 15, delay: 0.8 },
+            ].map((item, i) => {
+              const Icon = item.icon;
+              const radiusRatio = item.radiusRatio;
+              const startAngle = item.startAngle;
+              
               return (
                 <motion.div
-                  key={`arc1-${i}`}
+                  key={`orbit-${i}`}
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.1, type: "spring", stiffness: 200 }}
+                  transition={{ delay: item.delay, type: "spring", stiffness: 200 }}
                   className="absolute w-12 h-12 md:w-14 md:h-14"
-                  style={{ 
-                    left: `${(x / 800) * 100}%`, 
-                    top: `${(y / 600) * 100}%`, 
-                    transform: 'translate(-50%, -50%)' 
+                  style={{
+                    left: '50%',
+                    bottom: 0,
+                    transformOrigin: '50% 100%',
+                  }}
+                  animate={{
+                    rotate: [startAngle, startAngle + 360],
+                  }}
+                  transition={{
+                    rotate: {
+                      duration: item.duration,
+                      repeat: Infinity,
+                      ease: "linear",
+                    },
                   }}
                 >
-                  <div className="w-full h-full rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center hover:shadow-md hover:scale-105 transition-all cursor-pointer">
-                    <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
-                  </div>
-                </motion.div>
-              );
-            })}
-
-            {/* Icons on Arc 2 - 4 icons */}
-            {[0, 1, 2, 3].map((i) => {
-              const icons = [Target, Award, Trophy, Star];
-              const Icon = icons[i];
-              const angle = -70 + (i * 140) / 3;
-              const rad = (angle * Math.PI) / 180;
-              const radius = 280;
-              const centerX = 400;
-              const centerY = 600;
-              const x = centerX + radius * Math.sin(rad);
-              const y = centerY - radius * Math.cos(rad);
-              return (
-                <motion.div
-                  key={`arc2-${i}`}
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + i * 0.1, type: "spring", stiffness: 200 }}
-                  className="absolute w-11 h-11 md:w-12 md:h-12"
-                  style={{ 
-                    left: `${(x / 800) * 100}%`, 
-                    top: `${(y / 600) * 100}%`, 
-                    transform: 'translate(-50%, -50%)' 
-                  }}
-                >
-                  <div className="w-full h-full rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center hover:shadow-md hover:scale-105 transition-all cursor-pointer">
-                    <Icon className="w-4 h-4 md:w-5 md:h-5 text-blue-500" strokeWidth={1.5} />
-                  </div>
-                </motion.div>
-              );
-            })}
-
-            {/* Icons on Arc 3 - 3 icons */}
-            {[0, 1, 2].map((i) => {
-              const icons = [Cpu, Layers, Zap];
-              const Icon = icons[i];
-              const angle = -60 + (i * 120) / 2;
-              const rad = (angle * Math.PI) / 180;
-              const radius = 200;
-              const centerX = 400;
-              const centerY = 600;
-              const x = centerX + radius * Math.sin(rad);
-              const y = centerY - radius * Math.cos(rad);
-              return (
-                <motion.div
-                  key={`arc3-${i}`}
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.7 + i * 0.1, type: "spring", stiffness: 200 }}
-                  className="absolute w-10 h-10 md:w-11 md:h-11"
-                  style={{ 
-                    left: `${(x / 800) * 100}%`, 
-                    top: `${(y / 600) * 100}%`, 
-                    transform: 'translate(-50%, -50%)' 
-                  }}
-                >
-                  <div className="w-full h-full rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center hover:shadow-md hover:scale-105 transition-all cursor-pointer">
-                    <Icon className="w-4 h-4 text-blue-400" strokeWidth={1.5} />
-                  </div>
+                  <motion.div
+                    className="w-full h-full"
+                    style={{
+                      transform: `translateY(-${radiusRatio * 100}%)`,
+                    }}
+                    animate={{
+                      rotate: -360,
+                    }}
+                    transition={{
+                      rotate: {
+                        duration: item.duration,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                    }}
+                  >
+                    <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
+                      <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
+                    </div>
+                  </motion.div>
                 </motion.div>
               );
             })}
@@ -948,10 +901,10 @@ export default function HackathonsPage() {
               initial={{ opacity: 0, scale: 0 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
+              transition={{ delay: 1, type: "spring", stiffness: 200 }}
               className="absolute bottom-8 left-1/2 -translate-x-1/2"
             >
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center">
                 <span className="text-base md:text-lg font-bold text-blue-600">N</span>
               </div>
             </motion.div>
@@ -962,7 +915,7 @@ export default function HackathonsPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-16 text-muted-foreground text-sm font-medium"
+            className="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-16 text-white/70 text-sm font-medium"
           >
             {["Google", "OpenAI", "Anthropic", "Microsoft", "AWS", "Vercel", "GitHub"].map((name, i) => (
               <motion.span 
@@ -971,7 +924,7 @@ export default function HackathonsPage() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="hover:text-foreground transition-colors cursor-pointer"
+                className="hover:text-white transition-colors cursor-pointer"
               >
                 {name}
               </motion.span>
@@ -985,7 +938,7 @@ export default function HackathonsPage() {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <Button variant="outline" className="rounded-full px-6 border-border hover:bg-muted">
+            <Button className="rounded-full px-6 bg-white text-blue-600 hover:bg-white/90 shadow-lg">
               Become a Sponsor
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
