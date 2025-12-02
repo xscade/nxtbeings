@@ -181,12 +181,12 @@ const trustBadges = [
 
 // Floating profiles for hero
 const floatingProfiles = [
-  { name: "Anna M.", role: "AI Engineer", position: "top-20 left-[10%]" },
-  { name: "John D.", role: "Data Scientist", position: "top-32 left-[25%]" },
-  { name: "Mike R.", role: "Full Stack Dev", position: "top-16 right-[25%]" },
-  { name: "Sara K.", role: "UX Designer", position: "top-28 right-[10%]" },
-  { name: "Chris L.", role: "ML Engineer", position: "bottom-24 left-[15%]" },
-  { name: "Emma W.", role: "Product Manager", position: "bottom-20 right-[15%]" },
+  { name: "Anna M.", role: "AI Engineer", position: "top-28 left-[10%]" },
+  { name: "John D.", role: "Data Scientist", position: "top-40 left-[25%]" },
+  { name: "Mike R.", role: "Full Stack Dev", position: "top-24 right-[25%]" },
+  { name: "Sara K.", role: "UX Designer", position: "top-36 right-[10%]" },
+  { name: "Chris L.", role: "ML Engineer", position: "bottom-28 left-[15%]" },
+  { name: "Emma W.", role: "Product Manager", position: "bottom-24 right-[15%]" },
 ];
 
 export default function BrowseTalentPage() {
@@ -199,7 +199,7 @@ export default function BrowseTalentPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className="relative pt-40 pb-20 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
@@ -310,20 +310,40 @@ export default function BrowseTalentPage() {
         </div>
       </section>
 
-      {/* Trust Badges */}
-      <section className="py-8 border-y border-border bg-muted/30">
-        <div className="container mx-auto px-6">
+      {/* Trust Badges - Blue Glassmorphic */}
+      <section className="py-16 bg-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,white_1px,transparent_1px)] bg-[size:60px_60px]" />
+        </div>
+        
+        <div className="container relative z-10 mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Human expertise.<br />
+              <span className="text-white/80">AI amplified.</span>
+            </h2>
+            <p className="text-white/70 max-w-xl mx-auto">
+              We don't hire AI replacements. We verify domain experts who leverage AI to deliver 10× productivity.
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {trustBadges.map((badge, i) => (
-              <div key={i} className="flex items-center gap-4 justify-center md:justify-start">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <badge.icon className="w-5 h-5 text-primary" />
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 p-6 hover:bg-white/15 hover:border-white/25 transition-all"
+              >
+                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center mb-4">
+                  <badge.icon className="w-6 h-6 text-white" />
                 </div>
-                <div>
-                  <p className="font-medium text-foreground">{badge.title}</p>
-                  <p className="text-sm text-muted-foreground">{badge.desc}</p>
-                </div>
-              </div>
+                <h3 className="font-semibold text-white text-lg mb-1">{badge.title}</h3>
+                <p className="text-sm text-white/70">{badge.desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
