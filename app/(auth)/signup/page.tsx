@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,8 @@ import {
   Eye, 
   EyeOff,
   Loader2,
-  CheckCircle2
+  CheckCircle2,
+  Quote
 } from "lucide-react";
 
 function SignUpContent() {
@@ -92,18 +94,20 @@ function SignUpContent() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          {/* Back Link */}
+          {/* Back Link - Circular Button */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-8 group"
+            className="inline-flex items-center gap-3 text-sm text-slate-500 hover:text-slate-700 mb-8 group"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to home
+            <div className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center transition-all group-hover:scale-105">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            </div>
+            <span>Back to home</span>
           </Link>
 
           {/* Header */}
           <div className="mb-8">
-            <Link href="/" className="text-2xl font-semibold text-slate-900">
+            <Link href="/" className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
               Nxtbeings
             </Link>
             <h1 className="text-3xl font-bold text-slate-900 mt-6">
@@ -310,54 +314,60 @@ function SignUpContent() {
         </motion.div>
       </div>
 
-      {/* Right Side - Visual */}
-      <div className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 p-12">
-        <div className="max-w-md text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-8">
-              {role === "company" ? (
-                <Building2 className="w-8 h-8" />
-              ) : (
-                <Sparkles className="w-8 h-8" />
-              )}
-            </div>
-            <h2 className="text-3xl font-bold mb-4">
-              {role === "company"
-                ? "Access top AI talent"
-                : "Join the elite network"}
-            </h2>
-            <p className="text-white/80 text-lg leading-relaxed">
-              {role === "company"
-                ? "Connect with pre-vetted AI engineers, researchers, and creative technologists ready to transform your business."
-                : "Get discovered by leading companies, showcase your AI expertise, and access premium opportunities."}
-            </p>
+      {/* Right Side - Image with Overlay */}
+      <div className="hidden lg:flex flex-1 relative overflow-hidden">
+        {/* Dynamic Image Based on Role */}
+        <motion.div
+          key={role}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={
+              role === "company"
+                ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&h=1600&fit=crop&q=90"
+                : "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=1600&fit=crop&q=90"
+            }
+            alt={role === "company" ? "Professional woman in company" : "Corporate building"}
+            fill
+            className="object-cover"
+            priority
+            quality={90}
+          />
+        </motion.div>
 
-            <div className="mt-8 space-y-4">
-              {(role === "company"
-                ? [
-                    "Pre-vetted professionals",
-                    "Verified credentials",
-                    "Enterprise-ready portfolios",
-                  ]
-                : [
-                    "Get verified as AI talent",
-                    "Access premium projects",
-                    "Build your reputation",
-                  ]
-              ).map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-white/90">{item}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+        {/* Dark Gradient Overlay - Darker at bottom for text readability */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.4) 60%, transparent 100%)'
+          }}
+        />
+
+        {/* Text Content at Bottom - Minimal Design */}
+        <div className="relative z-10 flex items-end p-8 md:p-12 w-full h-full">
+          <div className="w-full text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="max-w-5xl relative"
+            >
+              {/* Main Quote */}
+              <div className="relative pr-16">
+                {/* Quote Icon - Minimal */}
+                <Quote className="absolute top-0 right-0 w-10 h-10 text-white" strokeWidth={1.5} />
+
+                <p className="text-2xl md:text-3xl lg:text-4xl font-normal leading-relaxed text-white mb-8">
+                  {role === "company"
+                    ? "Connect with pre-vetted AI engineers, researchers, and creative technologists ready to transform your business."
+                    : "Get discovered by leading companies, showcase your AI expertise, and access premium opportunities."}
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

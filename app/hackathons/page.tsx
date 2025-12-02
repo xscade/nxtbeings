@@ -266,22 +266,29 @@ function OrbitalDisplay() {
 
   // Icon configuration - redistribute across rings
   // Outer ring (arcIndex 0): 3 icons
-  // Third last ring (arcIndex 2): 2 icons
+  // Second last ring adjacent to outer (arcIndex 1): 4 icons
+  // Third last ring (arcIndex 2): 3 icons (1 in the middle)
   // Second last ring (arcIndex 3): 4 icons
-  // All in northern semi-circle (angles from -45° to +45°)
+  // All in northern semi-circle (angles from 30° to 150°)
   const iconDistribution = [
     // Outer ring - 3 icons
     { icon: Brain, arcIndex: 0, positionIndex: 0, totalOnArc: 3 },
     { icon: Globe, arcIndex: 0, positionIndex: 1, totalOnArc: 3 },
     { icon: Code, arcIndex: 0, positionIndex: 2, totalOnArc: 3 },
-    // Third last ring - 2 icons
-    { icon: Rocket, arcIndex: 2, positionIndex: 0, totalOnArc: 2 },
-    { icon: Sparkles, arcIndex: 2, positionIndex: 1, totalOnArc: 2 },
+    // Second last ring adjacent to outer (arcIndex 1) - 4 icons
+    { icon: Star, arcIndex: 1, positionIndex: 0, totalOnArc: 4 },
+    { icon: Trophy, arcIndex: 1, positionIndex: 1, totalOnArc: 4 },
+    { icon: Target, arcIndex: 1, positionIndex: 2, totalOnArc: 4 },
+    { icon: Award, arcIndex: 1, positionIndex: 3, totalOnArc: 4 },
+    // Third last ring - 3 icons (1 in the middle at 90°)
+    { icon: Rocket, arcIndex: 2, positionIndex: 0, totalOnArc: 3 },
+    { icon: Sparkles, arcIndex: 2, positionIndex: 1, totalOnArc: 3 }, // Middle icon at 90°
+    { icon: Cpu, arcIndex: 2, positionIndex: 2, totalOnArc: 3 },
     // Second last ring - 4 icons (reusing some icons)
-    { icon: Brain, arcIndex: 3, positionIndex: 0, totalOnArc: 4 },
-    { icon: Globe, arcIndex: 3, positionIndex: 1, totalOnArc: 4 },
-    { icon: Code, arcIndex: 3, positionIndex: 2, totalOnArc: 4 },
-    { icon: Rocket, arcIndex: 3, positionIndex: 3, totalOnArc: 4 },
+    { icon: Brain, arcIndex: 3, positionIndex: 0, totalOnArc: 3 },
+    { icon: Globe, arcIndex: 3, positionIndex: 1, totalOnArc: 3 },
+    { icon: Code, arcIndex: 3, positionIndex: 2, totalOnArc: 3 },
+   // { icon: Rocket, arcIndex: 3, positionIndex: 3, totalOnArc: 4 },
   ];
 
   // Calculate icon positions using parametric distribution
@@ -296,10 +303,15 @@ function OrbitalDisplay() {
     // 90° is straight up (north), so we want angles around that
     const angleRange = 120; // degrees (from 30° to 150°)
     const startAngle = 30; // degrees (right side of northern arc)
+    const endAngle = 150; // degrees (left side of northern arc)
     
     // Even angle distribution within the arc
-    // For multiple icons on same arc, distribute evenly across the range
-    // Use (totalOnArc - 1) to space from start to end, or use (totalOnArc + 1) for padding
+    // For rings that should have end icons at both ends (like outer ring and arcIndex 1):
+    // - First icon (positionIndex 0) is at startAngle (30°)
+    // - Last icon (positionIndex totalOnArc-1) is at endAngle (150°)
+    // - Middle icons are evenly distributed between them
+    // Formula: angleStep = angleRange / (totalOnArc - 1)
+    // This ensures the first and last icons are exactly at the ends
     const angleStep = iconConfig.totalOnArc > 1 
       ? angleRange / (iconConfig.totalOnArc - 1)
       : 0;
@@ -1012,102 +1024,316 @@ export default function HackathonsPage() {
         </div>
       </section>
 
-      {/* Judges Section */}
-      <section className="py-24 relative overflow-hidden">
+      {/* Testimonials Section */}
+      <section className="py-24 relative overflow-hidden bg-background">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px]" />
+          <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="container relative z-10 mx-auto px-6">
           <div className="text-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-sm font-medium mb-6"
+            >
+              <Star className="w-4 h-4 fill-primary text-primary" />
+              What Participants Say
+            </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
               className="text-4xl md:text-5xl font-bold text-foreground mb-4"
             >
-              Learn from the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Best</span>
+              Stories from the <span className="text-primary">Hackathon</span>
             </motion.h2>
-            <p className="text-muted-foreground">Judges and mentors from leading AI companies</p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground max-w-2xl mx-auto"
+            >
+              Real experiences from developers who built, learned, and won at our hackathons
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {judges.map((judge, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group text-center"
-              >
-                <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-primary/50 transition-colors">
-                  <Image
-                    src={judge.image}
-                    alt={judge.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <h3 className="font-semibold text-foreground">{judge.name}</h3>
-                <p className="text-sm text-muted-foreground">{judge.role}</p>
-                <p className="text-xs text-primary font-medium">{judge.company}</p>
-              </motion.div>
-            ))}
+          {/* Testimonials Grid - Unique Design */}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  name: "Alex Chen",
+                  role: "Full Stack Developer",
+                  company: "Won Best GenAI Track",
+                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
+                  quote: "The mentorship was incredible. I learned more in 48 hours than I did in months of self-study. The judges gave actionable feedback that helped me ship a better product.",
+                  rating: 5,
+                  highlight: "Best GenAI Winner",
+                },
+                {
+                  name: "Sarah Martinez",
+                  role: "ML Engineer",
+                  company: "Team Lead, DataMesh",
+                  image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
+                  quote: "The community here is amazing. Met my co-founder during the hackathon, and we're now building our startup together. The resources and support were top-notch.",
+                  rating: 5,
+                  highlight: "Grand Prize Runner-up",
+                },
+                {
+                  name: "Marcus Johnson",
+                  role: "AI Researcher",
+                  company: "Built CodePilot AI",
+                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+                  quote: "The API credits and cloud resources were a game-changer. We could focus on building instead of worrying about infrastructure. Best hackathon experience ever!",
+                  rating: 5,
+                  highlight: "Grand Prize Winner",
+                },
+                {
+                  name: "Priya Sharma",
+                  role: "Product Designer",
+                  company: "VoiceFlow Team",
+                  image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face",
+                  quote: "As a designer, I was worried about the technical focus, but the workshops and mentors helped me contribute meaningfully. The collaborative spirit was incredible.",
+                  rating: 5,
+                  highlight: "Best UX Award",
+                },
+                {
+                  name: "David Kim",
+                  role: "Student Developer",
+                  company: "First Hackathon",
+                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face",
+                  quote: "This was my first hackathon and I was nervous. The mentors were so supportive, and I learned so much. Even though we didn't win, the experience was priceless.",
+                  rating: 5,
+                  highlight: "Most Improved",
+                },
+                {
+                  name: "Emma Wilson",
+                  role: "Backend Engineer",
+                  company: "Open Innovation Track",
+                  image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
+                  quote: "The networking opportunities were fantastic. Met VCs, got job offers, and made lifelong friends. The hackathon opened doors I didn't even know existed.",
+                  rating: 5,
+                  highlight: "VC Interest",
+                },
+              ].map((testimonial, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="group relative"
+                >
+                  <div className="h-full bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col">
+                    {/* Quote Icon */}
+                    <div className="absolute top-6 right-6 w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center opacity-50 group-hover:opacity-100 transition-opacity">
+                      <span className="text-2xl text-primary">"</span>
+                    </div>
+
+                    {/* Rating Stars */}
+                    <div className="flex items-center gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, j) => (
+                        <Star key={j} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+
+                    {/* Quote */}
+                    <p className="text-foreground mb-6 flex-1 leading-relaxed">
+                      {testimonial.quote}
+                    </p>
+
+                    {/* Author */}
+                    <div className="flex items-center gap-4 pt-4 border-t border-border">
+                      <div className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-primary/20 group-hover:border-primary/40 transition-colors">
+                        <Image
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-foreground truncate">{testimonial.name}</h4>
+                        <p className="text-sm text-muted-foreground truncate">{testimonial.role}</p>
+                      </div>
+                    </div>
+
+                    {/* Highlight Badge */}
+                    <div className="absolute -top-3 left-6 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg shadow-primary/20">
+                      {testimonial.highlight}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Past Winners */}
-      <section className="py-24 bg-gradient-to-b from-blue-600 to-indigo-700 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* Hall of Fame - Improved Design */}
+      <section className="py-24 bg-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,white_1px,transparent_0)] bg-[length:40px_40px]" />
+        </div>
+        
+        {/* Animated Background Glows */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-white/10 rounded-full blur-[100px]"
+          />
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]"
+          />
+        </div>
 
         <div className="container relative z-10 mx-auto px-6">
           <div className="text-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 text-white text-sm font-medium mb-6"
+            >
+              <Trophy className="w-4 h-4 fill-white text-white" />
+              Champions
+            </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-bold mb-4"
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-5xl font-bold text-white mb-4"
             >
               Hall of Fame
             </motion.h2>
-            <p className="text-blue-200">Previous hackathon champions who shipped greatness</p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-white/80 max-w-2xl mx-auto"
+            >
+              Previous hackathon champions who shipped greatness and inspired the community
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pastWinners.map((winner, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all"
+                transition={{ delay: i * 0.15, duration: 0.5 }}
+                className="group relative"
               >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={winner.image}
-                    alt={winner.project}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-yellow-500 text-yellow-900 text-xs font-bold flex items-center gap-1">
-                      <Trophy className="w-3 h-3" />
-                      {winner.prize}
-                    </span>
+                {/* Card */}
+                <div className="relative h-full bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 hover:bg-white/15 hover:border-white/30 hover:shadow-2xl hover:shadow-white/10 transition-all duration-300">
+                  {/* Image Section */}
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src={winner.image}
+                      alt={winner.project}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    {/* Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent" />
+                    
+                    {/* Prize Badge */}
+                    <div className="absolute top-4 left-4">
+                      <div className="px-4 py-2 rounded-full bg-white text-primary text-xs font-bold flex items-center gap-2 shadow-lg shadow-primary/30">
+                        <Trophy className="w-4 h-4 fill-primary text-primary" />
+                        {winner.prize}
+                      </div>
+                    </div>
+
+                    {/* Decorative Corner Element */}
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 backdrop-blur-sm border-l-2 border-b-2 border-white/20 rounded-bl-3xl" />
                   </div>
+
+                  {/* Content Section */}
+                  <div className="p-6 relative">
+                    {/* Project Title */}
+                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-white transition-colors">
+                      {winner.project}
+                    </h3>
+                    
+                    {/* Team Name */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <Users className="w-4 h-4 text-white/70" />
+                      <p className="text-white/80 text-sm font-medium">{winner.team}</p>
+                    </div>
+                    
+                    {/* Description */}
+                    <p className="text-white/70 text-sm leading-relaxed mb-4">
+                      {winner.description}
+                    </p>
+
+                    {/* Bottom Accent Line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 group-hover:bg-white/40 transition-colors" />
+                  </div>
+
+                  {/* Hover Glow Effect */}
+                  <div className="absolute inset-0 rounded-3xl bg-white/0 group-hover:bg-white/5 transition-colors pointer-events-none" />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{winner.project}</h3>
-                  <p className="text-blue-200 text-sm mb-3">{winner.team}</p>
-                  <p className="text-white/70 text-sm">{winner.description}</p>
-                </div>
+
+                {/* Floating Trophy Icon (Decorative) */}
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.5,
+                  }}
+                  className="absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <Trophy className="w-8 h-8 text-white" />
+                </motion.div>
               </motion.div>
             ))}
           </div>
+
+          {/* View All Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <Button className="rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/50 backdrop-blur-sm shadow-lg">
+              View All Winners
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </motion.div>
         </div>
       </section>
 

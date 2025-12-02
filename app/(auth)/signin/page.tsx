@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +12,7 @@ import {
   ArrowLeft, 
   Eye, 
   EyeOff,
-  Loader2,
-  Sparkles
+  Loader2
 } from "lucide-react";
 
 function SignInContent() {
@@ -25,6 +25,16 @@ function SignInContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // Image carousel rotation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % 4);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,44 +86,40 @@ function SignInContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex">
-      {/* Left Side - Visual */}
-      <div className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-[100px]" />
+      {/* Left Side - Image Gallery */}
+      <div className="hidden lg:flex flex-1 relative overflow-hidden">
+        {/* Image Carousel */}
+        <div className="absolute inset-0">
+          {[
+            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=1600&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=1600&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=1600&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&h=1600&fit=crop&q=90",
+          ].map((image, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: index === 0 ? 1 : 0 }}
+              animate={{ opacity: index === currentImage ? 1 : 0 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={image}
+                alt={`Gallery image ${index + 1}`}
+                fill
+                className="object-cover"
+                priority={index === 0}
+                quality={90}
+              />
+              {/* Subtle overlay for better visual depth */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-slate-900/20 to-transparent" />
+            </motion.div>
+          ))}
         </div>
-        
-        <div className="max-w-md text-white relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mb-8 shadow-lg shadow-blue-500/25">
-              <Sparkles className="w-8 h-8" />
-            </div>
-            <h2 className="text-3xl font-bold mb-4">
-              Welcome back
-            </h2>
-            <p className="text-slate-400 text-lg leading-relaxed">
-              Sign in to access your dashboard, manage your profile, and connect with the AI talent network.
-            </p>
 
-            <div className="mt-12 p-6 rounded-2xl bg-white/5 backdrop-blur border border-white/10">
-              <blockquote className="text-slate-300 italic">
-                &quot;Nxtbeings helped us find the perfect AI engineer in just 48 hours. The quality of talent is exceptional.&quot;
-              </blockquote>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-violet-400" />
-                <div>
-                  <div className="font-medium text-white">Sarah Chen</div>
-                  <div className="text-sm text-slate-500">CTO, TechStart AI</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        {/* Subtle gradient overlay at edges */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/40 pointer-events-none" />
       </div>
 
       {/* Right Side - Form */}
@@ -124,18 +130,20 @@ function SignInContent() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          {/* Back Link */}
+          {/* Back Link - Circular Button */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-8 group"
+            className="inline-flex items-center gap-3 text-sm text-slate-500 hover:text-slate-700 mb-8 group"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to home
+            <div className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center transition-all group-hover:scale-105">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            </div>
+            <span>Back to home</span>
           </Link>
 
           {/* Header */}
           <div className="mb-8">
-            <Link href="/" className="text-2xl font-semibold text-slate-900">
+            <Link href="/" className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
               Nxtbeings
             </Link>
             <h1 className="text-3xl font-bold text-slate-900 mt-6">
