@@ -770,244 +770,169 @@ export default function HackathonsPage() {
         </div>
       </section>
 
-      {/* Sponsors Section - Orbital Design */}
-      <section className="py-24 bg-gradient-to-b from-background via-primary/[0.02] to-background relative overflow-hidden">
+      {/* Sponsors Section - Rotating Orbits */}
+      <section className="py-32 bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-600 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-700/50 to-transparent" />
+
         <div className="container relative z-10 mx-auto px-6">
-          <div className="text-center mb-16">
+          {/* Header */}
+          <div className="text-center mb-20">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+              className="text-4xl md:text-5xl font-bold text-white mb-4"
             >
-              Backed by the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">best</span>
+              Trusted by AI-Driven Companies
             </motion.h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Sponsored by industry leaders who believe in the future of AI
+            <p className="text-blue-100 max-w-xl mx-auto">
+              Backed by industry leaders who believe in the future of AI innovation
             </p>
           </div>
 
-          {/* Orbital Sponsor Display */}
-          <div className="relative max-w-4xl mx-auto h-[500px] md:h-[550px]">
-            {/* Concentric Arcs */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 550" fill="none">
-              {/* Outer Arc */}
-              <motion.path
-                d="M 50 550 A 400 400 0 0 1 750 550"
-                stroke="url(#arcGradient1)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-              />
-              {/* Middle Arc */}
-              <motion.path
-                d="M 150 550 A 300 300 0 0 1 650 550"
-                stroke="url(#arcGradient2)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-              />
-              {/* Inner Arc */}
-              <motion.path
-                d="M 250 550 A 200 200 0 0 1 550 550"
-                stroke="url(#arcGradient3)"
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
-              />
-              <defs>
-                <linearGradient id="arcGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="rgb(59, 130, 246)" stopOpacity="0.1" />
-                  <stop offset="50%" stopColor="rgb(59, 130, 246)" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="rgb(59, 130, 246)" stopOpacity="0.1" />
-                </linearGradient>
-                <linearGradient id="arcGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="rgb(99, 102, 241)" stopOpacity="0.1" />
-                  <stop offset="50%" stopColor="rgb(99, 102, 241)" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="rgb(99, 102, 241)" stopOpacity="0.1" />
-                </linearGradient>
-                <linearGradient id="arcGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="rgb(139, 92, 246)" stopOpacity="0.1" />
-                  <stop offset="50%" stopColor="rgb(139, 92, 246)" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="rgb(139, 92, 246)" stopOpacity="0.1" />
-                </linearGradient>
-              </defs>
-            </svg>
+          {/* Orbital Display */}
+          <div className="relative max-w-3xl mx-auto aspect-square">
+            {/* Center Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/10 rounded-full blur-[60px]" />
 
-            {/* Sponsor Logos - Positioned on Arcs */}
-            {/* Top Center - Outer Arc */}
+            {/* Outer Orbit - Clockwise */}
             <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="absolute left-1/2 -translate-x-1/2 top-[5%]"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0"
             >
-              <div className="w-16 h-16 rounded-2xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer group">
-                <span className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">G</span>
-              </div>
-              <p className="text-xs text-muted-foreground text-center mt-2 opacity-0 group-hover:opacity-100">Google</p>
+              {/* Orbit Ring */}
+              <div className="absolute inset-[5%] rounded-full border border-white/20" />
+              
+              {/* Icons on Outer Orbit - 6 icons, evenly spaced */}
+              {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+                const icons = [Brain, Globe, Cpu, Sparkles, Code, Rocket];
+                const Icon = icons[i];
+                const rad = (angle * Math.PI) / 180;
+                const radius = 45; // percentage from center
+                const x = 50 + radius * Math.cos(rad - Math.PI/2);
+                const y = 50 + radius * Math.sin(rad - Math.PI/2);
+                return (
+                  <motion.div
+                    key={`outer-${i}`}
+                    className="absolute w-12 h-12"
+                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                  >
+                    <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                      <Icon className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
-            {/* Left Upper - Outer Arc */}
+            {/* Middle Orbit - Counter-Clockwise */}
             <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="absolute left-[8%] top-[35%]"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[20%]"
             >
-              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Cpu className="w-6 h-6 text-blue-500" />
-              </div>
+              {/* Orbit Ring */}
+              <div className="absolute inset-0 rounded-full border border-white/25" />
+              
+              {/* Icons on Middle Orbit - 5 icons */}
+              {[0, 72, 144, 216, 288].map((angle, i) => {
+                const icons = [Zap, Award, Target, Layers, Trophy];
+                const Icon = icons[i];
+                const rad = (angle * Math.PI) / 180;
+                const radius = 50;
+                const x = 50 + radius * Math.cos(rad - Math.PI/2);
+                const y = 50 + radius * Math.sin(rad - Math.PI/2);
+                return (
+                  <motion.div
+                    key={`middle-${i}`}
+                    className="absolute w-11 h-11"
+                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                  >
+                    <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                      <Icon className="w-5 h-5 text-indigo-600" strokeWidth={1.5} />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
-            {/* Right Upper - Outer Arc */}
+            {/* Inner Orbit - Clockwise */}
             <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="absolute right-[8%] top-[30%]"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[35%]"
             >
-              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Brain className="w-6 h-6 text-indigo-500" />
-              </div>
+              {/* Orbit Ring */}
+              <div className="absolute inset-0 rounded-full border border-white/30" />
+              
+              {/* Icons on Inner Orbit - 4 icons */}
+              {[0, 90, 180, 270].map((angle, i) => {
+                const icons = [Star, Building2, Users, Gift];
+                const Icon = icons[i];
+                const rad = (angle * Math.PI) / 180;
+                const radius = 50;
+                const x = 50 + radius * Math.cos(rad - Math.PI/2);
+                const y = 50 + radius * Math.sin(rad - Math.PI/2);
+                return (
+                  <motion.div
+                    key={`inner-${i}`}
+                    className="absolute w-10 h-10"
+                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  >
+                    <div className="w-full h-full rounded-lg bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                      <Icon className="w-4 h-4 text-violet-600" strokeWidth={1.5} />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
-            {/* Center - Middle Arc */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="absolute left-1/2 -translate-x-1/2 top-[25%]"
-            >
-              <div className="w-16 h-16 rounded-2xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Sparkles className="w-7 h-7 text-violet-500" />
+            {/* Center Logo */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="w-20 h-20 rounded-2xl bg-white shadow-xl shadow-black/20 flex items-center justify-center">
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">N</span>
               </div>
-            </motion.div>
-
-            {/* Left Middle */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.7 }}
-              className="absolute left-[20%] top-[50%]"
-            >
-              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Code className="w-6 h-6 text-emerald-500" />
-              </div>
-            </motion.div>
-
-            {/* Right Middle */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.8 }}
-              className="absolute right-[18%] top-[48%]"
-            >
-              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Globe className="w-6 h-6 text-cyan-500" />
-              </div>
-            </motion.div>
-
-            {/* Bottom Left - Inner Arc */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.9 }}
-              className="absolute left-[5%] bottom-[15%]"
-            >
-              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Zap className="w-5 h-5 text-yellow-500" />
-              </div>
-            </motion.div>
-
-            {/* Center Bottom */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1 }}
-              className="absolute left-[35%] bottom-[20%]"
-            >
-              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Rocket className="w-6 h-6 text-rose-500" />
-              </div>
-            </motion.div>
-
-            {/* Bottom Right */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.1 }}
-              className="absolute right-[5%] bottom-[10%]"
-            >
-              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Award className="w-5 h-5 text-amber-500" />
-              </div>
-            </motion.div>
-
-            {/* Far Right */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.2 }}
-              className="absolute right-[2%] top-[55%]"
-            >
-              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
-                <Layers className="w-5 h-5 text-slate-500" />
-              </div>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Sponsor Tier Labels */}
+          {/* Sponsor Names */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-wrap justify-center gap-6 mt-8"
+            className="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-16 text-white/70 text-sm font-medium"
           >
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500" />
-              <span className="text-sm text-muted-foreground">Platinum Sponsors</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-slate-300 to-slate-400" />
-              <span className="text-sm text-muted-foreground">Gold Sponsors</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-amber-600 to-amber-700" />
-              <span className="text-sm text-muted-foreground">Silver Sponsors</span>
-            </div>
+            {["Google", "OpenAI", "Anthropic", "Microsoft", "AWS", "Vercel", "GitHub", "Stripe"].map((name, i) => (
+              <motion.span 
+                key={name}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                {name}
+              </motion.span>
+            ))}
           </motion.div>
 
-          {/* Become a Sponsor CTA */}
+          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
             className="text-center mt-12"
           >
-            <p className="text-muted-foreground mb-4">Want to support the next generation of AI builders?</p>
-            <Button variant="outline" className="rounded-full px-6">
+            <Button className="rounded-full px-6 bg-white text-blue-600 hover:bg-white/90 shadow-lg">
               Become a Sponsor
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
