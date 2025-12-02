@@ -291,18 +291,28 @@ function OrbitalDisplay() {
     const R = arcRadii[iconConfig.arcIndex];
     const Icon = iconConfig.icon;
     
-    // Northern semi-circle: angles from -45° to +45° (90° range)
-    const angleRange = 90; // degrees
-    const startAngle = -45; // degrees (left side of northern arc)
+    // Northern semi-circle: angles from 30° to 150° (upper portion of arc)
+    // This positions icons in the northern (top) half of the semi-circle
+    // 90° is straight up (north), so we want angles around that
+    const angleRange = 120; // degrees (from 30° to 150°)
+    const startAngle = 30; // degrees (right side of northern arc)
     
     // Even angle distribution within the arc
-    // For multiple icons on same arc, distribute evenly
-    const angleStep = angleRange / (iconConfig.totalOnArc + 1);
-    const angleDeg = startAngle + ((iconConfig.positionIndex + 1) * angleStep);
+    // For multiple icons on same arc, distribute evenly across the range
+    // Use (totalOnArc - 1) to space from start to end, or use (totalOnArc + 1) for padding
+    const angleStep = iconConfig.totalOnArc > 1 
+      ? angleRange / (iconConfig.totalOnArc - 1)
+      : 0;
+    const angleDeg = startAngle + (iconConfig.positionIndex * angleStep);
     const angleRad = (angleDeg * Math.PI) / 180;
     
     // Convert polar to cartesian coordinates
+    // For semi-circle with focal point at bottom: x = cx + r*cos(θ), y = cy - r*sin(θ)
     const { x, y } = polarToCartesian(Cx, Cy, R, angleRad);
+    
+    // Calculate icon size for responsive offset
+    const iconSize = W < 768 ? 48 : 56; // w-12 = 48px, w-14 = 56px
+    const iconOffset = iconSize / 2;
     
     iconElements.push(
       <motion.div
@@ -313,8 +323,8 @@ function OrbitalDisplay() {
         transition={{ delay: iconIndex * 0.1, type: "spring", stiffness: 200 }}
         className="absolute w-12 h-12 md:w-14 md:h-14"
         style={{
-          left: `${x - 28}px`, // 28 = half of w-14 (56px / 2)
-          top: `${y - 28}px`,
+          left: `${x - iconOffset}px`,
+          top: `${y - iconOffset}px`,
         }}
       >
         <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
