@@ -527,8 +527,8 @@ export default function HackathonsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Timeline Steps - Left Side */}
               <div className="relative">
-                {/* Vertical Line - More visible */}
-                <div className="absolute left-[27px] top-8 bottom-8 w-[2px] bg-border hidden md:block" />
+                {/* Vertical Line - Centered on circles (w-12 = 48px, center = 24px, + p-4 = 16px = 40px) */}
+                <div className="absolute left-[39px] top-16 bottom-16 w-[2px] bg-border hidden md:block" />
                 
                 <div className="space-y-1">
                   {timelineSteps.map((step, i) => (
