@@ -245,14 +245,16 @@ export function Navbar() {
             {/* Right Side */}
             <div className="flex items-center gap-3">
               <Link 
-                href="#" 
+                href="/signin" 
                 className="hidden sm:block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors px-4 py-2 rounded-full hover:bg-slate-100/80"
               >
                 Sign In
               </Link>
-              <Button className="rounded-full font-medium px-5 h-9 text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-none">
-                Get Started
-              </Button>
+              <Link href="/get-started">
+                <Button className="rounded-full font-medium px-5 h-9 text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-none">
+                  Get Started
+                </Button>
+              </Link>
 
               {/* Mobile Menu Toggle */}
               <button
@@ -338,15 +340,17 @@ export function Navbar() {
 
                   <div className="pt-4 border-t border-slate-100">
                     <Link
-                      href="#"
+                      href="/signin"
                       className="block w-full text-center py-3 text-sm font-medium text-slate-600 hover:text-slate-900"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign In
                     </Link>
-                    <Button className="w-full rounded-full mt-2 bg-blue-600 hover:bg-blue-700">
-                      Get Started
-                    </Button>
+                    <Link href="/get-started" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full rounded-full mt-2 bg-blue-600 hover:bg-blue-700">
+                        Get Started
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
