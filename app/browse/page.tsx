@@ -181,12 +181,12 @@ const trustBadges = [
 
 // Floating profiles for hero
 const floatingProfiles = [
-  { name: "Anna M.", role: "AI Engineer", position: "top-28 left-[10%]" },
-  { name: "John D.", role: "Data Scientist", position: "top-40 left-[25%]" },
-  { name: "Mike R.", role: "Full Stack Dev", position: "top-24 right-[25%]" },
-  { name: "Sara K.", role: "UX Designer", position: "top-36 right-[10%]" },
-  { name: "Chris L.", role: "ML Engineer", position: "bottom-28 left-[15%]" },
-  { name: "Emma W.", role: "Product Manager", position: "bottom-24 right-[15%]" },
+  { name: "Anna M.", role: "AI Engineer", position: "top-32 left-[10%]" },
+  { name: "John D.", role: "Data Scientist", position: "top-44 left-[25%]" },
+  { name: "Mike R.", role: "Full Stack Dev", position: "top-28 right-[25%]" },
+  { name: "Sara K.", role: "UX Designer", position: "top-40 right-[10%]" },
+  { name: "Chris L.", role: "ML Engineer", position: "bottom-32 left-[15%]" },
+  { name: "Emma W.", role: "Product Manager", position: "bottom-28 right-[15%]" },
 ];
 
 export default function BrowseTalentPage() {
@@ -199,7 +199,7 @@ export default function BrowseTalentPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 overflow-hidden">
+      <section className="relative pt-48 pb-20 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
