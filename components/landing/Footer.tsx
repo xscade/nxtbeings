@@ -29,7 +29,7 @@ const communityActivities = [
   {
     category: "Events",
     items: [
-      { name: "Hackathons", href: "#" },
+      { name: "Hackathons", href: "/hackathons" },
       { name: "Tech Talks", href: "#" },
       { name: "Workshops", href: "#" },
       { name: "Demo Days", href: "#" },
