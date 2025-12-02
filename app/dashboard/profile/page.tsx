@@ -140,7 +140,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
       </div>
     );
   }
@@ -149,7 +149,7 @@ export default function ProfilePage() {
   if (session?.user?.role !== "talent") {
     return (
       <div className="text-center py-20">
-        <p className="text-slate-500">Profile editing is only available for talent users.</p>
+        <p className="text-muted-foreground">Profile editing is only available for talent users.</p>
       </div>
     );
   }
@@ -158,8 +158,8 @@ export default function ProfilePage() {
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
-        <p className="text-slate-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">My Profile</h1>
+        <p className="text-muted-foreground mt-1">
           Update your profile to attract more companies
         </p>
       </div>
@@ -171,7 +171,7 @@ export default function ProfilePage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700"
+            className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 backdrop-blur-sm"
           >
             <CheckCircle className="w-5 h-5" />
             Profile saved successfully!
@@ -182,46 +182,48 @@ export default function ProfilePage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700"
+            className="p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive"
           >
             {error}
           </motion.div>
         )}
 
         {/* Basic Info */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-          <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-            <User className="w-5 h-5 text-slate-400" />
+        <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-6 space-y-4">
+          <h2 className="font-semibold text-foreground flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+              <User className="w-4 h-4 text-white" />
+            </div>
             Basic Information
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Full Name
               </label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="rounded-xl"
+                className="rounded-xl bg-white/50 border-white/30 focus:border-indigo-500/50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Professional Title
               </label>
               <Input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., Senior ML Engineer"
-                className="rounded-xl"
+                className="rounded-xl bg-white/50 border-white/30 focus:border-indigo-500/50"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Bio
             </label>
             <textarea
@@ -229,20 +231,22 @@ export default function ProfilePage() {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell companies about your background, expertise, and what makes you unique..."
               rows={4}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/50 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 resize-none"
             />
           </div>
         </div>
 
         {/* Experience & Skills */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-          <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-slate-400" />
+        <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-6 space-y-4">
+          <h2 className="font-semibold text-foreground flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+              <Briefcase className="w-4 h-4 text-white" />
+            </div>
             Experience & Skills
           </h2>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Years of Experience
             </label>
             <div className="flex flex-wrap gap-2">
@@ -251,10 +255,10 @@ export default function ProfilePage() {
                   key={opt.value}
                   type="button"
                   onClick={() => setExperience(opt.value)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     experience === opt.value
-                      ? "bg-violet-600 text-white"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/30"
+                      : "bg-white/60 text-muted-foreground border border-white/30 hover:bg-white/80"
                   }`}
                 >
                   {opt.label}
@@ -264,7 +268,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Skills & Expertise
             </label>
             <div className="flex flex-wrap gap-2">
@@ -273,10 +277,10 @@ export default function ProfilePage() {
                   key={skill}
                   type="button"
                   onClick={() => toggleSkill(skill)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedSkills.includes(skill)
-                      ? "bg-violet-600 text-white"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-md"
+                      : "bg-white/60 text-muted-foreground border border-white/30 hover:bg-white/80"
                   }`}
                 >
                   {skill}
@@ -287,15 +291,17 @@ export default function ProfilePage() {
         </div>
 
         {/* Additional Info */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-          <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-            <Code2 className="w-5 h-5 text-slate-400" />
+        <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-6 space-y-4">
+          <h2 className="font-semibold text-foreground flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+              <Code2 className="w-4 h-4 text-white" />
+            </div>
             Additional Information
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Portfolio / Website
               </label>
               <Input
@@ -303,11 +309,11 @@ export default function ProfilePage() {
                 onChange={(e) => setPortfolio(e.target.value)}
                 placeholder="https://yourportfolio.com"
                 type="url"
-                className="rounded-xl"
+                className="rounded-xl bg-white/50 border-white/30 focus:border-indigo-500/50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Hourly Rate (USD)
               </label>
               <Input
@@ -315,13 +321,13 @@ export default function ProfilePage() {
                 onChange={(e) => setHourlyRate(e.target.value)}
                 placeholder="e.g., 150"
                 type="number"
-                className="rounded-xl"
+                className="rounded-xl bg-white/50 border-white/30 focus:border-indigo-500/50"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Availability
             </label>
             <div className="flex flex-wrap gap-2">
@@ -330,10 +336,10 @@ export default function ProfilePage() {
                   key={opt.value}
                   type="button"
                   onClick={() => setAvailability(opt.value)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     availability === opt.value
-                      ? "bg-violet-600 text-white"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/30"
+                      : "bg-white/60 text-muted-foreground border border-white/30 hover:bg-white/80"
                   }`}
                 >
                   {opt.label}
@@ -348,7 +354,7 @@ export default function ProfilePage() {
           <Button
             type="submit"
             disabled={isSaving}
-            className="rounded-xl bg-violet-600 hover:bg-violet-700 px-6"
+            className="rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-6 shadow-lg shadow-indigo-500/30 hover:shadow-xl"
           >
             {isSaving ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -364,4 +370,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

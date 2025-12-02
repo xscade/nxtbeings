@@ -128,26 +128,19 @@ function CompanyDashboard({
   recentShortlists: Awaited<ReturnType<typeof getRecentShortlists>>;
 }) {
   const statCards = [
-    { name: "Available Talent", value: stats.totalTalent, icon: Users, color: "blue", href: "/dashboard/browse" },
-    { name: "Shortlisted", value: stats.shortlistedCount, icon: Star, color: "amber", href: "/dashboard/shortlist" },
-    { name: "Contacted", value: stats.contactedCount, icon: TrendingUp, color: "violet", href: "/dashboard/shortlist?status=contacted" },
-    { name: "Hired", value: stats.hiredCount, icon: UserCheck, color: "emerald", href: "/dashboard/shortlist?status=hired" },
+    { name: "Available Talent", value: stats.totalTalent, icon: Users, gradient: "from-blue-500 to-primary", href: "/dashboard/browse" },
+    { name: "Shortlisted", value: stats.shortlistedCount, icon: Star, gradient: "from-amber-400 to-orange-500", href: "/dashboard/shortlist" },
+    { name: "Contacted", value: stats.contactedCount, icon: TrendingUp, gradient: "from-indigo-500 to-violet-500", href: "/dashboard/shortlist?status=contacted" },
+    { name: "Hired", value: stats.hiredCount, icon: UserCheck, gradient: "from-emerald-400 to-teal-500", href: "/dashboard/shortlist?status=hired" },
   ];
-
-  const colorMap: Record<string, string> = {
-    blue: "bg-blue-50 text-blue-600",
-    amber: "bg-amber-50 text-amber-600",
-    violet: "bg-violet-50 text-violet-600",
-    emerald: "bg-emerald-50 text-emerald-600",
-  };
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {session.user.name?.split(" ")[0]}
         </h1>
-        <p className="text-slate-500 mt-1">Here&apos;s what&apos;s happening with your talent search.</p>
+        <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your talent search.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -155,54 +148,56 @@ function CompanyDashboard({
           <Link
             key={stat.name}
             href={stat.href}
-            className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all group"
+            className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:bg-white/80 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 group"
           >
             <div className="flex items-center justify-between">
-              <div className={`w-12 h-12 rounded-xl ${colorMap[stat.color]} flex items-center justify-center`}>
-                <stat.icon className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg`}>
+                <stat.icon className="w-6 h-6 text-white" />
               </div>
-              <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-1 transition-all" />
+              <ArrowRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </div>
             <div className="mt-4">
-              <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
-              <p className="text-sm text-slate-500 mt-1">{stat.name}</p>
+              <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+              <p className="text-sm text-muted-foreground mt-1">{stat.name}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="font-semibold text-slate-900">Recent Shortlists</h2>
-          <Link href="/dashboard/shortlist" className="text-sm text-blue-600 hover:text-blue-700 font-medium">View all</Link>
+      <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden">
+        <div className="px-6 py-4 border-b border-border/50 flex items-center justify-between">
+          <h2 className="font-semibold text-foreground">Recent Shortlists</h2>
+          <Link href="/dashboard/shortlist" className="text-sm text-primary hover:text-primary/80 font-medium">View all</Link>
         </div>
         
         {recentShortlists.length === 0 ? (
           <div className="px-6 py-12 text-center">
-            <Star className="w-12 h-12 text-slate-200 mx-auto" />
-            <p className="text-slate-500 mt-4">No candidates shortlisted yet.</p>
-            <Link href="/dashboard/browse" className="inline-flex items-center gap-2 mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 flex items-center justify-center mx-auto">
+              <Star className="w-8 h-8 text-amber-500" />
+            </div>
+            <p className="text-muted-foreground mt-4">No candidates shortlisted yet.</p>
+            <Link href="/dashboard/browse" className="inline-flex items-center gap-2 mt-4 text-sm text-primary hover:text-primary/80 font-medium">
               Browse talent <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         ) : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-border/50">
             {recentShortlists.map((item) => (
-              <li key={item.id} className="px-6 py-4 hover:bg-slate-50 transition-colors">
+              <li key={item.id} className="px-6 py-4 hover:bg-white/40 transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-600 font-medium">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-primary flex items-center justify-center text-white font-medium shadow-md">
                     {item.talent?.name?.charAt(0) || "?"}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">{item.talent?.name || "Unknown"}</p>
-                    <p className="text-xs text-slate-500 truncate">{item.talent?.title || "No title"}</p>
+                    <p className="text-sm font-medium text-foreground truncate">{item.talent?.name || "Unknown"}</p>
+                    <p className="text-xs text-muted-foreground truncate">{item.talent?.title || "No title"}</p>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize
-                    ${item.status === "shortlisted" ? "bg-amber-50 text-amber-700" : ""}
-                    ${item.status === "contacted" ? "bg-blue-50 text-blue-700" : ""}
-                    ${item.status === "interviewing" ? "bg-violet-50 text-violet-700" : ""}
-                    ${item.status === "hired" ? "bg-emerald-50 text-emerald-700" : ""}
-                    ${item.status === "rejected" ? "bg-slate-100 text-slate-600" : ""}
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize backdrop-blur-sm
+                    ${item.status === "shortlisted" ? "bg-amber-500/10 text-amber-600 border border-amber-500/20" : ""}
+                    ${item.status === "contacted" ? "bg-blue-500/10 text-blue-600 border border-blue-500/20" : ""}
+                    ${item.status === "interviewing" ? "bg-violet-500/10 text-violet-600 border border-violet-500/20" : ""}
+                    ${item.status === "hired" ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : ""}
+                    ${item.status === "rejected" ? "bg-muted text-muted-foreground border border-border" : ""}
                   `}>
                     {item.status}
                   </span>
@@ -229,18 +224,11 @@ function TalentDashboard({
   recentOpportunities: Awaited<ReturnType<typeof getRecentOpportunities>>;
 }) {
   const statCards = [
-    { name: "Companies Interested", value: stats.totalInterested, icon: Eye, color: "violet", href: "/dashboard/opportunities" },
-    { name: "Shortlisted By", value: stats.shortlistedCount, icon: Star, color: "amber", href: "/dashboard/opportunities" },
-    { name: "Contacted", value: stats.contactedCount, icon: MessageSquare, color: "blue", href: "/dashboard/opportunities" },
-    { name: "Interviewing", value: stats.interviewingCount, icon: Briefcase, color: "emerald", href: "/dashboard/opportunities" },
+    { name: "Companies Interested", value: stats.totalInterested, icon: Eye, gradient: "from-indigo-500 to-violet-500", href: "/dashboard/opportunities" },
+    { name: "Shortlisted By", value: stats.shortlistedCount, icon: Star, gradient: "from-amber-400 to-orange-500", href: "/dashboard/opportunities" },
+    { name: "Contacted", value: stats.contactedCount, icon: MessageSquare, gradient: "from-blue-500 to-primary", href: "/dashboard/opportunities" },
+    { name: "Interviewing", value: stats.interviewingCount, icon: Briefcase, gradient: "from-emerald-400 to-teal-500", href: "/dashboard/opportunities" },
   ];
-
-  const colorMap: Record<string, string> = {
-    violet: "bg-violet-50 text-violet-600",
-    amber: "bg-amber-50 text-amber-600",
-    blue: "bg-blue-50 text-blue-600",
-    emerald: "bg-emerald-50 text-emerald-600",
-  };
 
   const profileComplete = profile?.talentProfile?.title && 
     profile?.talentProfile?.skills && 
@@ -250,17 +238,17 @@ function TalentDashboard({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {session.user.name?.split(" ")[0]}
         </h1>
-        <p className="text-slate-500 mt-1">Here&apos;s your activity on Nxtbeings.</p>
+        <p className="text-muted-foreground mt-1">Here&apos;s your activity on Nxtbeings.</p>
       </div>
 
       {/* Profile Completion Banner */}
       {!profileComplete && (
-        <div className="bg-gradient-to-r from-violet-500 to-purple-600 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-r from-indigo-500 to-violet-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-500/20">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
               <Sparkles className="w-6 h-6" />
             </div>
             <div className="flex-1">
@@ -270,7 +258,7 @@ function TalentDashboard({
               </p>
               <Link
                 href="/dashboard/profile"
-                className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-white text-violet-600 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors"
+                className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-white text-indigo-600 rounded-xl font-medium text-sm hover:bg-white/90 transition-colors shadow-lg"
               >
                 Update profile
                 <ArrowRight className="w-4 h-4" />
@@ -285,51 +273,53 @@ function TalentDashboard({
           <Link
             key={stat.name}
             href={stat.href}
-            className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all group"
+            className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300 group"
           >
             <div className="flex items-center justify-between">
-              <div className={`w-12 h-12 rounded-xl ${colorMap[stat.color]} flex items-center justify-center`}>
-                <stat.icon className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg`}>
+                <stat.icon className="w-6 h-6 text-white" />
               </div>
-              <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-1 transition-all" />
+              <ArrowRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
             </div>
             <div className="mt-4">
-              <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
-              <p className="text-sm text-slate-500 mt-1">{stat.name}</p>
+              <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+              <p className="text-sm text-muted-foreground mt-1">{stat.name}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="font-semibold text-slate-900">Recent Interest</h2>
-          <Link href="/dashboard/opportunities" className="text-sm text-violet-600 hover:text-violet-700 font-medium">View all</Link>
+      <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden">
+        <div className="px-6 py-4 border-b border-border/50 flex items-center justify-between">
+          <h2 className="font-semibold text-foreground">Recent Interest</h2>
+          <Link href="/dashboard/opportunities" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">View all</Link>
         </div>
         
         {recentOpportunities.length === 0 ? (
           <div className="px-6 py-12 text-center">
-            <Briefcase className="w-12 h-12 text-slate-200 mx-auto" />
-            <p className="text-slate-500 mt-4">No companies have shown interest yet.</p>
-            <p className="text-sm text-slate-400 mt-2">Complete your profile to get discovered!</p>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 flex items-center justify-center mx-auto">
+              <Briefcase className="w-8 h-8 text-indigo-500" />
+            </div>
+            <p className="text-muted-foreground mt-4">No companies have shown interest yet.</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Complete your profile to get discovered!</p>
           </div>
         ) : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-border/50">
             {recentOpportunities.map((item) => (
-              <li key={item.id} className="px-6 py-4 hover:bg-slate-50 transition-colors">
+              <li key={item.id} className="px-6 py-4 hover:bg-white/40 transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-primary flex items-center justify-center text-white font-medium shadow-md">
                     {item.company?.name?.charAt(0) || "?"}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">{item.company?.name || "Unknown Company"}</p>
-                    <p className="text-xs text-slate-500">Interested in your profile</p>
+                    <p className="text-sm font-medium text-foreground truncate">{item.company?.name || "Unknown Company"}</p>
+                    <p className="text-xs text-muted-foreground">Interested in your profile</p>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize
-                    ${item.status === "shortlisted" ? "bg-amber-50 text-amber-700" : ""}
-                    ${item.status === "contacted" ? "bg-blue-50 text-blue-700" : ""}
-                    ${item.status === "interviewing" ? "bg-violet-50 text-violet-700" : ""}
-                    ${item.status === "hired" ? "bg-emerald-50 text-emerald-700" : ""}
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize backdrop-blur-sm
+                    ${item.status === "shortlisted" ? "bg-amber-500/10 text-amber-600 border border-amber-500/20" : ""}
+                    ${item.status === "contacted" ? "bg-blue-500/10 text-blue-600 border border-blue-500/20" : ""}
+                    ${item.status === "interviewing" ? "bg-violet-500/10 text-violet-600 border border-violet-500/20" : ""}
+                    ${item.status === "hired" ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : ""}
                   `}>
                     {item.status}
                   </span>

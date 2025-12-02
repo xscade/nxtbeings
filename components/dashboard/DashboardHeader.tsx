@@ -30,19 +30,19 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+    <header className="sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-white/20">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Mobile menu button */}
         <button
           type="button"
-          className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100"
+          className="lg:hidden p-2 -ml-2 rounded-xl hover:bg-primary/10 transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <Menu className="h-5 w-5 text-slate-600" />
+          <Menu className="h-5 w-5 text-foreground" />
         </button>
 
         {/* Logo for mobile */}
-        <div className="lg:hidden text-lg font-semibold text-slate-900">
+        <div className="lg:hidden text-lg font-semibold text-foreground">
           Nxtbeings
         </div>
 
@@ -53,15 +53,15 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
         <div className="relative">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-primary/10 transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-sm font-medium">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-primary flex items-center justify-center text-white text-sm font-medium shadow-md shadow-primary/20">
               {user.name?.charAt(0)?.toUpperCase() || <User className="w-4 h-4" />}
             </div>
-            <span className="hidden sm:block text-sm font-medium text-slate-700">
+            <span className="hidden sm:block text-sm font-medium text-foreground">
               {user.name || "User"}
             </span>
-            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
+            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
           </button>
 
           <AnimatePresence>
@@ -76,17 +76,17 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-56 rounded-xl bg-white shadow-lg border border-slate-200 py-1 z-50"
+                  className="absolute right-0 mt-2 w-56 rounded-2xl bg-white/90 backdrop-blur-xl shadow-xl shadow-primary/10 border border-white/20 py-1 z-50"
                 >
-                  <div className="px-4 py-3 border-b border-slate-100">
-                    <p className="text-sm font-medium text-slate-900">{user.name}</p>
-                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                  <div className="px-4 py-3 border-b border-border/50">
+                    <p className="text-sm font-medium text-foreground">{user.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                   </div>
                   <div className="py-1">
                     <Button
                       variant="ghost"
                       onClick={handleLogout}
-                      className="w-full justify-start px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 rounded-none"
+                      className="w-full justify-start px-4 py-2 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive rounded-none"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign out
@@ -101,4 +101,3 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
     </header>
   );
 }
-

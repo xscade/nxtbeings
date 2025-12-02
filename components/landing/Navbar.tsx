@@ -251,9 +251,9 @@ export function Navbar() {
                 Sign In
               </Link>
               <Link href="/get-started">
-                <Button className="rounded-full font-medium px-5 h-9 text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-none">
-                  Get Started
-                </Button>
+              <Button className="rounded-full font-medium px-5 h-9 text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-none">
+                Get Started
+              </Button>
               </Link>
 
               {/* Mobile Menu Toggle */}
@@ -347,9 +347,9 @@ export function Navbar() {
                       Sign In
                     </Link>
                     <Link href="/get-started" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full rounded-full mt-2 bg-blue-600 hover:bg-blue-700">
-                        Get Started
-                      </Button>
+                    <Button className="w-full rounded-full mt-2 bg-blue-600 hover:bg-blue-700">
+                      Get Started
+                    </Button>
                     </Link>
                   </div>
                 </div>

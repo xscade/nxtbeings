@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, MapPin, Briefcase } from "lucide-react";
+import { Star, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Talent {
@@ -29,16 +29,16 @@ const experienceLabels: Record<string, string> = {
 
 export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardProps) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 hover:border-slate-300 hover:shadow-sm transition-all">
+    <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-6 hover:bg-white/80 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white font-semibold text-lg">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-primary flex items-center justify-center text-white font-semibold text-lg shadow-lg shadow-primary/20">
             {talent.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">{talent.name}</h3>
-            <p className="text-sm text-slate-500">{talent.title || "AI Professional"}</p>
+            <h3 className="font-semibold text-foreground">{talent.name}</h3>
+            <p className="text-sm text-muted-foreground">{talent.title || "AI Professional"}</p>
           </div>
         </div>
         <Button
@@ -48,8 +48,8 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
           disabled={isShortlisted}
           className={`rounded-full w-9 h-9 p-0 ${
             isShortlisted
-              ? "bg-amber-50 text-amber-500 hover:bg-amber-50"
-              : "text-slate-400 hover:text-amber-500 hover:bg-amber-50"
+              ? "bg-amber-500/10 text-amber-500 hover:bg-amber-500/10"
+              : "text-muted-foreground hover:text-amber-500 hover:bg-amber-500/10"
           }`}
         >
           <Star className={`w-5 h-5 ${isShortlisted ? "fill-current" : ""}`} />
@@ -58,15 +58,15 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
 
       {/* Experience */}
       {talent.experience && (
-        <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
-          <Briefcase className="w-4 h-4 text-slate-400" />
+        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <Briefcase className="w-4 h-4" />
           <span>{experienceLabels[talent.experience] || talent.experience} experience</span>
         </div>
       )}
 
       {/* Bio */}
       {talent.bio && (
-        <p className="mt-3 text-sm text-slate-600 line-clamp-2">
+        <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
           {talent.bio}
         </p>
       )}
@@ -77,13 +77,13 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
           {talent.skills.slice(0, 4).map((skill) => (
             <span
               key={skill}
-              className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-medium"
+              className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium"
             >
               {skill}
             </span>
           ))}
           {talent.skills.length > 4 && (
-            <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-medium">
+            <span className="px-2.5 py-1 rounded-full bg-muted text-muted-foreground text-xs font-medium">
               +{talent.skills.length - 4}
             </span>
           )}
@@ -91,15 +91,14 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
       )}
 
       {/* Actions */}
-      <div className="mt-5 pt-4 border-t border-slate-100 flex gap-2">
-        <Button variant="outline" size="sm" className="flex-1 rounded-lg text-sm">
+      <div className="mt-5 pt-4 border-t border-border/50 flex gap-2">
+        <Button variant="outline" size="sm" className="flex-1 rounded-xl text-sm bg-white/50 border-white/30 hover:bg-white/80">
           View Profile
         </Button>
-        <Button size="sm" className="flex-1 rounded-lg text-sm">
+        <Button size="sm" className="flex-1 rounded-xl text-sm bg-gradient-to-r from-blue-500 to-primary shadow-md shadow-primary/20">
           Contact
         </Button>
       </div>
     </div>
   );
 }
-

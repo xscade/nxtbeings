@@ -153,50 +153,50 @@ export default function BrowseTalentPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Browse Talent</h1>
-          <p className="text-slate-500 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Browse Talent</h1>
+          <p className="text-muted-foreground mt-1">
             Discover AI professionals for your team
           </p>
         </div>
       </div>
 
       {/* Search & Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4">
+      <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-4">
         <form onSubmit={handleSearch} className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, title, or skills..."
-              className="pl-10 h-11 rounded-xl"
+              className="pl-10 h-11 rounded-xl bg-white/50 border-white/30 focus:border-primary/50"
             />
           </div>
           <Button
             type="button"
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
-            className={`rounded-xl h-11 ${showFilters ? "bg-slate-100" : ""}`}
+            className={`rounded-xl h-11 border-white/30 ${showFilters ? "bg-primary/10 border-primary/30" : "bg-white/50"}`}
           >
             <Filter className="w-4 h-4 mr-2" />
             Filters
             {(selectedSkills.length > 0 || experience) && (
-              <span className="ml-2 px-1.5 py-0.5 rounded-full bg-blue-600 text-white text-xs">
+              <span className="ml-2 px-1.5 py-0.5 rounded-full bg-primary text-primary-foreground text-xs">
                 {selectedSkills.length + (experience ? 1 : 0)}
               </span>
             )}
           </Button>
-          <Button type="submit" className="rounded-xl h-11">
+          <Button type="submit" className="rounded-xl h-11 bg-gradient-to-r from-blue-500 to-primary shadow-lg shadow-primary/20">
             Search
           </Button>
         </form>
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-slate-100 space-y-4">
+          <div className="mt-4 pt-4 border-t border-border/50 space-y-4">
             {/* Skills */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Skills
               </label>
               <div className="flex flex-wrap gap-2">
@@ -205,10 +205,10 @@ export default function BrowseTalentPage() {
                     key={skill}
                     type="button"
                     onClick={() => toggleSkill(skill)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                       selectedSkills.includes(skill)
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-gradient-to-r from-blue-500 to-primary text-white shadow-md"
+                        : "bg-white/60 text-muted-foreground hover:bg-white/80 border border-white/30"
                     }`}
                   >
                     {skill}
@@ -219,7 +219,7 @@ export default function BrowseTalentPage() {
 
             {/* Experience */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Experience
               </label>
               <div className="flex flex-wrap gap-2">
@@ -228,10 +228,10 @@ export default function BrowseTalentPage() {
                     key={opt.value}
                     type="button"
                     onClick={() => setExperience(experience === opt.value ? "" : opt.value)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                       experience === opt.value
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-gradient-to-r from-blue-500 to-primary text-white shadow-md"
+                        : "bg-white/60 text-muted-foreground hover:bg-white/80 border border-white/30"
                     }`}
                   >
                     {opt.label}
@@ -244,7 +244,7 @@ export default function BrowseTalentPage() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1"
+                className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
               >
                 <X className="w-4 h-4" />
                 Clear all filters
@@ -257,16 +257,18 @@ export default function BrowseTalentPage() {
       {/* Results */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       ) : talents.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
-          <Search className="w-12 h-12 text-slate-200 mx-auto" />
-          <p className="text-slate-500 mt-4">No talent found matching your criteria.</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-white/20 p-12 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-primary/20 flex items-center justify-center mx-auto">
+            <Search className="w-8 h-8 text-primary" />
+          </div>
+          <p className="text-muted-foreground mt-4">No talent found matching your criteria.</p>
           {hasFilters && (
             <button
               onClick={clearFilters}
-              className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="mt-4 text-sm text-primary hover:text-primary/80 font-medium"
             >
               Clear filters
             </button>
@@ -275,7 +277,7 @@ export default function BrowseTalentPage() {
       ) : (
         <>
           {/* Results count */}
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Showing {talents.length} of {pagination?.total || 0} professionals
           </p>
 
@@ -299,11 +301,11 @@ export default function BrowseTalentPage() {
                 size="sm"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="rounded-lg"
+                className="rounded-xl bg-white/60 border-white/30"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="text-sm text-slate-600 px-4">
+              <span className="text-sm text-muted-foreground px-4">
                 Page {page} of {pagination.totalPages}
               </span>
               <Button
@@ -311,7 +313,7 @@ export default function BrowseTalentPage() {
                 size="sm"
                 onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                 disabled={page === pagination.totalPages}
-                className="rounded-lg"
+                className="rounded-xl bg-white/60 border-white/30"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
@@ -322,4 +324,3 @@ export default function BrowseTalentPage() {
     </div>
   );
 }
-

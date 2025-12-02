@@ -31,33 +31,33 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-50 hidden lg:flex lg:w-64 lg:flex-col">
-      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-slate-200 px-6 pb-4">
+    <aside className="fixed inset-y-0 left-0 z-50 hidden lg:flex lg:w-72 lg:flex-col">
+      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white/70 backdrop-blur-xl border-r border-white/20 px-6 pb-4 shadow-xl shadow-primary/5">
         {/* Logo */}
         <div className="flex h-16 shrink-0 items-center">
-          <Link href="/" className="text-xl font-semibold text-slate-900">
+          <Link href="/" className="text-xl font-semibold text-foreground">
             Nxtbeings
           </Link>
         </div>
 
         {/* Company Badge */}
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-50">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white">
-            <Building2 className="w-5 h-5" />
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-500/10 border border-primary/20 backdrop-blur-sm">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-primary flex items-center justify-center text-white shadow-lg shadow-primary/30">
+            <Building2 className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-slate-900 truncate">
+            <p className="text-sm font-semibold text-foreground truncate">
               {user.name || "Company"}
             </p>
-            <p className="text-xs text-slate-500 truncate">
-              {user.email}
+            <p className="text-xs text-primary font-medium">
+              Hiring Account
             </p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-1 flex-col">
-          <ul role="list" className="flex flex-1 flex-col gap-y-1">
+        <nav className="flex flex-1 flex-col mt-2">
+          <ul role="list" className="flex flex-1 flex-col gap-y-2">
             {navigation.map((item) => {
               const isActive = pathname === item.href || 
                 (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -67,16 +67,16 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                   <Link
                     href={item.href}
                     className={`
-                      group flex gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors
+                      group flex gap-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200
                       ${isActive 
-                        ? "bg-blue-50 text-blue-600" 
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-gradient-to-r from-blue-500 to-primary text-white shadow-lg shadow-primary/30" 
+                        : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
                       }
                     `}
                   >
                     <item.icon
-                      className={`h-5 w-5 shrink-0 ${
-                        isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"
+                      className={`h-5 w-5 shrink-0 transition-colors ${
+                        isActive ? "text-white" : "text-muted-foreground group-hover:text-primary"
                       }`}
                     />
                     {item.name}
@@ -86,8 +86,21 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             })}
           </ul>
         </nav>
+
+        {/* Bottom Card */}
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-primary text-white shadow-lg shadow-primary/30">
+          <p className="text-sm font-semibold">Find AI Talent</p>
+          <p className="text-xs text-white/80 mt-1">
+            Browse pre-vetted professionals ready to join your team.
+          </p>
+          <Link
+            href="/dashboard/browse"
+            className="mt-3 inline-flex items-center text-xs font-medium text-white hover:underline"
+          >
+            Browse talent →
+          </Link>
+        </div>
       </div>
     </aside>
   );
 }
-
