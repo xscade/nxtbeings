@@ -252,20 +252,20 @@ export function Footer() {
             </div>
             <div className="flex flex-wrap gap-2">
               {[
-                { name: "Hackathons", icon: Code },
-                { name: "Tech Talks", icon: Mic },
-                { name: "Workshops", icon: GraduationCap },
-                { name: "Coding Challenges", icon: Trophy },
-                { name: "Build Sprints", icon: Rocket },
-                { name: "AI Playground", icon: Sparkles },
-                { name: "Mentorship", icon: Users },
-                { name: "Mock Interviews", icon: Briefcase },
-                { name: "Code & Coffee", icon: Coffee },
-                { name: "Gaming Nights", icon: Gamepad2 },
+                { name: "Hackathons", icon: Code, href: "/hackathons" },
+                { name: "Tech Talks", icon: Mic, href: "#" },
+                { name: "Workshops", icon: GraduationCap, href: "#" },
+                { name: "Coding Challenges", icon: Trophy, href: "#" },
+                { name: "Build Sprints", icon: Rocket, href: "#" },
+                { name: "AI Playground", icon: Sparkles, href: "#" },
+                { name: "Mentorship", icon: Users, href: "#" },
+                { name: "Mock Interviews", icon: Briefcase, href: "#" },
+                { name: "Code & Coffee", icon: Coffee, href: "#" },
+                { name: "Gaming Nights", icon: Gamepad2, href: "#" },
               ].map((activity) => (
                 <Link
                   key={activity.name}
-                  href="#"
+                  href={activity.href}
                   className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-xs"
                 >
                   <activity.icon className="w-3 h-3 text-white/50 group-hover:text-white/70" />
