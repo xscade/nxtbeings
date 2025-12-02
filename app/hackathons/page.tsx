@@ -855,10 +855,8 @@ export default function HackathonsPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: item.delay, type: "spring", stiffness: 200 }}
-                  className="absolute w-12 h-12 md:w-14 md:h-14"
+                  className="absolute inset-0"
                   style={{
-                    left: '50%',
-                    bottom: 0,
                     transformOrigin: '50% 100%',
                   }}
                   animate={{
@@ -873,9 +871,11 @@ export default function HackathonsPage() {
                   }}
                 >
                   <motion.div
-                    className="w-full h-full"
+                    className="absolute w-12 h-12 md:w-14 md:h-14"
                     style={{
-                      transform: `translateY(-${radiusRatio * 100}%)`,
+                      bottom: `${(1 - radiusRatio) * 100}%`,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
                     }}
                     animate={{
                       rotate: -360,
