@@ -185,8 +185,8 @@ const floatingProfiles = [
   { name: "John D.", role: "Data Scientist", position: "top-56 left-[25%]" },
   { name: "Mike R.", role: "Full Stack Dev", position: "top-40 right-[25%]" },
   { name: "Sara K.", role: "UX Designer", position: "top-52 right-[10%]" },
-  { name: "Chris L.", role: "ML Engineer", position: "bottom-36 left-[15%]" },
-  { name: "Emma W.", role: "Product Manager", position: "bottom-32 right-[15%]" },
+  { name: "Chris L.", role: "ML Engineer", position: "bottom-36 left-[8%]" },
+  { name: "Emma W.", role: "Product Manager", position: "bottom-32 right-[8%]" },
 ];
 
 export default function BrowseTalentPage() {
