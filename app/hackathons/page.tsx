@@ -770,6 +770,251 @@ export default function HackathonsPage() {
         </div>
       </section>
 
+      {/* Sponsors Section - Orbital Design */}
+      <section className="py-24 bg-gradient-to-b from-background via-primary/[0.02] to-background relative overflow-hidden">
+        <div className="container relative z-10 mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+            >
+              Backed by the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">best</span>
+            </motion.h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Sponsored by industry leaders who believe in the future of AI
+            </p>
+          </div>
+
+          {/* Orbital Sponsor Display */}
+          <div className="relative max-w-4xl mx-auto h-[500px] md:h-[550px]">
+            {/* Concentric Arcs */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 550" fill="none">
+              {/* Outer Arc */}
+              <motion.path
+                d="M 50 550 A 400 400 0 0 1 750 550"
+                stroke="url(#arcGradient1)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+              {/* Middle Arc */}
+              <motion.path
+                d="M 150 550 A 300 300 0 0 1 650 550"
+                stroke="url(#arcGradient2)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+              />
+              {/* Inner Arc */}
+              <motion.path
+                d="M 250 550 A 200 200 0 0 1 550 550"
+                stroke="url(#arcGradient3)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
+              />
+              <defs>
+                <linearGradient id="arcGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgb(59, 130, 246)" stopOpacity="0.1" />
+                  <stop offset="50%" stopColor="rgb(59, 130, 246)" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="rgb(59, 130, 246)" stopOpacity="0.1" />
+                </linearGradient>
+                <linearGradient id="arcGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgb(99, 102, 241)" stopOpacity="0.1" />
+                  <stop offset="50%" stopColor="rgb(99, 102, 241)" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="rgb(99, 102, 241)" stopOpacity="0.1" />
+                </linearGradient>
+                <linearGradient id="arcGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgb(139, 92, 246)" stopOpacity="0.1" />
+                  <stop offset="50%" stopColor="rgb(139, 92, 246)" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="rgb(139, 92, 246)" stopOpacity="0.1" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Sponsor Logos - Positioned on Arcs */}
+            {/* Top Center - Outer Arc */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="absolute left-1/2 -translate-x-1/2 top-[5%]"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer group">
+                <span className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">G</span>
+              </div>
+              <p className="text-xs text-muted-foreground text-center mt-2 opacity-0 group-hover:opacity-100">Google</p>
+            </motion.div>
+
+            {/* Left Upper - Outer Arc */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="absolute left-[8%] top-[35%]"
+            >
+              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Cpu className="w-6 h-6 text-blue-500" />
+              </div>
+            </motion.div>
+
+            {/* Right Upper - Outer Arc */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="absolute right-[8%] top-[30%]"
+            >
+              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Brain className="w-6 h-6 text-indigo-500" />
+              </div>
+            </motion.div>
+
+            {/* Center - Middle Arc */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="absolute left-1/2 -translate-x-1/2 top-[25%]"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Sparkles className="w-7 h-7 text-violet-500" />
+              </div>
+            </motion.div>
+
+            {/* Left Middle */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.7 }}
+              className="absolute left-[20%] top-[50%]"
+            >
+              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Code className="w-6 h-6 text-emerald-500" />
+              </div>
+            </motion.div>
+
+            {/* Right Middle */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8 }}
+              className="absolute right-[18%] top-[48%]"
+            >
+              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Globe className="w-6 h-6 text-cyan-500" />
+              </div>
+            </motion.div>
+
+            {/* Bottom Left - Inner Arc */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.9 }}
+              className="absolute left-[5%] bottom-[15%]"
+            >
+              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Zap className="w-5 h-5 text-yellow-500" />
+              </div>
+            </motion.div>
+
+            {/* Center Bottom */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1 }}
+              className="absolute left-[35%] bottom-[20%]"
+            >
+              <div className="w-14 h-14 rounded-xl bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Rocket className="w-6 h-6 text-rose-500" />
+              </div>
+            </motion.div>
+
+            {/* Bottom Right */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.1 }}
+              className="absolute right-[5%] bottom-[10%]"
+            >
+              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Award className="w-5 h-5 text-amber-500" />
+              </div>
+            </motion.div>
+
+            {/* Far Right */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.2 }}
+              className="absolute right-[2%] top-[55%]"
+            >
+              <div className="w-12 h-12 rounded-lg bg-card border border-border shadow-lg shadow-primary/5 flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all cursor-pointer">
+                <Layers className="w-5 h-5 text-slate-500" />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Sponsor Tier Labels */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-wrap justify-center gap-6 mt-8"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500" />
+              <span className="text-sm text-muted-foreground">Platinum Sponsors</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-slate-300 to-slate-400" />
+              <span className="text-sm text-muted-foreground">Gold Sponsors</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-amber-600 to-amber-700" />
+              <span className="text-sm text-muted-foreground">Silver Sponsors</span>
+            </div>
+          </motion.div>
+
+          {/* Become a Sponsor CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+            className="text-center mt-12"
+          >
+            <p className="text-muted-foreground mb-4">Want to support the next generation of AI builders?</p>
+            <Button variant="outline" className="rounded-full px-6">
+              Become a Sponsor
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Judges Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
