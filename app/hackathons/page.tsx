@@ -527,10 +527,10 @@ export default function HackathonsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Timeline Steps - Left Side */}
               <div className="relative">
-                {/* Vertical Line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/10 hidden md:block" />
+                {/* Vertical Line - More visible */}
+                <div className="absolute left-[27px] top-8 bottom-8 w-[2px] bg-border hidden md:block" />
                 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {timelineSteps.map((step, i) => (
                     <motion.button
                       key={step.id}
@@ -545,44 +545,42 @@ export default function HackathonsPage() {
                           : "hover:bg-muted/50"
                       }`}
                     >
-                      {/* Timeline Dot */}
+                      {/* Timeline Circle */}
                       <div className="relative z-10 shrink-0">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
-                          activeStep === i
-                            ? "bg-primary text-white shadow-lg shadow-primary/30"
-                            : i < activeStep 
-                              ? "bg-primary/20 text-primary"
-                              : "bg-muted text-muted-foreground"
-                        }`}>
-                          {activeStep === i ? (
+                        {activeStep === i ? (
+                          /* Active: Filled circle with icon */
+                          <div className="w-12 h-12 rounded-full bg-primary text-white shadow-lg shadow-primary/30 flex items-center justify-center">
                             <step.icon className="w-5 h-5" />
-                          ) : i < activeStep ? (
-                            <CheckCircle2 className="w-5 h-5" />
-                          ) : (
-                            <div className="w-2.5 h-2.5 rounded-full bg-current" />
-                          )}
-                        </div>
-                        {/* Connector Line for active */}
+                          </div>
+                        ) : (
+                          /* Inactive: Ring with inner dot */
+                          <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+                            i < activeStep 
+                              ? "border-primary bg-primary/10" 
+                              : "border-muted-foreground/30 bg-background"
+                          }`}>
+                            <div className={`w-3 h-3 rounded-full transition-colors ${
+                              i < activeStep ? "bg-primary" : "bg-muted-foreground/40"
+                            }`} />
+                          </div>
+                        )}
+                        
+                        {/* Connecting line segment for active item */}
                         {activeStep === i && i < timelineSteps.length - 1 && (
-                          <motion.div 
-                            initial={{ height: 0 }}
-                            animate={{ height: "100%" }}
-                            className="absolute left-1/2 top-12 w-0.5 bg-primary -translate-x-1/2"
-                            style={{ maxHeight: "40px" }}
-                          />
+                          <div className="absolute left-1/2 top-full w-[2px] h-4 bg-primary -translate-x-1/2" />
                         )}
                       </div>
                       
                       {/* Content */}
-                      <div className="flex-1 min-w-0 pt-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-sm font-semibold ${activeStep === i ? "text-primary" : "text-muted-foreground"}`}>
+                      <div className="flex-1 min-w-0 pt-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className={`text-sm font-semibold ${activeStep === i ? "text-primary" : "text-foreground"}`}>
                             {step.date}
                           </span>
                           <span className="text-xs text-muted-foreground">• {step.time}</span>
                         </div>
                         <h3 className={`font-semibold transition-colors ${
-                          activeStep === i ? "text-foreground" : "text-muted-foreground"
+                          activeStep === i ? "text-foreground" : "text-foreground/70"
                         }`}>
                           {step.title}
                         </h3>
@@ -590,7 +588,7 @@ export default function HackathonsPage() {
                           <motion.p 
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
-                            className="text-sm text-muted-foreground mt-2 md:hidden"
+                            className="text-sm text-muted-foreground mt-2 lg:hidden"
                           >
                             {step.description}
                           </motion.p>
@@ -598,7 +596,9 @@ export default function HackathonsPage() {
                       </div>
 
                       {/* Arrow indicator */}
-                      <div className={`shrink-0 pt-2 transition-transform ${activeStep === i ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"}`}>
+                      <div className={`shrink-0 pt-3 transition-all duration-300 ${
+                        activeStep === i ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
+                      }`}>
                         <ArrowRight className="w-4 h-4 text-primary" />
                       </div>
                     </motion.button>
