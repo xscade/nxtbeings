@@ -13,41 +13,54 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.log("Auth: Missing credentials");
+            return null;
+          }
+
+          await connectToDatabase();
+
+          // Case-insensitive email lookup
+          const email = (credentials.email as string).toLowerCase();
+          console.log("Auth: Looking up user:", email);
+          
+          const user = await User.findOne({ email }).select("+password");
+
+          if (!user) {
+            console.log("Auth: User not found");
+            return null;
+          }
+
+          if (!user.password) {
+            console.log("Auth: User has no password (OAuth account)");
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            console.log("Auth: Invalid password");
+            return null;
+          }
+
+          console.log("Auth: Login successful for:", email);
+          
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+            onboardingCompleted: user.onboardingCompleted,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
         }
-
-        await connectToDatabase();
-
-        const user = await User.findOne({ email: credentials.email }).select(
-          "+password"
-        );
-
-        if (!user) {
-          throw new Error("No user found with this email");
-        }
-
-        if (!user.password) {
-          throw new Error("Please sign in with the method you used to create your account");
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          throw new Error("Invalid password");
-        }
-
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          role: user.role,
-          onboardingCompleted: user.onboardingCompleted,
-        };
       },
     }),
   ],

@@ -38,15 +38,28 @@ function SignInContent() {
         redirect: false,
       });
 
+      console.log("SignIn result:", result);
+
       if (result?.error) {
-        setError("Invalid email or password");
+        // Map error messages
+        if (result.error === "CredentialsSignin") {
+          setError("Invalid email or password");
+        } else {
+          setError(result.error);
+        }
         setIsLoading(false);
         return;
       }
 
-      // Successful login - redirect
-      window.location.href = callbackUrl;
-    } catch {
+      if (result?.ok) {
+        // Successful login - redirect
+        window.location.href = callbackUrl;
+      } else {
+        setError("Login failed. Please try again.");
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error("SignIn error:", err);
       setError("Something went wrong. Please try again.");
       setIsLoading(false);
     }
