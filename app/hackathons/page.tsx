@@ -203,53 +203,35 @@ const faqs = [
   { q: "What resources are provided?", a: "Free API credits from OpenAI, Google, AWS. Cloud compute. 24/7 mentor access. All the tools you need." },
 ];
 
-// Orbiting Icon Component - Follows Arc Path
-function OrbitingIcon({ 
+// Static Icon Component - Positioned on Arc
+function StaticIcon({ 
   Icon, 
   radiusRatio, 
   startAngle, 
-  duration, 
   delay 
 }: { 
   Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
   radiusRatio: number;
   startAngle: number;
-  duration: number;
   delay: number;
 }) {
-  // Calculate positions for keyframes along the arc
-  const getPosition = (angleDeg: number) => {
-    const angleRad = (angleDeg * Math.PI) / 180;
-    const xPercent = radiusRatio * 100 * Math.sin(angleRad);
-    const yPercent = radiusRatio * 100 * (1 - Math.cos(angleRad));
-    return { x: `${xPercent}%`, y: `-${yPercent}%` };
-  };
-  
-  const startPos = getPosition(startAngle);
-  const midPos = getPosition(startAngle + 90);
-  const endPos = getPosition(startAngle + 180);
+  // Calculate static position on arc using trigonometry
+  // For semi-circle: x = radius * sin(angle), y = radius * (1 - cos(angle))
+  const angleRad = (startAngle * Math.PI) / 180;
+  const xPercent = radiusRatio * 100 * Math.sin(angleRad);
+  const yPercent = radiusRatio * 100 * (1 - Math.cos(angleRad));
   
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
+      transition={{ delay, type: "spring", stiffness: 200 }}
       className="absolute w-12 h-12 md:w-14 md:h-14"
       style={{
-        left: '50%',
-        bottom: 0,
-      }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        x: [startPos.x, midPos.x, endPos.x, midPos.x, startPos.x],
-        y: [startPos.y, midPos.y, endPos.y, midPos.y, startPos.y],
-      }}
-      transition={{
-        opacity: { delay, type: "spring", stiffness: 200 },
-        scale: { delay, type: "spring", stiffness: 200 },
-        x: { duration: duration, repeat: Infinity, ease: "linear" },
-        y: { duration: duration, repeat: Infinity, ease: "linear" },
+        left: `calc(50% + ${xPercent}%)`,
+        bottom: `calc(${(1 - radiusRatio) * 100}% - ${yPercent}%)`,
+        transform: 'translate(-50%, 0)',
       }}
     >
       <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
@@ -289,13 +271,13 @@ function OrbitalDisplay() {
     return `M ${startX} 600 A ${radius} ${radius} 0 0 1 ${endX} 600`;
   };
   
-  // Icon configuration - evenly distributed angles along arcs
+  // Icon configuration - evenly distributed angles along arcs (static positions)
   const iconConfig = [
-    { icon: Brain, arcIndex: 0, startAngle: -70, duration: 20, delay: 0 },
-    { icon: Globe, arcIndex: 1, startAngle: -35, duration: 25, delay: 0.2 },
-    { icon: Code, arcIndex: 2, startAngle: 0, duration: 18, delay: 0.4 },
-    { icon: Rocket, arcIndex: 3, startAngle: 35, duration: 22, delay: 0.6 },
-    { icon: Sparkles, arcIndex: 4, startAngle: 70, duration: 15, delay: 0.8 },
+    { icon: Brain, arcIndex: 0, startAngle: -70, delay: 0 },
+    { icon: Globe, arcIndex: 1, startAngle: -35, delay: 0.1 },
+    { icon: Code, arcIndex: 2, startAngle: 0, delay: 0.2 },
+    { icon: Rocket, arcIndex: 3, startAngle: 35, delay: 0.3 },
+    { icon: Sparkles, arcIndex: 4, startAngle: 70, delay: 0.4 },
   ];
   
   return (
@@ -317,14 +299,13 @@ function OrbitalDisplay() {
         ))}
       </svg>
 
-      {/* Orbiting Icons - Following Arc Paths */}
+      {/* Static Icons - Positioned on Arc Rings */}
       {iconConfig.map((config, i) => (
-        <OrbitingIcon
-          key={`orbit-${i}`}
+        <StaticIcon
+          key={`icon-${i}`}
           Icon={config.icon}
           radiusRatio={arcRadii[config.arcIndex]}
           startAngle={config.startAngle}
-          duration={config.duration}
           delay={config.delay}
         />
       ))}
@@ -925,7 +906,7 @@ export default function HackathonsPage() {
       <section className="py-24 bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-600 relative overflow-hidden">
         <div className="container relative z-10 mx-auto px-6">
           {/* Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-8">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
