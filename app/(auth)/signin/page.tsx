@@ -33,17 +33,25 @@ function SignInContent() {
 
     try {
       const result = await signIn("credentials", {
-        email,
+        email: email.toLowerCase().trim(),
         password,
         redirect: false,
       });
 
-      console.log("SignIn result:", result);
+      console.log("SignIn result:", JSON.stringify(result));
 
-      if (result?.error) {
+      if (!result) {
+        setError("No response from server. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      if (result.error) {
         // Map error messages
         if (result.error === "CredentialsSignin") {
-          setError("Invalid email or password");
+          setError("Invalid email or password. Please check your credentials.");
+        } else if (result.error === "Configuration") {
+          setError("Server configuration error. Please contact support.");
         } else {
           setError(result.error);
         }
@@ -51,16 +59,17 @@ function SignInContent() {
         return;
       }
 
-      if (result?.ok) {
-        // Successful login - redirect
-        window.location.href = callbackUrl;
+      if (result.ok && !result.error) {
+        // Successful login - use full reload to ensure session is established
+        console.log("Login successful, redirecting to:", callbackUrl);
+        window.location.replace(callbackUrl);
       } else {
-        setError("Login failed. Please try again.");
+        setError("Login failed. Please check your credentials and try again.");
         setIsLoading(false);
       }
     } catch (err) {
       console.error("SignIn error:", err);
-      setError("Something went wrong. Please try again.");
+      setError("Connection error. Please check your internet and try again.");
       setIsLoading(false);
     }
   };
