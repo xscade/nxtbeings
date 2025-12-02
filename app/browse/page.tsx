@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -517,10 +518,12 @@ export default function BrowseTalentPage() {
                     </div>
 
                     {/* CTA */}
-                    <Button className="w-full rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
-                      View Profile
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
+                    <Link href={`/talent/${talent.id}`}>
+                      <Button className="w-full rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
+                        View Profile
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
