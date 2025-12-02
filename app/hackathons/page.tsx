@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useMotionValue, animate } from "framer-motion";
+import { motion } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
@@ -217,42 +217,39 @@ function OrbitingIcon({
   duration: number;
   delay: number;
 }) {
-  const angle = useMotionValue(startAngle);
+  // Calculate positions for keyframes along the arc
+  const getPosition = (angleDeg: number) => {
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const xPercent = radiusRatio * 100 * Math.sin(angleRad);
+    const yPercent = radiusRatio * 100 * (1 - Math.cos(angleRad));
+    return { x: `${xPercent}%`, y: `-${yPercent}%` };
+  };
   
-  // Transform angle to x and y positions along arc
-  const x = useTransform(angle, (a) => {
-    const angleRad = (a * Math.PI) / 180;
-    return radiusRatio * 100 * Math.sin(angleRad);
-  });
-  
-  const y = useTransform(angle, (a) => {
-    const angleRad = (a * Math.PI) / 180;
-    return radiusRatio * 100 * (1 - Math.cos(angleRad));
-  });
-  
-  // Animate angle along arc (semi-circle: 180° sweep)
-  React.useEffect(() => {
-    const controls = animate(angle, startAngle + 180, {
-      duration: duration,
-      repeat: Infinity,
-      repeatType: "reverse",
-      ease: "linear",
-    });
-    return () => controls.stop();
-  }, [angle, startAngle, duration]);
+  const startPos = getPosition(startAngle);
+  const midPos = getPosition(startAngle + 90);
+  const endPos = getPosition(startAngle + 180);
   
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ delay, type: "spring", stiffness: 200 }}
       className="absolute w-12 h-12 md:w-14 md:h-14"
       style={{
         left: '50%',
         bottom: 0,
-        x: useTransform(x, (val) => `${val}%`),
-        y: useTransform(y, (val) => `-${val}%`),
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+        x: [startPos.x, midPos.x, endPos.x, midPos.x, startPos.x],
+        y: [startPos.y, midPos.y, endPos.y, midPos.y, startPos.y],
+      }}
+      transition={{
+        opacity: { delay, type: "spring", stiffness: 200 },
+        scale: { delay, type: "spring", stiffness: 200 },
+        x: { duration: duration, repeat: Infinity, ease: "linear" },
+        y: { duration: duration, repeat: Infinity, ease: "linear" },
       }}
     >
       <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
