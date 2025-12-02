@@ -108,13 +108,58 @@ const tracks = [
   },
 ];
 
-// Timeline with visual elements
-const timeline = [
-  { date: "Jan 15", title: "Registration Opens", icon: Calendar, status: "upcoming" },
-  { date: "Jan 25", title: "Kickoff Ceremony", icon: Rocket, status: "upcoming" },
-  { date: "48 Hours", title: "Build Phase", icon: Code, status: "main" },
-  { date: "Jan 26", title: "Submissions Close", icon: Target, status: "upcoming" },
-  { date: "Jan 27", title: "Demo Day & Awards", icon: Trophy, status: "upcoming" },
+// Timeline with detailed info
+const timelineSteps = [
+  { 
+    id: 0,
+    date: "Jan 15", 
+    time: "6:00 PM IST",
+    title: "Registration Opens", 
+    description: "Sign up solo or with your team. Get access to our Discord community, find teammates, and start brainstorming ideas.",
+    icon: Calendar, 
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop",
+    highlights: ["Form your team (1-4 members)", "Join Discord community", "Access preparation resources"]
+  },
+  { 
+    id: 1,
+    date: "Jan 25", 
+    time: "10:00 AM IST",
+    title: "Kickoff Ceremony", 
+    description: "The official start! Hear from keynote speakers, meet sponsors, get your API credits, and start building.",
+    icon: Rocket, 
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop",
+    highlights: ["Keynote from industry leaders", "Sponsor introductions", "API credits distributed"]
+  },
+  { 
+    id: 2,
+    date: "48 Hours", 
+    time: "Non-stop",
+    title: "Build Phase", 
+    description: "The main event! Code, create, and collaborate. Mentors available 24/7. Workshops running throughout.",
+    icon: Code, 
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop",
+    highlights: ["24/7 mentor support", "Live workshops & tech talks", "Free food & energy drinks"]
+  },
+  { 
+    id: 3,
+    date: "Jan 26", 
+    time: "6:00 PM IST",
+    title: "Submissions Close", 
+    description: "Submit your project with a 3-minute demo video. Make sure to document your journey!",
+    icon: Target, 
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=500&fit=crop",
+    highlights: ["Submit project + demo video", "Final documentation", "Team photos & reflections"]
+  },
+  { 
+    id: 4,
+    date: "Jan 27", 
+    time: "3:00 PM IST",
+    title: "Demo Day & Awards", 
+    description: "Present your project to judges and the community. Winners announced live with prizes worth $50K+!",
+    icon: Trophy, 
+    image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&h=500&fit=crop",
+    highlights: ["Live presentations to judges", "Community voting", "Prize ceremony & celebration"]
+  },
 ];
 
 // Judges/Mentors
@@ -162,6 +207,7 @@ export default function HackathonsPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [activeTrack, setActiveTrack] = useState(0);
+  const [activeStep, setActiveStep] = useState(2); // Default to Build Phase
   const targetDate = new Date("2025-01-25T10:00:00");
   const countdown = useCountdown(targetDate);
 
@@ -219,14 +265,14 @@ export default function HackathonsPage() {
               transition={{ delay: 0.1 }}
               className="text-center mb-8"
             >
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-4">
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground">
                 Build the Future
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">
                   in 48 Hours
                 </span>
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mt-6">
                 Join 5,000+ developers, designers, and AI enthusiasts for the biggest AI hackathon. 
                 $50K+ in prizes. World-class mentors. Your breakthrough moment.
               </p>
@@ -455,7 +501,7 @@ export default function HackathonsPage() {
         </div>
       </section>
 
-      {/* Timeline Section */}
+      {/* Timeline Section - Interactive */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
@@ -476,48 +522,165 @@ export default function HackathonsPage() {
             </p>
           </div>
 
-          {/* Horizontal Timeline */}
-          <div className="relative max-w-5xl mx-auto">
-            {/* Timeline Line */}
-            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent -translate-y-1/2 hidden md:block" />
-            
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-              {timeline.map((event, i) => (
+          {/* Interactive Timeline */}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Timeline Steps - Left Side */}
+              <div className="relative">
+                {/* Vertical Line */}
+                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/10 hidden md:block" />
+                
+                <div className="space-y-2">
+                  {timelineSteps.map((step, i) => (
+                    <motion.button
+                      key={step.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      onClick={() => setActiveStep(i)}
+                      className={`w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 ${
+                        activeStep === i
+                          ? "bg-primary/5 border border-primary/20"
+                          : "hover:bg-muted/50"
+                      }`}
+                    >
+                      {/* Timeline Dot */}
+                      <div className="relative z-10 shrink-0">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          activeStep === i
+                            ? "bg-primary text-white shadow-lg shadow-primary/30"
+                            : i < activeStep 
+                              ? "bg-primary/20 text-primary"
+                              : "bg-muted text-muted-foreground"
+                        }`}>
+                          {activeStep === i ? (
+                            <step.icon className="w-5 h-5" />
+                          ) : i < activeStep ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            <div className="w-2.5 h-2.5 rounded-full bg-current" />
+                          )}
+                        </div>
+                        {/* Connector Line for active */}
+                        {activeStep === i && i < timelineSteps.length - 1 && (
+                          <motion.div 
+                            initial={{ height: 0 }}
+                            animate={{ height: "100%" }}
+                            className="absolute left-1/2 top-12 w-0.5 bg-primary -translate-x-1/2"
+                            style={{ maxHeight: "40px" }}
+                          />
+                        )}
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 pt-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-sm font-semibold ${activeStep === i ? "text-primary" : "text-muted-foreground"}`}>
+                            {step.date}
+                          </span>
+                          <span className="text-xs text-muted-foreground">• {step.time}</span>
+                        </div>
+                        <h3 className={`font-semibold transition-colors ${
+                          activeStep === i ? "text-foreground" : "text-muted-foreground"
+                        }`}>
+                          {step.title}
+                        </h3>
+                        {activeStep === i && (
+                          <motion.p 
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            className="text-sm text-muted-foreground mt-2 md:hidden"
+                          >
+                            {step.description}
+                          </motion.p>
+                        )}
+                      </div>
+
+                      {/* Arrow indicator */}
+                      <div className={`shrink-0 pt-2 transition-transform ${activeStep === i ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"}`}>
+                        <ArrowRight className="w-4 h-4 text-primary" />
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Detail Panel - Right Side */}
+              <div className="hidden lg:block">
                 <motion.div
-                  key={i}
+                  key={activeStep}
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="relative text-center group"
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="sticky top-24"
                 >
-                  {/* Connector Dot */}
-                  <div className={`hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 ${
-                    event.status === "main" 
-                      ? "bg-primary border-primary scale-150" 
-                      : "bg-background border-primary/50 group-hover:border-primary group-hover:bg-primary/10"
-                  } transition-all z-10`} />
-                  
-                  {/* Card */}
-                  <div className={`p-6 rounded-2xl border transition-all ${
-                    event.status === "main"
-                      ? "bg-primary text-white border-primary shadow-xl shadow-primary/20"
-                      : "bg-card border-border hover:border-primary/30 hover:shadow-lg"
-                  }`}>
-                    <div className={`w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center ${
-                      event.status === "main" ? "bg-white/20" : "bg-primary/10"
-                    }`}>
-                      <event.icon className={`w-6 h-6 ${event.status === "main" ? "text-white" : "text-primary"}`} />
+                  {/* Image */}
+                  <div className="relative h-64 rounded-3xl overflow-hidden mb-6">
+                    <Image
+                      src={timelineSteps[activeStep].image}
+                      alt={timelineSteps[activeStep].title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                          {React.createElement(timelineSteps[activeStep].icon, { className: "w-5 h-5 text-white" })}
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold">{timelineSteps[activeStep].title}</p>
+                          <p className="text-white/70 text-sm">{timelineSteps[activeStep].date} • {timelineSteps[activeStep].time}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className={`text-sm font-semibold mb-1 ${event.status === "main" ? "text-white/80" : "text-primary"}`}>
-                      {event.date}
+                  </div>
+
+                  {/* Description */}
+                  <div className="bg-card rounded-2xl border border-border p-6">
+                    <p className="text-muted-foreground mb-6">
+                      {timelineSteps[activeStep].description}
+                    </p>
+
+                    {/* Highlights */}
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">What happens</h4>
+                      {timelineSteps[activeStep].highlights.map((highlight, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className="flex items-center gap-3"
+                        >
+                          <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                          </div>
+                          <span className="text-sm text-foreground">{highlight}</span>
+                        </motion.div>
+                      ))}
                     </div>
-                    <h3 className={`font-semibold ${event.status === "main" ? "text-white" : "text-foreground"}`}>
-                      {event.title}
-                    </h3>
+                  </div>
+
+                  {/* Progress Indicator */}
+                  <div className="mt-6 flex items-center gap-2">
+                    {timelineSteps.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveStep(i)}
+                        className={`h-1.5 rounded-full transition-all ${
+                          i === activeStep 
+                            ? "w-8 bg-primary" 
+                            : i < activeStep 
+                              ? "w-4 bg-primary/50" 
+                              : "w-4 bg-muted"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </motion.div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
