@@ -108,8 +108,7 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-// Indexes
-UserSchema.index({ email: 1 });
+// Indexes (email index already created by unique: true)
 UserSchema.index({ role: 1 });
 
 // Prevent model recompilation in development

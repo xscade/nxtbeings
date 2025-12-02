@@ -44,8 +44,8 @@ function SignInContent() {
         return;
       }
 
-      router.push(callbackUrl);
-      router.refresh();
+      // Successful login - redirect
+      window.location.href = callbackUrl;
     } catch {
       setError("Something went wrong. Please try again.");
       setIsLoading(false);
