@@ -44,23 +44,38 @@ const stats = [
 const benefits = [
   {
     title: "Customized Curriculum",
-    description: "Training tailored to your industry, tools, and specific use cases",
+    description: "Training tailored to your industry, tools, and specific use cases. We analyze your workflows before building your program.",
     icon: BookOpen,
+    meta: "Tailored",
+    span: "md:col-span-4 md:row-span-2",
   },
   {
     title: "Hands-on Workshops",
-    description: "Practice with real company data and scenarios, not generic examples",
+    description: "Practice with real company data and scenarios, not generic examples.",
     icon: Laptop,
+    meta: "Practical",
+    span: "md:col-span-2 md:row-span-1",
   },
   {
     title: "Implementation Support",
-    description: "Post-training guidance to ensure tools are adopted and used effectively",
+    description: "Post-training guidance to ensure tools are adopted effectively.",
     icon: Rocket,
+    meta: "Support",
+    span: "md:col-span-2 md:row-span-1",
+  },
+  {
+    title: "Expert Trainers",
+    description: "Learn from practitioners who've implemented AI at Fortune 500 companies.",
+    icon: Users,
+    meta: "Expert",
+    span: "md:col-span-3 md:row-span-1",
   },
   {
     title: "Measurable Results",
-    description: "Track productivity gains and ROI with our assessment framework",
+    description: "Track productivity gains and ROI with our assessment framework.",
     icon: Trophy,
+    meta: "Results",
+    span: "md:col-span-3 md:row-span-1",
   },
 ];
 
@@ -225,32 +240,63 @@ export default function UpskillPage() {
                 transition={{ duration: 0.3 }}
                 className="space-y-24"
               >
-                {/* Benefits Grid */}
-                <div className="max-w-5xl mx-auto">
-                  <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-foreground mb-4">Why Upskill with Nxtbeings?</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                      Most training programs stop at theory. We focus on implementation and measurable outcomes.
-                    </p>
+                {/* Benefits Section - Blue Glassmorphic */}
+                <div className="relative w-full bg-primary text-white overflow-hidden rounded-3xl">
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,white_1px,transparent_1px)] bg-[size:60px_60px]" />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {benefits.map((benefit, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-4">
-                          <benefit.icon className="w-6 h-6" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
-                        <p className="text-muted-foreground">{benefit.description}</p>
-                      </motion.div>
-                    ))}
+                  <div className="relative mx-auto max-w-6xl px-6 py-16 md:py-24">
+                    <header className="mb-12 flex flex-col gap-6 border-b border-white/20 pb-8 md:flex-row md:items-end md:justify-between">
+                      <div className="flex flex-col gap-3">
+                        <span className="text-xs uppercase tracking-[0.35em] text-white/70">
+                          Why Choose Us
+                        </span>
+                        <h2 className="text-3xl font-bold tracking-tight md:text-5xl text-white leading-tight">
+                          Why Upskill with <br/>Nxtbeings?
+                        </h2>
+                      </div>
+                      <div className="flex flex-col items-start gap-4 md:items-end md:max-w-sm">
+                        <p className="text-base text-white/80 leading-relaxed">
+                          Most training programs stop at theory. We focus on implementation and measurable outcomes.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div className="grid grid-cols-1 gap-4 md:auto-rows-[minmax(140px,auto)] md:grid-cols-6">
+                      {benefits.map((benefit, i) => (
+                        <motion.article
+                          key={i}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.1 }}
+                          className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/10 backdrop-blur-md p-6 transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/15 hover:border-white/25 hover:shadow-xl hover:shadow-blue-900/20 ${benefit.span}`}
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/10 group-hover:bg-white/20 transition-colors shrink-0">
+                              <benefit.icon className="h-6 w-6 text-white" strokeWidth={1.5} />
+                            </div>
+                            <div className="flex-1">
+                              <header className="flex items-start gap-3">
+                                <h3 className="text-lg font-semibold uppercase tracking-wide text-white">
+                                  {benefit.title}
+                                </h3>
+                                {benefit.meta && (
+                                  <span className="ml-auto rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white/70 border border-white/10 shrink-0">
+                                    {benefit.meta}
+                                  </span>
+                                )}
+                              </header>
+                              <p className="mt-3 text-sm leading-relaxed text-white/70">
+                                {benefit.description}
+                              </p>
+                            </div>
+                          </div>
+                        </motion.article>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
