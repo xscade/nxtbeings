@@ -4,11 +4,13 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isSecure = request.url.startsWith("https://");
 
   // Get token (Edge-compatible)
   const token = await getToken({ 
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: isSecure,
   });
 
   const isLoggedIn = !!token;
