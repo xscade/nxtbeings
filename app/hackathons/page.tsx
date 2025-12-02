@@ -305,7 +305,7 @@ export default function HackathonsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+              className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
                 Register Now
@@ -313,35 +313,6 @@ export default function HackathonsPage() {
               <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
                 Watch Highlights
               </Button>
-            </motion.div>
-
-            {/* Stats Bar */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-wrap justify-center gap-8 md:gap-16"
-            >
-              {[
-                { value: "5,000+", label: "Participants", icon: Users },
-                { value: "$50K+", label: "In Prizes", icon: Trophy },
-                { value: "48", label: "Hours", icon: Timer },
-                { value: "100+", label: "Projects", icon: Layers },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="text-center group"
-                >
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <stat.icon className="w-5 h-5 text-primary opacity-70 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-2xl md:text-3xl font-bold text-foreground">{stat.value}</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground">{stat.label}</span>
-                </motion.div>
-              ))}
             </motion.div>
           </div>
         </div>
@@ -497,6 +468,44 @@ export default function HackathonsPage() {
                 </Button>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
+        </div>
+
+        <div className="container relative z-10 mx-auto px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              {[
+                { value: "5,000+", label: "Participants", icon: Users, description: "Developers & designers" },
+                { value: "$50K+", label: "In Prizes", icon: Trophy, description: "Cash & credits" },
+                { value: "48", label: "Hours", icon: Timer, description: "To build & ship" },
+                { value: "100+", label: "Projects", icon: Layers, description: "Submitted last year" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="relative group"
+                >
+                  <div className="bg-card rounded-2xl border border-border p-6 text-center hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                      <stat.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="text-3xl md:text-4xl font-bold text-foreground mb-1">{stat.value}</div>
+                    <div className="text-sm font-medium text-foreground mb-1">{stat.label}</div>
+                    <div className="text-xs text-muted-foreground">{stat.description}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
