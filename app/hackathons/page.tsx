@@ -770,15 +770,15 @@ export default function HackathonsPage() {
         </div>
       </section>
 
-      {/* Sponsors Section - Rotating Orbits */}
-      <section className="py-32 bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-600 relative overflow-hidden">
+      {/* Sponsors Section - Semi-Circle Orbits */}
+      <section className="py-24 pb-12 bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-600 relative overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:24px_24px]" />
         <div className="absolute inset-0 bg-gradient-to-t from-blue-700/50 to-transparent" />
 
         <div className="container relative z-10 mx-auto px-6">
           {/* Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -792,116 +792,157 @@ export default function HackathonsPage() {
             </p>
           </div>
 
-          {/* Orbital Display */}
-          <div className="relative max-w-3xl mx-auto aspect-square">
-            {/* Center Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/10 rounded-full blur-[60px]" />
+          {/* Semi-Circle Orbital Display */}
+          <div className="relative max-w-4xl mx-auto h-[350px] md:h-[400px] overflow-hidden">
+            {/* Center Glow - positioned at bottom center */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-40 h-40 bg-white/15 rounded-full blur-[80px]" />
 
-            {/* Outer Orbit - Clockwise */}
+            {/* SVG Semi-Circle Arcs */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 400" fill="none" preserveAspectRatio="xMidYMax meet">
+              {/* Outer Arc */}
+              <motion.path
+                d="M 25 400 A 375 375 0 0 1 775 400"
+                stroke="rgba(255,255,255,0.2)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+              {/* Middle Arc */}
+              <motion.path
+                d="M 125 400 A 275 275 0 0 1 675 400"
+                stroke="rgba(255,255,255,0.25)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+              />
+              {/* Inner Arc */}
+              <motion.path
+                d="M 225 400 A 175 175 0 0 1 575 400"
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="1"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
+              />
+            </svg>
+
+            {/* Icons on Outer Arc - 6 icons spread on semi-circle */}
+            {[0, 1, 2, 3, 4, 5].map((i) => {
+              const icons = [Brain, Globe, Cpu, Sparkles, Code, Rocket];
+              const Icon = icons[i];
+              // Spread icons from -80° to 80° (where 0° is top)
+              const angle = -80 + (i * 160) / 5;
+              const rad = (angle * Math.PI) / 180;
+              const radius = 375;
+              const centerX = 400;
+              const centerY = 400;
+              const x = centerX + radius * Math.sin(rad);
+              const y = centerY - radius * Math.cos(rad);
+              return (
+                <motion.div
+                  key={`outer-${i}`}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                  className="absolute w-12 h-12 md:w-14 md:h-14"
+                  style={{ 
+                    left: `${(x / 800) * 100}%`, 
+                    top: `${(y / 400) * 100}%`, 
+                    transform: 'translate(-50%, -50%)' 
+                  }}
+                >
+                  <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 hover:bg-white transition-all cursor-pointer group">
+                    <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600 group-hover:text-blue-700" strokeWidth={1.5} />
+                  </div>
+                </motion.div>
+              );
+            })}
+
+            {/* Icons on Middle Arc - 5 icons */}
+            {[0, 1, 2, 3, 4].map((i) => {
+              const icons = [Zap, Award, Target, Layers, Trophy];
+              const Icon = icons[i];
+              const angle = -70 + (i * 140) / 4;
+              const rad = (angle * Math.PI) / 180;
+              const radius = 275;
+              const centerX = 400;
+              const centerY = 400;
+              const x = centerX + radius * Math.sin(rad);
+              const y = centerY - radius * Math.cos(rad);
+              return (
+                <motion.div
+                  key={`middle-${i}`}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                  className="absolute w-11 h-11 md:w-12 md:h-12"
+                  style={{ 
+                    left: `${(x / 800) * 100}%`, 
+                    top: `${(y / 400) * 100}%`, 
+                    transform: 'translate(-50%, -50%)' 
+                  }}
+                >
+                  <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 hover:bg-white transition-all cursor-pointer group">
+                    <Icon className="w-5 h-5 text-indigo-600 group-hover:text-indigo-700" strokeWidth={1.5} />
+                  </div>
+                </motion.div>
+              );
+            })}
+
+            {/* Icons on Inner Arc - 4 icons */}
+            {[0, 1, 2, 3].map((i) => {
+              const icons = [Star, Building2, Users, Gift];
+              const Icon = icons[i];
+              const angle = -60 + (i * 120) / 3;
+              const rad = (angle * Math.PI) / 180;
+              const radius = 175;
+              const centerX = 400;
+              const centerY = 400;
+              const x = centerX + radius * Math.sin(rad);
+              const y = centerY - radius * Math.cos(rad);
+              return (
+                <motion.div
+                  key={`inner-${i}`}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.7 + i * 0.1 }}
+                  className="absolute w-10 h-10 md:w-11 md:h-11"
+                  style={{ 
+                    left: `${(x / 800) * 100}%`, 
+                    top: `${(y / 400) * 100}%`, 
+                    transform: 'translate(-50%, -50%)' 
+                  }}
+                >
+                  <div className="w-full h-full rounded-lg bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 hover:bg-white transition-all cursor-pointer group">
+                    <Icon className="w-4 h-4 md:w-5 md:h-5 text-violet-600 group-hover:text-violet-700" strokeWidth={1.5} />
+                  </div>
+                </motion.div>
+              );
+            })}
+
+            {/* Center Logo at bottom */}
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0"
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.9 }}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
             >
-              {/* Orbit Ring */}
-              <div className="absolute inset-[5%] rounded-full border border-white/20" />
-              
-              {/* Icons on Outer Orbit - 6 icons, evenly spaced */}
-              {[0, 60, 120, 180, 240, 300].map((angle, i) => {
-                const icons = [Brain, Globe, Cpu, Sparkles, Code, Rocket];
-                const Icon = icons[i];
-                const rad = (angle * Math.PI) / 180;
-                const radius = 45; // percentage from center
-                const x = 50 + radius * Math.cos(rad - Math.PI/2);
-                const y = 50 + radius * Math.sin(rad - Math.PI/2);
-                return (
-                  <motion.div
-                    key={`outer-${i}`}
-                    className="absolute w-12 h-12"
-                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                  >
-                    <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                      <Icon className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* Middle Orbit - Counter-Clockwise */}
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-[20%]"
-            >
-              {/* Orbit Ring */}
-              <div className="absolute inset-0 rounded-full border border-white/25" />
-              
-              {/* Icons on Middle Orbit - 5 icons */}
-              {[0, 72, 144, 216, 288].map((angle, i) => {
-                const icons = [Zap, Award, Target, Layers, Trophy];
-                const Icon = icons[i];
-                const rad = (angle * Math.PI) / 180;
-                const radius = 50;
-                const x = 50 + radius * Math.cos(rad - Math.PI/2);
-                const y = 50 + radius * Math.sin(rad - Math.PI/2);
-                return (
-                  <motion.div
-                    key={`middle-${i}`}
-                    className="absolute w-11 h-11"
-                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                  >
-                    <div className="w-full h-full rounded-xl bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                      <Icon className="w-5 h-5 text-indigo-600" strokeWidth={1.5} />
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* Inner Orbit - Clockwise */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-[35%]"
-            >
-              {/* Orbit Ring */}
-              <div className="absolute inset-0 rounded-full border border-white/30" />
-              
-              {/* Icons on Inner Orbit - 4 icons */}
-              {[0, 90, 180, 270].map((angle, i) => {
-                const icons = [Star, Building2, Users, Gift];
-                const Icon = icons[i];
-                const rad = (angle * Math.PI) / 180;
-                const radius = 50;
-                const x = 50 + radius * Math.cos(rad - Math.PI/2);
-                const y = 50 + radius * Math.sin(rad - Math.PI/2);
-                return (
-                  <motion.div
-                    key={`inner-${i}`}
-                    className="absolute w-10 h-10"
-                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                  >
-                    <div className="w-full h-full rounded-lg bg-white/90 backdrop-blur-sm shadow-lg shadow-black/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                      <Icon className="w-4 h-4 text-violet-600" strokeWidth={1.5} />
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* Center Logo */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="w-20 h-20 rounded-2xl bg-white shadow-xl shadow-black/20 flex items-center justify-center">
-                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">N</span>
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-xl shadow-black/20 flex items-center justify-center">
+                <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">N</span>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Sponsor Names */}
