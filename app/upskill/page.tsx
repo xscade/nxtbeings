@@ -303,22 +303,22 @@ export default function UpskillPage() {
                 {/* Form Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
                   {/* Left: Testimonial & Info */}
-                  <div className="space-y-8">
-                    <div>
+                <div className="space-y-8">
+                  <div>
                       <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Transform Your Team?</h3>
                       <p className="text-muted-foreground leading-relaxed">
                         Join leading companies that have already transformed their workflows with AI. 
                         Our expert trainers will guide your team from basics to advanced implementation.
-                      </p>
-                    </div>
+                    </p>
+                  </div>
 
-                    <div className="space-y-4">
-                      {[
-                        "Customized curriculum based on your industry",
-                        "Hands-on workshops with real company data",
-                        "Post-training implementation support",
-                        "Access to proprietary AI tool library"
-                      ].map((item, i) => (
+                  <div className="space-y-4">
+                    {[
+                      "Customized curriculum based on your industry",
+                      "Hands-on workshops with real company data",
+                      "Post-training implementation support",
+                      "Access to proprietary AI tool library"
+                    ].map((item, i) => (
                         <motion.div 
                           key={i} 
                           initial={{ opacity: 0, x: -20 }}
@@ -329,11 +329,11 @@ export default function UpskillPage() {
                         >
                           <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-primary" />
-                          </div>
+                      </div>
                           <span className="text-foreground">{item}</span>
                         </motion.div>
-                      ))}
-                    </div>
+                    ))}
+                  </div>
 
                     {/* Testimonial Card */}
                     <div className="bg-primary/5 rounded-2xl border border-primary/20 p-6">
@@ -344,7 +344,7 @@ export default function UpskillPage() {
                       </div>
                       <p className="text-foreground italic mb-4">
                         "Nxtbeings helped our marketing team reduce content production time by 60% within just 2 weeks of training. The ROI was immediate and substantial."
-                      </p>
+                        </p>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                           <User className="w-5 h-5 text-primary" />
@@ -354,10 +354,10 @@ export default function UpskillPage() {
                           <div className="text-sm text-muted-foreground">CTO, TechCorp Inc.</div>
                         </div>
                       </div>
-                    </div>
                   </div>
+                </div>
 
-                  {/* Right: Registration Form */}
+                {/* Right: Registration Form */}
                   <div className="bg-card rounded-2xl border border-border shadow-xl shadow-primary/5 p-8">
                     <h3 className="text-2xl font-bold text-foreground mb-2">Register Your Team</h3>
                     <p className="text-muted-foreground mb-8 text-sm">Tell us about your needs and we'll build a custom plan.</p>
@@ -433,17 +433,17 @@ export default function UpskillPage() {
                 <div className="bg-card rounded-2xl border border-border shadow-xl shadow-primary/5 p-12">
                   <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-8">
                     <Sparkles className="w-10 h-10 text-primary" />
-                  </div>
+                    </div>
                   <h3 className="text-3xl font-bold text-foreground mb-4">Individual Certification Coming Soon</h3>
                   <p className="text-muted-foreground mb-8 max-w-lg mx-auto text-lg">
-                    We are currently prioritizing enterprise cohorts. Join the waitlist to be notified when individual enrollments open for our AI mastery tracks.
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                      We are currently prioritizing enterprise cohorts. Join the waitlist to be notified when individual enrollments open for our AI mastery tracks.
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                     <Input placeholder="Enter your email" className="rounded-xl bg-background" />
                     <Button className="rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 px-8">
-                      Join Waitlist
-                    </Button>
+                        Join Waitlist
+                      </Button>
                   </div>
 
                   <div className="mt-12 pt-8 border-t border-border">

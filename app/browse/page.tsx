@@ -318,31 +318,23 @@ export default function BrowseTalentPage() {
         </div>
         
         <div className="container relative z-10 mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Human expertise.<br />
-              <span className="text-white/80">AI amplified.</span>
-            </h2>
-            <p className="text-white/70 max-w-xl mx-auto">
-              We don't hire AI replacements. We verify domain experts who leverage AI to deliver 10× productivity.
-            </p>
-          </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {trustBadges.map((badge, i) => (
               <motion.div 
-                key={i}
+                key={i} 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 p-6 hover:bg-white/15 hover:border-white/25 transition-all"
+                className="flex items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/15 transition-all"
               >
-                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center">
                   <badge.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-white text-lg mb-1">{badge.title}</h3>
-                <p className="text-sm text-white/70">{badge.desc}</p>
+                <div>
+                  <p className="font-semibold text-white">{badge.title}</p>
+                  <p className="text-sm text-white/70">{badge.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>

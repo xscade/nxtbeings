@@ -95,14 +95,14 @@ export function Hero() {
           className="flex flex-col sm:flex-row gap-4 w-full justify-center pointer-events-auto"
         >
           <Link href="/browse">
-            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
-              Find Talent
-            </Button>
+          <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20">
+            Find Talent
+          </Button>
           </Link>
           <Link href="/get-started">
-            <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
-              Create Portfolio
-            </Button>
+          <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base hover:bg-muted">
+            Create Portfolio
+          </Button>
           </Link>
         </motion.div>
 
