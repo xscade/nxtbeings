@@ -172,12 +172,22 @@ export function TestimonialsSection() {
           transition={{ delay: 0.3 }}
           className="flex justify-center mb-12"
         >
-          <div className="p-1 bg-muted rounded-full inline-flex gap-1">
+          <div className="p-1 bg-muted rounded-full inline-grid grid-cols-2 relative">
+            {/* Animated Background Pill */}
+            <motion.div
+              className="absolute inset-y-1 bg-primary rounded-full shadow-lg shadow-primary/20"
+              initial={false}
+              animate={{
+                left: activeTab === "company" ? 4 : "50%",
+                right: activeTab === "company" ? "50%" : 4,
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            />
             <button
               onClick={() => { setActiveTab("company"); setCurrentIndex(0); }}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+              className={`relative z-10 px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 ${
                 activeTab === "company" 
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                  ? "text-primary-foreground" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -186,9 +196,9 @@ export function TestimonialsSection() {
             </button>
             <button
               onClick={() => { setActiveTab("talent"); setCurrentIndex(0); }}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+              className={`relative z-10 px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2 ${
                 activeTab === "talent" 
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                  ? "text-primary-foreground" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
