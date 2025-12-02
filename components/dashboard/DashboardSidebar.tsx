@@ -41,8 +41,8 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
         </div>
 
         {/* Company Badge */}
-        <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-500/10 border border-primary/20 backdrop-blur-sm">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-primary flex items-center justify-center text-white shadow-lg shadow-primary/30">
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20 backdrop-blur-sm">
+          <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
             <Building2 className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
@@ -69,14 +69,14 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                     className={`
                       group flex gap-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200
                       ${isActive 
-                        ? "bg-gradient-to-r from-blue-500 to-primary text-white shadow-lg shadow-primary/30" 
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
                         : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
                       }
                     `}
                   >
                     <item.icon
                       className={`h-5 w-5 shrink-0 transition-colors ${
-                        isActive ? "text-white" : "text-muted-foreground group-hover:text-primary"
+                        isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary"
                       }`}
                     />
                     {item.name}
@@ -88,14 +88,14 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
         </nav>
 
         {/* Bottom Card */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-primary text-white shadow-lg shadow-primary/30">
-          <p className="text-sm font-semibold">Find AI Talent</p>
-          <p className="text-xs text-white/80 mt-1">
+        <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 backdrop-blur-sm">
+          <p className="text-sm font-semibold text-foreground">Find AI Talent</p>
+          <p className="text-xs text-muted-foreground mt-1">
             Browse pre-vetted professionals ready to join your team.
           </p>
           <Link
             href="/dashboard/browse"
-            className="mt-3 inline-flex items-center text-xs font-medium text-white hover:underline"
+            className="mt-3 inline-flex items-center text-xs font-medium text-primary hover:underline"
           >
             Browse talent →
           </Link>
