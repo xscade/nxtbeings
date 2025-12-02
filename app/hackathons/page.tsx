@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -203,94 +203,128 @@ const faqs = [
   { q: "What resources are provided?", a: "Free API credits from OpenAI, Google, AWS. Cloud compute. 24/7 mentor access. All the tools you need." },
 ];
 
-// Static Icon Component - Positioned on Arc
-function StaticIcon({ 
-  Icon, 
-  radiusRatio, 
-  startAngle, 
-  delay 
-}: { 
-  Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
-  radiusRatio: number;
-  startAngle: number;
-  delay: number;
-}) {
-  // Calculate static position on arc using trigonometry
-  // For semi-circle: x = radius * sin(angle), y = radius * (1 - cos(angle))
-  const angleRad = (startAngle * Math.PI) / 180;
-  const xPercent = radiusRatio * 100 * Math.sin(angleRad);
-  const yPercent = radiusRatio * 100 * (1 - Math.cos(angleRad));
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, type: "spring", stiffness: 200 }}
-      className="absolute w-12 h-12 md:w-14 md:h-14"
-      style={{
-        left: `calc(50% + ${xPercent}%)`,
-        bottom: `calc(${(1 - radiusRatio) * 100}% - ${yPercent}%)`,
-        transform: 'translate(-50%, 0)',
-      }}
-    >
-      <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
-        <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
-      </div>
-    </motion.div>
-  );
+// Polar to Cartesian conversion helper
+function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy - r * Math.sin(angleRad),
+  };
 }
 
-// Responsive Orbital Display Component
+// Describe SVG arc path
+function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
+  const startPos = polarToCartesian(cx, cy, r, (endDeg * Math.PI) / 180);
+  const endPos = polarToCartesian(cx, cy, r, (startDeg * Math.PI) / 180);
+  const largeArc = endDeg - startDeg <= 180 ? 0 : 1;
+  return [
+    "M", startPos.x, startPos.y,
+    "A", r, r, 0, largeArc, 0, endPos.x, endPos.y
+  ].join(" ");
+}
+
+// Responsive Orbital Display Component with Parametric Positioning
 function OrbitalDisplay() {
-  // Mathematical Formula for Responsive Arc Calculation
-  // Formula: radius[i] = maxRadius - (i * spacingRatio)
-  // where spacingRatio = (maxRadius - minRadius) / (numArcs - 1)
-  // This ensures evenly spaced arcs regardless of screen size
-  const calculateArcs = () => {
-    const numArcs = 5;
-    const minRadiusRatio = 0.125;  // 12.5% of container height (innermost)
-    const maxRadiusRatio = 0.625; // 62.5% of container height (outermost)
-    const radiusRange = maxRadiusRatio - minRadiusRatio;
-    const spacingRatio = radiusRange / (numArcs - 1);
-    
-    // Calculate evenly spaced radii (outer to inner)
-    return Array.from({ length: numArcs }, (_, i) => {
-      return maxRadiusRatio - (i * spacingRatio);
-    });
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    function updateSize() {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setSize({ width: rect.width, height: rect.height });
+      }
+    }
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  if (!size.width) {
+    return (
+      <div ref={containerRef} className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]" />
+    );
+  }
+
+  // Responsive calculations based on container dimensions
+  const W = size.width;
+  const H = size.height;
+  const Cx = W / 2; // Center X (horizontal center)
+  const Cy = H; // Center Y (bottom of container - focal point)
+
+  // Arc radii based on container width (evenly spaced)
+  // Formula: R[i] = minRadius + (i * spacingRatio)
+  const numArcs = 5;
+  const minRadius = 0.12 * W; // 12% of width (innermost)
+  const maxRadius = 0.60 * W; // 60% of width (outermost)
+  const radiusRange = maxRadius - minRadius;
+  const spacingRatio = radiusRange / (numArcs - 1);
   
-  const arcRadii = calculateArcs();
-  
-  // Calculate SVG arc path - responsive to viewBox
-  const getArcPath = (radiusRatio: number) => {
-    const radius = radiusRatio * 600; // viewBox height is 600
-    const centerX = 400; // Center of viewBox width
-    const startX = centerX - radius;
-    const endX = centerX + radius;
-    return `M ${startX} 600 A ${radius} ${radius} 0 0 1 ${endX} 600`;
-  };
-  
-  // Icon configuration - evenly distributed angles along arcs (static positions)
-  const iconConfig = [
-    { icon: Brain, arcIndex: 0, startAngle: -70, delay: 0 },
-    { icon: Globe, arcIndex: 1, startAngle: -35, delay: 0.1 },
-    { icon: Code, arcIndex: 2, startAngle: 0, delay: 0.2 },
-    { icon: Rocket, arcIndex: 3, startAngle: 35, delay: 0.3 },
-    { icon: Sparkles, arcIndex: 4, startAngle: 70, delay: 0.4 },
+  const arcRadii = Array.from({ length: numArcs }, (_, i) => {
+    return minRadius + (i * spacingRatio);
+  }).reverse(); // Reverse to get outer to inner
+
+  // Icon configuration - distribute 5 icons across 5 arcs (1 per arc)
+  const icons = [
+    { icon: Brain, arcIndex: 0 },
+    { icon: Globe, arcIndex: 1 },
+    { icon: Code, arcIndex: 2 },
+    { icon: Rocket, arcIndex: 3 },
+    { icon: Sparkles, arcIndex: 4 },
   ];
+
+  // Calculate icon positions using parametric distribution
+  const iconElements: React.ReactElement[] = [];
   
+  icons.forEach((iconConfig, iconIndex) => {
+    const R = arcRadii[iconConfig.arcIndex];
+    const Icon = iconConfig.icon;
+    
+    // Even angle distribution for single icon per arc
+    // Spread icons from -80° to +80° (160° range)
+    const angleRange = 160; // degrees
+    const startAngle = -80; // degrees
+    const angleStep = angleRange / (numArcs - 1);
+    const angleDeg = startAngle + (iconConfig.arcIndex * angleStep);
+    const angleRad = (angleDeg * Math.PI) / 180;
+    
+    // Convert polar to cartesian coordinates
+    const { x, y } = polarToCartesian(Cx, Cy, R, angleRad);
+    
+    iconElements.push(
+      <motion.div
+        key={`icon-${iconIndex}`}
+        initial={{ opacity: 0, scale: 0 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: iconIndex * 0.1, type: "spring", stiffness: 200 }}
+        className="absolute w-12 h-12 md:w-14 md:h-14"
+        style={{
+          left: `${x - 28}px`, // 28 = half of w-14 (56px / 2)
+          top: `${y - 28}px`,
+        }}
+      >
+        <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center hover:shadow-xl hover:scale-110 transition-all cursor-pointer">
+          <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" strokeWidth={1.5} />
+        </div>
+      </motion.div>
+    );
+  });
+
   return (
-    <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
-      {/* SVG Semi-Circle Arcs - Responsive */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 600" fill="none" preserveAspectRatio="xMidYMax meet">
-        {arcRadii.map((radiusRatio, i) => (
+    <div ref={containerRef} className="relative max-w-4xl mx-auto h-[500px] md:h-[600px]">
+      {/* SVG Semi-Circle Arcs - Parametric */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        style={{ pointerEvents: "none" }}
+      >
+        {arcRadii.map((R, i) => (
           <motion.path
             key={`arc-${i}`}
-            d={getArcPath(radiusRatio)}
+            d={describeArc(Cx, Cy, R, 180, 0)}
+            fill="none"
             stroke="rgba(255, 255, 255, 0.15)"
             strokeWidth="1"
-            fill="none"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
             viewport={{ once: true }}
@@ -299,26 +333,22 @@ function OrbitalDisplay() {
         ))}
       </svg>
 
-      {/* Static Icons - Positioned on Arc Rings */}
-      {iconConfig.map((config, i) => (
-        <StaticIcon
-          key={`icon-${i}`}
-          Icon={config.icon}
-          radiusRatio={arcRadii[config.arcIndex]}
-          startAngle={config.startAngle}
-          delay={config.delay}
-        />
-      ))}
+      {/* Icons - Parametrically Positioned */}
+      {iconElements}
 
-      {/* Center Logo - At Focal Point (where all arcs converge) */}
+      {/* Center Logo - At Focal Point */}
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 1, type: "spring", stiffness: 200 }}
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+        transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+        className="absolute w-12 h-12 md:w-14 md:h-14"
+        style={{
+          left: `${Cx - 28}px`,
+          top: `${Cy - 28}px`,
+        }}
       >
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center">
+        <div className="w-full h-full rounded-full bg-white shadow-lg border border-white/20 flex items-center justify-center">
           <span className="text-base md:text-lg font-bold text-blue-600">N</span>
         </div>
       </motion.div>
