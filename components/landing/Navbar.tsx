@@ -18,7 +18,8 @@ import {
   Sparkles,
   ArrowRight,
   Menu,
-  X
+  X,
+  Megaphone
 } from "lucide-react";
 
 const talentCategories = [
@@ -40,15 +41,93 @@ const talentServices = [
   { name: "Upskill Yourself", icon: GraduationCap, href: "/upskill", description: "Learn cutting-edge AI skills" },
 ];
 
-const whyNxtbeings = [
-  { name: "Verified Professionals", icon: ShieldCheck, href: "#" },
-  { name: "Global Talent Pool", icon: Globe2, href: "#" },
-  { name: "AI-Native Platform", icon: Sparkles, href: "#" },
+// Consulting Services - Toptal-style structure
+const consultingCategories = [
+  {
+    id: "technology",
+    name: "Technology Services",
+    icon: Code2,
+    mainLink: "/consulting/technology",
+    services: [
+      "Artificial Intelligence",
+      "Data Analytics",
+      "Cloud Services",
+      "Information Security",
+      "Apps and Integrations",
+      "Custom Software Development",
+    ],
+    featuredServices: [
+      "Data Engineering Services",
+      "Data Management Services",
+      "Machine Learning Services",
+      "Generative AI Services",
+      "Business Intelligence Services",
+      "DevOps Services",
+      "Cloud Strategy Consulting",
+      "Cloud Migration Services",
+      "Cloud Security Services",
+      "Application Security Services",
+      "Enterprise Applications Services",
+      "Business Process Automation Services",
+    ],
+  },
+  {
+    id: "marketing",
+    name: "Marketing Agency",
+    icon: Megaphone,
+    mainLink: "/consulting/marketing",
+    services: [
+      "Digital Marketing",
+      "Growth Marketing",
+      "Marketing Strategy and Operations",
+      "Brand Marketing",
+      "Product Marketing",
+      "Creative and Content Marketing",
+      "Sales and Revenue Operations",
+    ],
+    featuredServices: [
+      "Brand Strategy Consulting",
+      "Content Creation Services",
+      "Content Marketing Services",
+      "Conversion Rate Optimization Services",
+      "Email Marketing Services",
+      "Market Research Services",
+      "Performance Marketing Services",
+      "PPC Services",
+      "Search Engine Optimization Services",
+      "Social Media Management Services",
+    ],
+  },
+  {
+    id: "management",
+    name: "Management Consulting",
+    icon: Briefcase,
+    mainLink: "/consulting/management",
+    services: [
+      "Strategy Consulting",
+      "People Consulting",
+      "Finance Consulting",
+      "Operations Consulting",
+    ],
+    featuredServices: [
+      "Digital Strategy Consulting",
+      "AI Strategy Consulting",
+      "Growth Strategy Consulting",
+      "Corporate Finance Consulting",
+      "CFO Consulting",
+      "M&A Due Diligence Consulting",
+      "Sales Consulting",
+      "Change Management Consulting",
+      "Performance Improvement Consulting",
+      "Supply Chain Consulting",
+    ],
+  },
 ];
 
 export function Navbar() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedConsultingCategory, setSelectedConsultingCategory] = useState("technology");
 
   return (
     <>
@@ -155,39 +234,125 @@ export function Navbar() {
                 </AnimatePresence>
               </div>
 
-              {/* Why Nxtbeings Dropdown */}
+              {/* Consulting Services Dropdown - Toptal Style */}
               <div
                 className="relative"
-                onMouseEnter={() => setActiveMenu("why")}
+                onMouseEnter={() => setActiveMenu("consulting")}
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors rounded-full hover:bg-slate-100/80">
-                  Why Nxtbeings
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeMenu === "why" ? "rotate-180" : ""}`} />
+                  Consulting Services
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeMenu === "consulting" ? "rotate-180" : ""}`} />
                 </button>
 
                 <AnimatePresence>
-                  {activeMenu === "why" && (
+                  {activeMenu === "consulting" && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute top-full left-0 pt-2"
+                      onMouseEnter={() => setActiveMenu("consulting")}
                     >
-                      <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 p-2 w-64">
-                        {whyNxtbeings.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                              <item.icon className="w-4 h-4" strokeWidth={1.5} />
-                            </div>
-                            <span className="text-sm font-medium text-slate-700">{item.name}</span>
-                          </Link>
-                        ))}
+                      <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden w-[800px]">
+                        <div className="flex">
+                          {/* Left Column - Categories */}
+                          <div className="w-64 bg-slate-50 border-r border-slate-200">
+                            {consultingCategories.map((category) => (
+                              <button
+                                key={category.id}
+                                onClick={() => setSelectedConsultingCategory(category.id)}
+                                onMouseEnter={() => setSelectedConsultingCategory(category.id)}
+                                className={`w-full text-left px-6 py-4 transition-colors ${
+                                  selectedConsultingCategory === category.id
+                                    ? "bg-white border-l-4 border-blue-600 text-blue-600"
+                                    : "text-slate-700 hover:bg-slate-100"
+                                }`}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <category.icon className={`w-5 h-5 ${selectedConsultingCategory === category.id ? "text-blue-600" : "text-slate-500"}`} />
+                                  <span className="font-medium text-sm">{category.name}</span>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Right Columns - Services */}
+                          <div className="flex-1 p-6">
+                            {consultingCategories
+                              .filter((cat) => cat.id === selectedConsultingCategory)
+                              .map((category) => (
+                                <div key={category.id} className="grid grid-cols-3 gap-8">
+                                  {/* Main Services Column */}
+                                  <div>
+                                    <Link
+                                      href={category.mainLink}
+                                      className="text-blue-600 font-semibold text-sm mb-4 inline-flex items-center gap-1 hover:underline"
+                                    >
+                                      {category.name} <ArrowRight className="w-3 h-3" />
+                                    </Link>
+                                    <ul className="space-y-2">
+                                      {category.services.map((service) => (
+                                        <li key={service}>
+                                          <Link
+                                            href={`${category.mainLink}?service=${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                            className="text-sm text-slate-700 hover:text-blue-600 transition-colors"
+                                          >
+                                            {service}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+
+                                  {/* Featured Services Column 1 */}
+                                  <div>
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
+                                      Featured Services
+                                    </h4>
+                                    <ul className="space-y-2">
+                                      {category.featuredServices.slice(0, Math.ceil(category.featuredServices.length / 2)).map((service) => (
+                                        <li key={service}>
+                                          <Link
+                                            href={`${category.mainLink}?service=${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                            className="text-sm text-slate-700 hover:text-blue-600 transition-colors"
+                                          >
+                                            {service}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+
+                                  {/* Featured Services Column 2 */}
+                                  <div>
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
+                                      &nbsp;
+                                    </h4>
+                                    <ul className="space-y-2">
+                                      {category.featuredServices.slice(Math.ceil(category.featuredServices.length / 2)).map((service) => (
+                                        <li key={service}>
+                                          <Link
+                                            href={`${category.mainLink}?service=${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                            className="text-sm text-slate-700 hover:text-blue-600 transition-colors"
+                                          >
+                                            {service}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                    <Link
+                                      href={category.mainLink}
+                                      className="text-sm text-blue-600 font-medium mt-4 inline-flex items-center gap-1 hover:underline"
+                                    >
+                                      See more services <ArrowRight className="w-3 h-3" />
+                                    </Link>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -333,6 +498,23 @@ export function Navbar() {
                         >
                           <item.icon className="w-5 h-5 text-slate-400" />
                           <span className="text-sm font-medium text-slate-700">{item.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">Consulting Services</div>
+                    <div className="space-y-1">
+                      {consultingCategories.map((category) => (
+                        <Link
+                          key={category.id}
+                          href={category.mainLink}
+                          className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <category.icon className="w-5 h-5 text-slate-400" />
+                          <span className="text-sm font-medium text-slate-700">{category.name}</span>
                         </Link>
                       ))}
                     </div>
