@@ -23,7 +23,7 @@ const companyTestimonials = [
     author: "Sarah Chen",
     role: "CTO",
     company: "TechCorp AI",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
     rating: 5,
     metric: "3 days to hire",
     industry: "AI/ML",
@@ -226,8 +226,13 @@ export function TestimonialsSection() {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                {/* Dark to Blue Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/95 to-black/60" />
+                {/* Semi-parabolic Gradient: Blue at bottom → Transparent at 45% */}
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: 'linear-gradient(to top, hsl(221.2, 83.2%, 53.3%) 0%, hsl(221.2, 83.2%, 53.3%) 10%, rgba(37, 99, 235, 0.95) 14%, rgba(37, 99, 235, 0.85) 19%, rgba(37, 99, 235, 0.7) 24%, rgba(37, 99, 235, 0.5) 30%, rgba(37, 99, 235, 0.3) 36%, rgba(37, 99, 235, 0.15) 39%, rgba(37, 99, 235, 0.05) 43%, transparent 45%)'
+                  }}
+                />
               </div>
               
               <div className="relative z-10 p-8 h-full flex flex-col justify-end">

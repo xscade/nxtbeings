@@ -122,6 +122,35 @@ const consultingCategories = [
       "Supply Chain Consulting",
     ],
   },
+  {
+    id: "ai",
+    name: "AI Consulting",
+    icon: Sparkles,
+    mainLink: "/consulting/ai",
+    services: [
+      "AI Workflow Automation",
+      "N8N Implementation",
+      "Langchain Development",
+      "LLM Integration & Fine-tuning",
+      "AI Agent Development",
+      "RAG (Retrieval-Augmented Generation) Systems",
+      "AI Model Deployment & MLOps",
+    ],
+    featuredServices: [
+      "Custom AI Solution Architecture",
+      "Vector Database Implementation",
+      "Prompt Engineering Services",
+      "AI Chatbot Development",
+      "Document AI & Processing",
+      "AI-Powered Analytics",
+      "Computer Vision Solutions",
+      "Natural Language Processing",
+      "AI API Integration",
+      "AI Model Training & Optimization",
+      "AI Security & Governance",
+      "AI Performance Monitoring",
+    ],
+  },
 ];
 
 export function Navbar() {
@@ -247,24 +276,29 @@ export function Navbar() {
 
                 <AnimatePresence>
                   {activeMenu === "consulting" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="fixed top-16 left-0 right-0 pt-2 z-50"
-                      onMouseEnter={() => setActiveMenu("consulting")}
-                    >
-                      <div className="max-w-7xl mx-auto px-6">
-                        <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
-                        <div className="flex">
-                          {/* Left Column - Categories */}
-                          <div className="w-64 bg-slate-50 border-r border-slate-200">
+                    <>
+                      {/* Invisible bridge to prevent gap collapse */}
+                      <div className="absolute top-full left-0 right-0 h-1" onMouseEnter={() => setActiveMenu("consulting")} />
+                      
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed top-16 left-0 right-0 z-50"
+                        onMouseEnter={() => setActiveMenu("consulting")}
+                        onMouseLeave={() => setActiveMenu(null)}
+                      >
+                        <div className="max-w-7xl mx-auto px-6">
+                          {/* Dropdown Card */}
+                          <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                            <div className="flex">
+                              {/* Left Column - Categories */}
+                              <div className="w-64 bg-slate-50 border-r border-slate-200">
                             {consultingCategories.map((category) => (
                               <button
                                 key={category.id}
                                 onClick={() => setSelectedConsultingCategory(category.id)}
-                                onMouseEnter={() => setSelectedConsultingCategory(category.id)}
                                 className={`w-full text-left px-6 py-4 transition-colors ${
                                   selectedConsultingCategory === category.id
                                     ? "bg-white border-l-4 border-blue-600 text-blue-600"
@@ -315,7 +349,7 @@ export function Navbar() {
                                     <ul className="space-y-2">
                                       {category.featuredServices.slice(0, Math.ceil(category.featuredServices.length / 2)).map((service) => (
                                         <li key={service}>
-                                          <Link
+                          <Link
                                             href={`${category.mainLink}?service=${service.toLowerCase().replace(/\s+/g, "-")}`}
                                             className="text-sm text-slate-700 hover:text-blue-600 transition-colors"
                                           >
@@ -324,7 +358,7 @@ export function Navbar() {
                                         </li>
                                       ))}
                                     </ul>
-                                  </div>
+                            </div>
 
                                   {/* Featured Services Column 2 */}
                                   <div>
@@ -348,15 +382,16 @@ export function Navbar() {
                                       className="text-sm text-blue-600 font-medium mt-4 inline-flex items-center gap-1 hover:underline"
                                     >
                                       See more services <ArrowRight className="w-3 h-3" />
-                                    </Link>
+                          </Link>
                                   </div>
                                 </div>
-                              ))}
+                        ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                      </div>
                     </motion.div>
+                    </>
                   )}
                 </AnimatePresence>
               </div>
