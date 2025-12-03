@@ -72,7 +72,7 @@ const tracks = [
     tagline: "Autonomous & Intelligent",
     description: "Build agents that reason, plan, and execute complex tasks autonomously",
     icon: Brain,
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=600&fit=crop",
     prizes: "$10,000",
     participants: "1,200+",
   },
