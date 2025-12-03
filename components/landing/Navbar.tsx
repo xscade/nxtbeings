@@ -44,6 +44,59 @@ const talentServices = [
 // Consulting Services - Toptal-style structure
 const consultingCategories = [
   {
+    id: "ai",
+    name: "AI Consulting",
+    icon: Sparkles,
+    mainLink: "/consulting/ai",
+    services: [
+      "AI Workflow Automation",
+      "N8N Implementation",
+      "Langchain Development",
+      "LLM Integration & Fine-tuning",
+      "AI Agent Development",
+      "RAG (Retrieval-Augmented Generation) Systems",
+      "AI Model Deployment & MLOps",
+    ],
+    featuredServices: [
+      "Custom AI Solution Architecture",
+      "Vector Database Implementation",
+      "Prompt Engineering Services",
+      "AI Chatbot Development",
+      "Document AI & Processing",
+      "AI-Powered Analytics",
+      "Computer Vision Solutions",
+      "Natural Language Processing",
+      "AI API Integration",
+      "AI Model Training & Optimization",
+      "AI Security & Governance",
+      "AI Performance Monitoring",
+    ],
+  },
+  {
+    id: "management",
+    name: "Management Consulting",
+    icon: Briefcase,
+    mainLink: "/consulting/management",
+    services: [
+      "Strategy Consulting",
+      "People Consulting",
+      "Finance Consulting",
+      "Operations Consulting",
+    ],
+    featuredServices: [
+      "Digital Strategy Consulting",
+      "AI Strategy Consulting",
+      "Growth Strategy Consulting",
+      "Corporate Finance Consulting",
+      "CFO Consulting",
+      "M&A Due Diligence Consulting",
+      "Sales Consulting",
+      "Change Management Consulting",
+      "Performance Improvement Consulting",
+      "Supply Chain Consulting",
+    ],
+  },
+  {
     id: "technology",
     name: "Technology Services",
     icon: Code2,
@@ -98,65 +151,12 @@ const consultingCategories = [
       "Social Media Management Services",
     ],
   },
-  {
-    id: "management",
-    name: "Management Consulting",
-    icon: Briefcase,
-    mainLink: "/consulting/management",
-    services: [
-      "Strategy Consulting",
-      "People Consulting",
-      "Finance Consulting",
-      "Operations Consulting",
-    ],
-    featuredServices: [
-      "Digital Strategy Consulting",
-      "AI Strategy Consulting",
-      "Growth Strategy Consulting",
-      "Corporate Finance Consulting",
-      "CFO Consulting",
-      "M&A Due Diligence Consulting",
-      "Sales Consulting",
-      "Change Management Consulting",
-      "Performance Improvement Consulting",
-      "Supply Chain Consulting",
-    ],
-  },
-  {
-    id: "ai",
-    name: "AI Consulting",
-    icon: Sparkles,
-    mainLink: "/consulting/ai",
-    services: [
-      "AI Workflow Automation",
-      "N8N Implementation",
-      "Langchain Development",
-      "LLM Integration & Fine-tuning",
-      "AI Agent Development",
-      "RAG (Retrieval-Augmented Generation) Systems",
-      "AI Model Deployment & MLOps",
-    ],
-    featuredServices: [
-      "Custom AI Solution Architecture",
-      "Vector Database Implementation",
-      "Prompt Engineering Services",
-      "AI Chatbot Development",
-      "Document AI & Processing",
-      "AI-Powered Analytics",
-      "Computer Vision Solutions",
-      "Natural Language Processing",
-      "AI API Integration",
-      "AI Model Training & Optimization",
-      "AI Security & Governance",
-      "AI Performance Monitoring",
-    ],
-  },
 ];
 
 export function Navbar() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedConsultingCategory, setSelectedConsultingCategory] = useState("technology");
+  const [selectedConsultingCategory, setSelectedConsultingCategory] = useState("ai");
 
   return (
     <>
