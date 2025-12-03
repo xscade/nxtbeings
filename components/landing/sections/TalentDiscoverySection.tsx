@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Code2, 
@@ -256,9 +257,11 @@ export function TalentDiscoverySection() {
                 <p className="text-blue-100 mb-8">
                   in the Nxtbeings Network
                 </p>
-                <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold w-full">
-                  Discover Talent
-                </Button>
+                <Link href="/browse">
+                  <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold w-full">
+                    Discover Talent
+                  </Button>
+                </Link>
               </div>
             </Card>
           </motion.div>
