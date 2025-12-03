@@ -252,10 +252,11 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute top-full left-0 pt-2"
+                      className="fixed top-16 left-0 right-0 pt-2 z-50"
                       onMouseEnter={() => setActiveMenu("consulting")}
                     >
-                      <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden w-[800px]">
+                      <div className="max-w-7xl mx-auto px-6">
+                        <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
                         <div className="flex">
                           {/* Left Column - Categories */}
                           <div className="w-64 bg-slate-50 border-r border-slate-200">
@@ -353,6 +354,7 @@ export function Navbar() {
                               ))}
                           </div>
                         </div>
+                      </div>
                       </div>
                     </motion.div>
                   )}
