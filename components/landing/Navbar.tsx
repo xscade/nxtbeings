@@ -126,7 +126,7 @@ const consultingCategories = [
   },
   {
     id: "marketing",
-    name: "Marketing Agency",
+    name: "Marketing Services",
     icon: Megaphone,
     mainLink: "/consulting/marketing",
     services: [
