@@ -198,11 +198,28 @@ export default function ProfilePage() {
           setWeeklyAvailability(profile.weeklyAvailability || "");
           setResponseTime(profile.responseTime || "");
           
-          setSkills(profile.skills || []);
-          setLanguages(profile.languages || []);
-          setExperience(profile.experience || []);
-          setEducation(profile.education || []);
-          setCertifications(profile.certifications || []);
+          // Handle skills - migrate from old string array format if needed
+          if (Array.isArray(profile.skills)) {
+            if (profile.skills.length > 0 && typeof profile.skills[0] === 'string') {
+              // Old format: string array, convert to new format
+              setSkills(profile.skills.map((skill: string) => ({
+                name: skill,
+                level: "Expert",
+                years: undefined,
+              })));
+            } else {
+              // New format: array of objects
+              setSkills(profile.skills);
+            }
+          } else {
+            setSkills([]);
+          }
+          
+          // Ensure arrays are always arrays
+          setLanguages(Array.isArray(profile.languages) ? profile.languages : []);
+          setExperience(Array.isArray(profile.experience) ? profile.experience : []);
+          setEducation(Array.isArray(profile.education) ? profile.education : []);
+          setCertifications(Array.isArray(profile.certifications) ? profile.certifications : []);
           
           setHourlyRate(profile.hourlyRate?.toString() || "");
           setRating(profile.rating?.toString() || "");
@@ -599,14 +616,14 @@ export default function ProfilePage() {
           </h2>
 
           {/* Existing Skills */}
-          {skills.length > 0 && (
+          {Array.isArray(skills) && skills.length > 0 && (
             <div className="space-y-2">
               {skills.map((skill, index) => (
                 <div key={index} className="flex items-center gap-2 p-3 rounded-xl bg-muted">
                   <div className="flex-1">
-                    <span className="font-medium text-foreground">{skill.name}</span>
-                    <span className="ml-2 text-sm text-muted-foreground">• {skill.level}</span>
-                    {skill.years && (
+                    <span className="font-medium text-foreground">{skill?.name || 'Unknown'}</span>
+                    <span className="ml-2 text-sm text-muted-foreground">• {skill?.level || 'Expert'}</span>
+                    {skill?.years && (
                       <span className="ml-2 text-sm text-muted-foreground">• {skill.years} years</span>
                     )}
                   </div>
@@ -658,7 +675,7 @@ export default function ProfilePage() {
           <div>
             <p className="text-sm text-muted-foreground mb-2">Quick add:</p>
             <div className="flex flex-wrap gap-2">
-              {commonSkills.filter(s => !skills.some(sk => sk.name === s)).slice(0, 10).map((skill) => (
+              {Array.isArray(skills) && commonSkills.filter(s => !skills.some(sk => sk?.name === s)).slice(0, 10).map((skill) => (
                 <button
                   key={skill}
                   type="button"
@@ -685,13 +702,13 @@ export default function ProfilePage() {
           </h2>
 
           {/* Existing Languages */}
-          {languages.length > 0 && (
+          {Array.isArray(languages) && languages.length > 0 && (
             <div className="space-y-2">
               {languages.map((lang, index) => (
                 <div key={index} className="flex items-center gap-2 p-3 rounded-xl bg-muted">
                   <div className="flex-1">
-                    <span className="font-medium text-foreground">{lang.name}</span>
-                    <span className="ml-2 text-sm text-muted-foreground">• {lang.level}</span>
+                    <span className="font-medium text-foreground">{lang?.name || 'Unknown'}</span>
+                    <span className="ml-2 text-sm text-muted-foreground">• {lang?.level || 'Fluent'}</span>
                   </div>
                   <button
                     type="button"
@@ -740,7 +757,7 @@ export default function ProfilePage() {
           </h2>
 
           {/* Existing Experience */}
-          {experience.length > 0 && (
+          {Array.isArray(experience) && experience.length > 0 && (
             <div className="space-y-4">
               {experience.map((exp, index) => (
                 <div key={index} className="p-4 rounded-xl bg-muted border border-border">
@@ -835,7 +852,7 @@ export default function ProfilePage() {
           </h2>
 
           {/* Existing Education */}
-          {education.length > 0 && (
+          {Array.isArray(education) && education.length > 0 && (
             <div className="space-y-2">
               {education.map((edu, index) => (
                 <div key={index} className="flex items-start justify-between p-3 rounded-xl bg-muted">
@@ -903,7 +920,7 @@ export default function ProfilePage() {
           </h2>
 
           {/* Existing Certifications */}
-          {certifications.length > 0 && (
+          {Array.isArray(certifications) && certifications.length > 0 && (
             <div className="space-y-2">
               {certifications.map((cert, index) => (
                 <div key={index} className="flex items-start justify-between p-3 rounded-xl bg-muted">
