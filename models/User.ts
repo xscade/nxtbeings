@@ -91,6 +91,28 @@ export interface ITalentProfile {
   availability?: string;
 }
 
+export interface INotifications {
+  // Talent notifications
+  newOpportunities?: boolean;
+  shortlisted?: boolean;
+  messages?: boolean;
+  profileViews?: boolean;
+  weeklyDigest?: boolean;
+  // Company notifications
+  newApplications?: boolean;
+  talentInterest?: boolean;
+  shortlistUpdates?: boolean;
+}
+
+export interface IPrivacy {
+  profileVisibility?: "public" | "private" | "unlisted";
+  showEmail?: boolean;
+  showPhone?: boolean;
+  allowMessages?: boolean;
+  showAvailability?: boolean;
+  showHourlyRate?: boolean;
+}
+
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   email: string;
@@ -102,6 +124,8 @@ export interface IUser extends Document {
   onboardingCompleted: boolean;
   companyProfile?: ICompanyProfile;
   talentProfile?: ITalentProfile;
+  notifications?: INotifications;
+  privacy?: IPrivacy;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -229,6 +253,38 @@ const TalentProfileSchema = new Schema<ITalentProfile>(
   { _id: false }
 );
 
+const NotificationsSchema = new Schema<INotifications>(
+  {
+    // Talent notifications
+    newOpportunities: { type: Boolean, default: true },
+    shortlisted: { type: Boolean, default: true },
+    messages: { type: Boolean, default: true },
+    profileViews: { type: Boolean, default: true },
+    weeklyDigest: { type: Boolean, default: false },
+    // Company notifications
+    newApplications: { type: Boolean, default: true },
+    talentInterest: { type: Boolean, default: true },
+    shortlistUpdates: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
+const PrivacySchema = new Schema<IPrivacy>(
+  {
+    profileVisibility: {
+      type: String,
+      enum: ["public", "private", "unlisted"],
+      default: "public",
+    },
+    showEmail: { type: Boolean, default: false },
+    showPhone: { type: Boolean, default: false },
+    allowMessages: { type: Boolean, default: true },
+    showAvailability: { type: Boolean, default: true },
+    showHourlyRate: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
 const UserSchema = new Schema<IUser>(
   {
     email: {
@@ -267,6 +323,12 @@ const UserSchema = new Schema<IUser>(
     },
     talentProfile: {
       type: TalentProfileSchema,
+    },
+    notifications: {
+      type: NotificationsSchema,
+    },
+    privacy: {
+      type: PrivacySchema,
     },
   },
   {
