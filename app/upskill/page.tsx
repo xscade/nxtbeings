@@ -22,7 +22,10 @@ import {
   BookOpen,
   Rocket,
   Star,
-  TrendingUp
+  TrendingUp,
+  Loader2,
+  Phone,
+  Mail
 } from "lucide-react";
 
 const domains = [
@@ -79,14 +82,105 @@ const benefits = [
   },
 ];
 
+const industries = [
+  "Technology & Software",
+  "Finance & Banking",
+  "Healthcare & Life Sciences",
+  "E-commerce & Retail",
+  "Manufacturing & Supply Chain",
+  "Marketing & Advertising",
+  "Legal & Professional Services",
+  "Education & Training",
+  "Real Estate",
+  "Other",
+];
+
 export default function UpskillPage() {
   const [activeTab, setActiveTab] = useState<"company" | "individual">("company");
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
+  
+  // Form state
+  const [companyName, setCompanyName] = useState("");
+  const [contactName, setContactName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [teamSize, setTeamSize] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const toggleDomain = (id: string) => {
     setSelectedDomains(prev => 
       prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
     );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
+
+    // Validation
+    if (!companyName || !contactName || !email || !phone || !teamSize || !industry) {
+      setSubmitError("Please fill in all required fields");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (selectedDomains.length === 0) {
+      setSubmitError("Please select at least one area to upskill");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/upskill/consultation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyName,
+          contactName,
+          email,
+          phone,
+          teamSize,
+          industry,
+          domains: selectedDomains,
+          requirements,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit consultation request");
+      }
+
+      setSubmitSuccess(true);
+      
+      // Reset form
+      setCompanyName("");
+      setContactName("");
+      setEmail("");
+      setPhone("");
+      setTeamSize("");
+      setIndustry("");
+      setRequirements("");
+      setSelectedDomains([]);
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -360,27 +454,124 @@ export default function UpskillPage() {
                 {/* Right: Registration Form */}
                   <div className="bg-card rounded-2xl border border-border shadow-xl shadow-primary/5 p-8">
                     <h3 className="text-2xl font-bold text-foreground mb-2">Register Your Team</h3>
-                    <p className="text-muted-foreground mb-8 text-sm">Tell us about your needs and we'll build a custom plan.</p>
+                    <p className="text-muted-foreground mb-8 text-sm">Tell us about your needs and we'll build a custom plan. Our AI agent will call you shortly after submission.</p>
                     
-                    <form className="space-y-6">
+                    {submitSuccess && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary"
+                      >
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-5 h-5" />
+                          <p className="font-medium">Form submitted successfully! Our AI agent will call you shortly at the number provided.</p>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive"
+                      >
+                        <p className="font-medium">{submitError}</p>
+                      </motion.div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground">Company Name</label>
-                          <Input placeholder="Acme Inc." className="rounded-xl" />
+                          <label className="text-sm font-medium text-foreground">
+                            Company Name <span className="text-destructive">*</span>
+                          </label>
+                          <Input 
+                            value={companyName}
+                            onChange={(e) => setCompanyName(e.target.value)}
+                            placeholder="Acme Inc." 
+                            className="rounded-xl" 
+                            required
+                          />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground">Team Size</label>
-                          <Input placeholder="e.g. 10-50" className="rounded-xl" />
+                          <label className="text-sm font-medium text-foreground">
+                            Team Size <span className="text-destructive">*</span>
+                          </label>
+                          <Input 
+                            value={teamSize}
+                            onChange={(e) => setTeamSize(e.target.value)}
+                            placeholder="e.g. 10-50" 
+                            className="rounded-xl" 
+                            required
+                          />
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-foreground">Work Email</label>
-                        <Input type="email" placeholder="you@company.com" className="rounded-xl" />
+                        <label className="text-sm font-medium text-foreground">
+                          Contact Name <span className="text-destructive">*</span>
+                        </label>
+                        <Input 
+                          value={contactName}
+                          onChange={(e) => setContactName(e.target.value)}
+                          placeholder="John Doe" 
+                          className="rounded-xl" 
+                          required
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground">
+                            Work Email <span className="text-destructive">*</span>
+                          </label>
+                          <Input 
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="you@company.com" 
+                            className="rounded-xl" 
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground">
+                            Phone Number <span className="text-destructive">*</span>
+                          </label>
+                          <Input 
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="+1 (555) 123-4567" 
+                            className="rounded-xl" 
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-foreground">
+                          Industry <span className="text-destructive">*</span>
+                        </label>
+                        <select
+                          value={industry}
+                          onChange={(e) => setIndustry(e.target.value)}
+                          className="w-full px-4 py-2 rounded-xl border border-input bg-background focus:border-primary focus:ring-1 focus:ring-primary"
+                          required
+                        >
+                          <option value="">Select your industry</option>
+                          {industries.map((ind) => (
+                            <option key={ind} value={ind}>
+                              {ind}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
                       <div className="space-y-3">
-                        <label className="text-sm font-medium text-foreground">Select Areas to Upskill</label>
+                        <label className="text-sm font-medium text-foreground">
+                          Select Areas to Upskill <span className="text-destructive">*</span>
+                        </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {domains.map((domain) => (
                             <button
@@ -413,10 +604,41 @@ export default function UpskillPage() {
                         </div>
                       </div>
 
-                      <Button size="lg" className="w-full rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-                        Request Consultation
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-foreground">
+                          Specific Requirements or Notes
+                        </label>
+                        <textarea
+                          value={requirements}
+                          onChange={(e) => setRequirements(e.target.value)}
+                          placeholder="Tell us about your specific needs, goals, or any questions you have..."
+                          rows={4}
+                          className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        />
+                      </div>
+
+                      <Button 
+                        type="submit"
+                        size="lg" 
+                        disabled={isSubmitting}
+                        className="w-full rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            Request Consultation
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </>
+                        )}
                       </Button>
+                      
+                      <p className="text-xs text-muted-foreground text-center">
+                        By submitting, you agree to receive a call from our AI consultation agent. We'll call you at the number provided.
+                      </p>
                     </form>
                   </div>
                 </div>
