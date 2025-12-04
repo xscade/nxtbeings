@@ -70,7 +70,7 @@ const quickLinks = {
     { name: "Contact", href: "#" },
   ],
   legal: [
-    { name: "Privacy Policy", href: "#" },
+    { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "#" },
     { name: "Cookie Policy", href: "#" },
     { name: "Refund Policy", href: "#" },
