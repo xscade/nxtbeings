@@ -64,7 +64,7 @@ const quickLinks = {
     { name: "Upskill", href: "/upskill" },
   ],
   company: [
-    { name: "About Us", href: "#" },
+    { name: "About Us", href: "/about" },
     { name: "Careers", href: "#" },
     { name: "Blog", href: "#" },
     { name: "Contact", href: "#" },
