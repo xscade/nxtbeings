@@ -11,15 +11,84 @@ export interface ICompanyProfile {
   description?: string;
 }
 
+export interface ISkill {
+  name: string;
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+  years?: number;
+}
+
+export interface ILanguage {
+  name: string;
+  level: "Basic" | "Conversational" | "Fluent" | "Native";
+}
+
+export interface IWorkExperience {
+  title: string;
+  company: string;
+  location?: string;
+  period: string; // e.g., "2020 - 2023"
+  description?: string;
+  current?: boolean;
+}
+
+export interface IEducation {
+  degree: string;
+  school: string;
+  year?: string;
+  fieldOfStudy?: string;
+}
+
+export interface ICertification {
+  name: string;
+  issuer: string;
+  year?: string;
+  credentialId?: string;
+  credentialUrl?: string;
+}
+
 export interface ITalentProfile {
+  // Basic Info
   title?: string;
-  skills?: string[];
-  experience?: string;
-  portfolio?: string;
+  tagline?: string;
   bio?: string;
+  image?: string;
+  
+  // Location & Availability
+  location?: string;
+  timezone?: string;
+  available?: boolean;
+  availableFrom?: string; // e.g., "Immediately", "2 weeks notice"
+  weeklyAvailability?: string; // e.g., "30+ hrs/week"
+  
+  // Skills & Expertise
+  skills?: ISkill[];
+  languages?: ILanguage[];
+  
+  // Experience & Education
+  experience?: IWorkExperience[];
+  education?: IEducation[];
+  certifications?: ICertification[];
+  
+  // Rates & Stats
   hourlyRate?: number;
-  availability?: string;
+  rating?: number;
+  totalReviews?: number;
+  jobsCompleted?: number;
+  successRate?: number;
+  responseTime?: string; // e.g., "< 2 hours"
+  
+  // Performance Stats
+  stats?: {
+    onTimeDelivery?: number;
+    onBudget?: number;
+    repeatClients?: number;
+  };
+  
+  // Verification
   verified?: boolean;
+  
+  // Legacy fields (for backward compatibility)
+  availability?: string;
 }
 
 export interface IUser extends Document {
@@ -49,16 +118,113 @@ const CompanyProfileSchema = new Schema<ICompanyProfile>(
   { _id: false }
 );
 
+const SkillSchema = new Schema<ISkill>(
+  {
+    name: { type: String, required: true },
+    level: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced", "Expert"],
+      required: true,
+    },
+    years: { type: Number },
+  },
+  { _id: false }
+);
+
+const LanguageSchema = new Schema<ILanguage>(
+  {
+    name: { type: String, required: true },
+    level: {
+      type: String,
+      enum: ["Basic", "Conversational", "Fluent", "Native"],
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+const WorkExperienceSchema = new Schema<IWorkExperience>(
+  {
+    title: { type: String, required: true },
+    company: { type: String, required: true },
+    location: { type: String },
+    period: { type: String, required: true },
+    description: { type: String },
+    current: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
+const EducationSchema = new Schema<IEducation>(
+  {
+    degree: { type: String, required: true },
+    school: { type: String, required: true },
+    year: { type: String },
+    fieldOfStudy: { type: String },
+  },
+  { _id: false }
+);
+
+const CertificationSchema = new Schema<ICertification>(
+  {
+    name: { type: String, required: true },
+    issuer: { type: String, required: true },
+    year: { type: String },
+    credentialId: { type: String },
+    credentialUrl: { type: String },
+  },
+  { _id: false }
+);
+
+const TalentProfileStatsSchema = new Schema(
+  {
+    onTimeDelivery: { type: Number },
+    onBudget: { type: Number },
+    repeatClients: { type: Number },
+  },
+  { _id: false }
+);
+
 const TalentProfileSchema = new Schema<ITalentProfile>(
   {
+    // Basic Info
     title: { type: String },
-    skills: [{ type: String }],
-    experience: { type: String },
-    portfolio: { type: String },
+    tagline: { type: String },
     bio: { type: String },
+    image: { type: String },
+    
+    // Location & Availability
+    location: { type: String },
+    timezone: { type: String },
+    available: { type: Boolean, default: false },
+    availableFrom: { type: String },
+    weeklyAvailability: { type: String },
+    
+    // Skills & Expertise
+    skills: [SkillSchema],
+    languages: [LanguageSchema],
+    
+    // Experience & Education
+    experience: [WorkExperienceSchema],
+    education: [EducationSchema],
+    certifications: [CertificationSchema],
+    
+    // Rates & Stats
     hourlyRate: { type: Number },
-    availability: { type: String },
+    rating: { type: Number },
+    totalReviews: { type: Number, default: 0 },
+    jobsCompleted: { type: Number, default: 0 },
+    successRate: { type: Number },
+    responseTime: { type: String },
+    
+    // Performance Stats
+    stats: TalentProfileStatsSchema,
+    
+    // Verification
     verified: { type: Boolean, default: false },
+    
+    // Legacy fields
+    availability: { type: String },
   },
   { _id: false }
 );
