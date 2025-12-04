@@ -80,14 +80,14 @@ ${requirements ? `Requirements: ${requirements}` : ""}
 
     // Call Retell AI API to create a phone call using the SDK
     // Reference: https://docs.retellai.com/api-references/create-phone-call
-    // The SDK handles the correct endpoint and request format
+    // The SDK expects snake_case properties (agent_id, from_number, to_number, etc.)
     const phoneCallResponse = await retellClient.call.createPhoneCall({
-      agentId: RETELL_AGENT_ID,
-      fromNumber: RETELL_PHONE_NUMBER,
-      toNumber: formattedPhone,
+      agent_id: RETELL_AGENT_ID,
+      from_number: RETELL_PHONE_NUMBER,
+      to_number: formattedPhone,
       // Pass form data as dynamic variables - these will be available in the agent's prompt
       // The agent can access these via {{variable_name}} in the prompt
-      retellLlmDynamicVariables: retellLlmDynamicVariables,
+      retell_llm_dynamic_variables: retellLlmDynamicVariables,
       // Optional: Add metadata for tracking
       metadata: {
         source: "upskill_consultation_form",
