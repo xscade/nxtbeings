@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import Retell from "retell-sdk";
 
 const RETELL_API_KEY = process.env.RETELL_AI_API_KEY || "key_e7471f8292959ba9fd201f025e51";
 const RETELL_AGENT_ID = process.env.RETELL_AI_AGENT_ID || "agent_7a877e6da78743de2cbb9ddee3";
 const RETELL_PHONE_NUMBER = process.env.RETELL_AI_PHONE_NUMBER || "+14025264321";
-const RETELL_API_BASE_URL = "https://api.retellai.com";
+
+// Initialize Retell AI client
+const retellClient = new Retell({
+  apiKey: RETELL_API_KEY,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -73,41 +78,22 @@ Areas of Interest: ${Array.isArray(domains) ? domains.join(", ") : domains}
 ${requirements ? `Requirements: ${requirements}` : ""}
     `.trim();
 
-    // Call Retell AI API to create a phone call
+    // Call Retell AI API to create a phone call using the SDK
     // Reference: https://docs.retellai.com/api-references/create-phone-call
-    // Using REST API directly for more control and reliability
-    const retellApiUrl = `${RETELL_API_BASE_URL}/create-phone-call`;
-    
-    const requestBody = {
-      agent_id: RETELL_AGENT_ID,
-      from_number: RETELL_PHONE_NUMBER,
-      to_number: formattedPhone,
+    // The SDK handles the correct endpoint and request format
+    const phoneCallResponse = await retellClient.call.createPhoneCall({
+      agentId: RETELL_AGENT_ID,
+      fromNumber: RETELL_PHONE_NUMBER,
+      toNumber: formattedPhone,
       // Pass form data as dynamic variables - these will be available in the agent's prompt
       // The agent can access these via {{variable_name}} in the prompt
-      retell_llm_dynamic_variables: retellLlmDynamicVariables,
+      retellLlmDynamicVariables: retellLlmDynamicVariables,
       // Optional: Add metadata for tracking
       metadata: {
         source: "upskill_consultation_form",
         submitted_at: new Date().toISOString(),
       },
-    };
-
-    const retellResponse = await fetch(retellApiUrl, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${RETELL_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!retellResponse.ok) {
-      const errorData = await retellResponse.text();
-      console.error("Retell AI API Error:", errorData);
-      throw new Error(`Retell AI API error: ${errorData}`);
-    }
-
-    const phoneCallResponse = await retellResponse.json();
+    } as any); // Type assertion for SDK compatibility
 
     // Store the consultation request in database (optional)
     // You can create a Consultation model to track submissions
