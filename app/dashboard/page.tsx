@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Shortlist from "@/models/Shortlist";
 import User from "@/models/User";
+import { calculateProfileCompletion } from "@/lib/profileCompletion";
+import { ProfileCompletionCard } from "@/components/dashboard/ProfileCompletionCard";
 import Link from "next/link";
 import { 
   Users, 
@@ -230,10 +232,7 @@ function TalentDashboard({
     { name: "Interviewing", value: stats.interviewingCount, icon: Briefcase, gradient: "from-emerald-400 to-teal-500", href: "/dashboard/opportunities" },
   ];
 
-  const profileComplete = profile?.talentProfile?.title && 
-    profile?.talentProfile?.skills && 
-    profile?.talentProfile?.skills.length > 0 &&
-    profile?.talentProfile?.bio;
+  const profileCompletion = calculateProfileCompletion(profile?.talentProfile || null);
 
   return (
     <div className="space-y-8">
@@ -244,28 +243,9 @@ function TalentDashboard({
         <p className="text-muted-foreground mt-1">Here&apos;s your activity on Nxtbeings.</p>
       </div>
 
-      {/* Profile Completion Banner */}
-      {!profileComplete && (
-        <div className="bg-gradient-to-r from-indigo-500 to-violet-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-500/20">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg">Complete your profile</h3>
-              <p className="text-white/80 mt-1">
-                Profiles with complete information get 3x more views from companies.
-              </p>
-              <Link
-                href="/dashboard/profile"
-                className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-white text-indigo-600 rounded-xl font-medium text-sm hover:bg-white/90 transition-colors shadow-lg"
-              >
-                Update profile
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
+      {/* Profile Completion Card */}
+      {profileCompletion < 100 && (
+        <ProfileCompletionCard completion={profileCompletion} />
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
