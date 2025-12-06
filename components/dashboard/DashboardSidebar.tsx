@@ -7,7 +7,9 @@ import {
   Users, 
   Star, 
   Settings,
-  Building2
+  Building2,
+  FileText,
+  Video
 } from "lucide-react";
 
 interface User {
@@ -23,6 +25,7 @@ interface DashboardSidebarProps {
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "Browse Talent", href: "/dashboard/browse", icon: Users },
+  { name: "Job Descriptions", href: "/dashboard/job-descriptions", icon: FileText },
   { name: "Shortlist", href: "/dashboard/shortlist", icon: Star },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];

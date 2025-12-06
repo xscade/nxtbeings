@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
+import { AIInterviewModal } from "@/components/interviews/AIInterviewModal";
 import { 
   MapPin,
   Star,
@@ -33,7 +34,8 @@ import {
   TrendingUp,
   Users,
   BadgeCheck,
-  ArrowRight
+  ArrowRight,
+  Video
 } from "lucide-react";
 
 // Sample talent data (in production, this would come from API based on ID)
@@ -194,6 +196,7 @@ I'm passionate about translating complex AI capabilities into practical business
 
 export default function TalentProfilePage() {
   const [activeTab, setActiveTab] = useState<"overview" | "portfolio" | "reviews">("overview");
+  const [showAIInterviewModal, setShowAIInterviewModal] = useState(false);
   const talent = talentData;
 
   const getLinkIcon = (type: string) => {
@@ -609,6 +612,13 @@ export default function TalentProfilePage() {
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Contact {talent.name.split(" ")[0]}
                   </Button>
+                  <Button 
+                    onClick={() => setShowAIInterviewModal(true)}
+                    className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20 h-12 hover:from-violet-700 hover:to-indigo-700"
+                  >
+                    <Video className="w-4 h-4 mr-2" />
+                    AI Interview
+                  </Button>
                   <Button variant="outline" className="w-full rounded-xl h-12">
                     <Heart className="w-4 h-4 mr-2" />
                     Add to Shortlist
@@ -709,6 +719,14 @@ export default function TalentProfilePage() {
       </section>
 
       <Footer />
+
+      {/* AI Interview Modal */}
+      <AIInterviewModal
+        isOpen={showAIInterviewModal}
+        onClose={() => setShowAIInterviewModal(false)}
+        talentId={talent.id}
+        talentName={talent.name}
+      />
     </main>
   );
 }

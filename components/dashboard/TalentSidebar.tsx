@@ -8,7 +8,8 @@ import {
   Briefcase, 
   Settings,
   Sparkles,
-  FolderGit2
+  FolderGit2,
+  Video
 } from "lucide-react";
 
 interface UserData {
@@ -25,6 +26,7 @@ const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "My Profile", href: "/dashboard/profile", icon: User },
   { name: "Portfolio", href: "/dashboard/portfolio", icon: FolderGit2 },
+  { name: "Interviews", href: "/dashboard/interviews", icon: Video },
   { name: "Opportunities", href: "/dashboard/opportunities", icon: Briefcase },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
