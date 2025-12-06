@@ -107,8 +107,7 @@ const PortfolioSchema = new Schema<IPortfolio>(
   }
 );
 
-// Index for quick lookup by user
-PortfolioSchema.index({ userId: 1 });
+// Note: userId index is automatically created by unique: true constraint above
 
 const Portfolio: Model<IPortfolio> =
   mongoose.models.Portfolio || mongoose.model<IPortfolio>("Portfolio", PortfolioSchema);
