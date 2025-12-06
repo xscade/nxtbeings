@@ -326,27 +326,28 @@ export default function DashboardTalentProfilePage() {
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Tabs */}
-            <div className="flex gap-1 mt-6 border-t border-white/20 pt-4 w-full">
-              {[
-                { id: "overview", label: "Overview" },
-                { id: "portfolio", label: "Portfolio" },
-                { id: "reviews", label: `Reviews (${talent.totalReviews || 0})` },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
-                    activeTab === tab.id
-                      ? "bg-white/20 text-white"
-                      : "text-white/60 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+          {/* Tabs */}
+          <div className="relative z-20 flex gap-1 mt-6 border-t border-white/20 pt-4">
+            {[
+              { id: "overview", label: "Overview" },
+              { id: "portfolio", label: "Portfolio" },
+              { id: "reviews", label: `Reviews (${talent.totalReviews || 0})` },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                  activeTab === tab.id
+                    ? "bg-white/20 text-white"
+                    : "text-white/60 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
