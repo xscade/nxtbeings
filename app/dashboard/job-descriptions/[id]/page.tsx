@@ -112,6 +112,21 @@ export default function JDEditorPage() {
     };
   }, [jd, hasChanges]);
 
+  // Auto-resize all textareas when content loads or changes
+  useEffect(() => {
+    if (jd && !loading) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        const textareas = document.querySelectorAll<HTMLTextAreaElement>('.auto-resize-textarea');
+        textareas.forEach((textarea) => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [jd, loading]);
+
   const fetchJobDescription = async () => {
     try {
       const response = await fetch(`/api/job-descriptions/${id}`);
@@ -574,7 +589,7 @@ export default function JDEditorPage() {
                     onChange={(e) => updateBlock(index, { content: e.target.value })}
                     placeholder="Write something..."
                     rows={1}
-                    className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed break-words whitespace-pre-wrap"
+                    className="auto-resize-textarea w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed break-words whitespace-pre-wrap overflow-hidden"
                     style={{ minHeight: "1.5rem", wordBreak: "break-word" }}
                     onInput={(e) => {
                       const target = e.target as HTMLTextAreaElement;
@@ -606,8 +621,8 @@ export default function JDEditorPage() {
                           }}
                           placeholder="List item"
                           rows={1}
-                          className="flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed"
-                          style={{ minHeight: "1.5rem" }}
+                          className="auto-resize-textarea flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed overflow-hidden"
+                          style={{ minHeight: "1.5rem", wordBreak: "break-word" }}
                           onInput={(e) => {
                             const target = e.target as HTMLTextAreaElement;
                             target.style.height = "auto";
@@ -646,7 +661,8 @@ export default function JDEditorPage() {
                         onChange={(e) => updateBlock(index, { content: e.target.value })}
                         placeholder="Callout content..."
                         rows={1}
-                        className="flex-1 bg-transparent border-none outline-none resize-none"
+                        className="auto-resize-textarea flex-1 bg-transparent border-none outline-none resize-none overflow-hidden"
+                        style={{ minHeight: "1.5rem", wordBreak: "break-word" }}
                         onInput={(e) => {
                           const target = e.target as HTMLTextAreaElement;
                           target.style.height = "auto";
