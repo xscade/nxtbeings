@@ -179,12 +179,11 @@ AIInterviewSchema.index({ status: 1, createdAt: -1 });
 AIInterviewSchema.index({ jobDescriptionId: 1 });
 
 // Set expiration date on creation if not set
-AIInterviewSchema.pre("save", function (next) {
+AIInterviewSchema.pre("save", function () {
   if (this.isNew && !this.expiresAt) {
     // Default expiration: 7 days from creation
     this.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   }
-  next();
 });
 
 const AIInterview: Model<IAIInterview> =

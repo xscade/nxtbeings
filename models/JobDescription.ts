@@ -108,7 +108,7 @@ JobDescriptionSchema.index({ companyId: 1, updatedAt: -1 });
 JobDescriptionSchema.index({ title: "text", rawContent: "text" });
 
 // Generate raw content before saving for search
-JobDescriptionSchema.pre("save", function (next) {
+JobDescriptionSchema.pre("save", function () {
   if (this.content && Array.isArray(this.content)) {
     const textParts: string[] = [];
     this.content.forEach((block) => {
@@ -117,7 +117,6 @@ JobDescriptionSchema.pre("save", function (next) {
     });
     this.rawContent = textParts.join(" ");
   }
-  next();
 });
 
 const JobDescription: Model<IJobDescription> =
