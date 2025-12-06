@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { TalentSidebar } from "@/components/dashboard/TalentSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardLayoutClient } from "@/components/dashboard/DashboardLayoutClient";
 
 export default async function DashboardLayout({
   children,
@@ -36,18 +34,9 @@ export default async function DashboardLayout({
         <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]" />
       </div>
 
-      {/* Sidebar */}
-      {isCompany ? (
-        <DashboardSidebar user={session.user} />
-      ) : (
-        <TalentSidebar user={session.user} />
-      )}
-      
-      {/* Main Content */}
-      <div className="lg:pl-72 relative z-10">
-        <DashboardHeader user={session.user} />
-        <main className="p-6 lg:p-8">{children}</main>
-      </div>
+      <DashboardLayoutClient user={session.user} isCompany={isCompany}>
+        {children}
+      </DashboardLayoutClient>
     </div>
   );
 }
