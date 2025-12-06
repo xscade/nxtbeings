@@ -293,7 +293,7 @@ export default function JDEditorPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: aiPrompt,
-          jobTitle: jd.title || undefined,
+          jobTitle: jd.title !== "Untitled Job Description" ? jd.title : undefined,
         }),
       });
       
@@ -304,13 +304,22 @@ export default function JDEditorPage() {
       }
       
       if (data.content && Array.isArray(data.content)) {
+        const updates: Partial<JobDescription> = {};
+        
+        // Update title if it's still "Untitled" and AI generated a title
+        if (data.title && (jd.title === "Untitled Job Description" || !jd.title)) {
+          updates.title = data.title;
+        }
+        
         // Append or replace content based on whether there's existing content
         if (jd.content.length === 0) {
-          updateJD({ content: data.content });
+          updates.content = data.content;
         } else {
           // Append to existing content
-          updateJD({ content: [...jd.content, ...data.content] });
+          updates.content = [...jd.content, ...data.content];
         }
+        
+        updateJD(updates);
         
         setShowAIPrompt(false);
         setAiPrompt("");

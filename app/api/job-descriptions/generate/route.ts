@@ -34,16 +34,21 @@ export async function POST(request: Request) {
 
 IMPORTANT: Return ONLY valid JSON, no markdown, no code blocks, no explanations.
 
-The JSON must be an array of content blocks with this exact structure:
-[
-  { "type": "heading", "content": "Section Title", "level": 1 },
-  { "type": "paragraph", "content": "Paragraph text here" },
-  { "type": "bulletList", "items": ["Item 1", "Item 2", "Item 3"] },
-  { "type": "numberedList", "items": ["Step 1", "Step 2", "Step 3"] },
-  { "type": "callout", "content": "Important note", "calloutType": "info" }
-]
+The JSON must be an object with this exact structure:
+{
+  "title": "Job Title Here",
+  "content": [
+    { "type": "heading", "content": "Section Title", "level": 1 },
+    { "type": "paragraph", "content": "Paragraph text here" },
+    { "type": "bulletList", "items": ["Item 1", "Item 2", "Item 3"] },
+    { "type": "numberedList", "items": ["Step 1", "Step 2", "Step 3"] },
+    { "type": "callout", "content": "Important note", "calloutType": "info" }
+  ]
+}
 
-Block types available:
+The "title" field should be a professional, concise job title (e.g., "Senior Software Engineer", "Marketing Manager", "AI/ML Engineer").
+
+Block types available for content:
 - "heading": Use level 1 for main sections, level 2 for subsections
 - "paragraph": For descriptive text
 - "bulletList": For unordered lists (requirements, benefits, etc.)
@@ -58,7 +63,7 @@ Generate a comprehensive job description with sections like:
 - What We Offer / Benefits
 - Any other relevant sections
 
-${jobTitle ? `Job Title: ${jobTitle}` : ""}
+${jobTitle ? `Suggested Job Title: ${jobTitle}` : ""}
 
 User's request: ${prompt}`;
 
@@ -113,6 +118,7 @@ User's request: ${prompt}`;
 
     // Parse the JSON from the response
     let contentBlocks: ContentBlock[];
+    let generatedTitle: string | null = null;
     
     try {
       // Clean up the response - remove any markdown code blocks if present
@@ -131,7 +137,17 @@ User's request: ${prompt}`;
       
       cleanedText = cleanedText.trim();
       
-      contentBlocks = JSON.parse(cleanedText);
+      const parsed = JSON.parse(cleanedText);
+      
+      // Handle both old array format and new object format
+      if (Array.isArray(parsed)) {
+        contentBlocks = parsed;
+      } else if (parsed.content && Array.isArray(parsed.content)) {
+        contentBlocks = parsed.content;
+        generatedTitle = parsed.title || null;
+      } else {
+        throw new Error("Invalid response format");
+      }
       
       // Validate and sanitize the blocks
       contentBlocks = contentBlocks.map((block) => {
@@ -169,7 +185,10 @@ User's request: ${prompt}`;
       ];
     }
 
-    return NextResponse.json({ content: contentBlocks });
+    return NextResponse.json({ 
+      content: contentBlocks,
+      title: generatedTitle,
+    });
     
   } catch (error) {
     console.error("Error generating job description:", error);
