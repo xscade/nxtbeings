@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
         sortOption = { "talentProfile.rating": -1, createdAt: -1 };
         break;
       case "most-jobs":
-        sortOption = { "talentProfile.completedJobs": -1, createdAt: -1 };
+        sortOption = { "talentProfile.jobsCompleted": -1, createdAt: -1 };
         break;
       case "lowest-rate":
         sortOption = { "talentProfile.hourlyRate": 1, createdAt: -1 };
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
         location: t.talentProfile?.location || "Remote",
         hourlyRate: t.talentProfile?.hourlyRate || 0,
         rating: t.talentProfile?.rating || 0,
-        completedJobs: t.talentProfile?.completedJobs || 0,
+        completedJobs: t.talentProfile?.jobsCompleted || 0,
         skills: t.talentProfile?.skills || [],
         verified: t.talentProfile?.verified || false,
         availability: t.talentProfile?.availability || "available",
