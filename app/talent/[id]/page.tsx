@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -35,169 +36,163 @@ import {
   Users,
   BadgeCheck,
   ArrowRight,
-  Video
+  Video,
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 
-// Sample talent data (in production, this would come from API based on ID)
-const talentData = {
-  id: "1",
-  name: "Sarah Chenn",
-  title: "Senior AI Engineer & Machine Learning Specialist",
-  tagline: "Building intelligent systems that solve real-world problems",
-  location: "San Francisco, USA",
-  timezone: "PST (UTC-8)",
-  hourlyRate: 150,
-  rating: 4.9,
-  totalReviews: 47,
-  jobsCompleted: 52,
-  successRate: 98,
-  responseTime: "< 2 hours",
-  memberSince: "Jan 2022",
-  verified: true,
-  available: true,
-  availableFrom: "Immediately",
-  weeklyAvailability: "30+ hrs/week",
-  bio: `I'm a Senior AI Engineer with 8+ years of experience building production-grade machine learning systems. Previously at Google AI and OpenAI, I've led teams that shipped products used by millions.
-
-My expertise spans:
-• Large Language Models (LLMs) - Fine-tuning, RAG systems, prompt engineering
-• Computer Vision - Object detection, image classification, OCR
-• MLOps - Model deployment, monitoring, and scaling
-• Data Engineering - Building robust data pipelines
-
-I'm passionate about translating complex AI capabilities into practical business solutions. Whether you need to build an AI-powered product from scratch or optimize existing ML systems, I can help you achieve measurable results.`,
-  skills: [
-    { name: "Python", level: "Expert", years: 8 },
-    { name: "TensorFlow", level: "Expert", years: 6 },
-    { name: "PyTorch", level: "Expert", years: 5 },
-    { name: "LLMs/GPT", level: "Expert", years: 3 },
-    { name: "Computer Vision", level: "Expert", years: 5 },
-    { name: "AWS/GCP", level: "Advanced", years: 6 },
-    { name: "Kubernetes", level: "Advanced", years: 4 },
-    { name: "MLOps", level: "Expert", years: 5 },
-    { name: "RAG Systems", level: "Expert", years: 2 },
-    { name: "Data Engineering", level: "Advanced", years: 6 },
-  ],
-  languages: [
-    { name: "English", level: "Native" },
-    { name: "Mandarin", level: "Native" },
-    { name: "Spanish", level: "Conversational" },
-  ],
-  experience: [
-    {
-      title: "Senior AI Engineer",
-      company: "Google AI",
-      location: "Mountain View, CA",
-      period: "2020 - 2023",
-      description: "Led a team of 5 engineers building NLP models for Google Search. Improved query understanding by 23%.",
-    },
-    {
-      title: "Machine Learning Engineer",
-      company: "OpenAI",
-      location: "San Francisco, CA",
-      period: "2018 - 2020",
-      description: "Worked on GPT model optimization and deployment infrastructure. Reduced inference latency by 40%.",
-    },
-    {
-      title: "Data Scientist",
-      company: "Airbnb",
-      location: "San Francisco, CA",
-      period: "2016 - 2018",
-      description: "Built recommendation systems and fraud detection models. Increased booking conversion by 15%.",
-    },
-  ],
-  education: [
-    {
-      degree: "M.S. Computer Science (AI Specialization)",
-      school: "Stanford University",
-      year: "2016",
-    },
-    {
-      degree: "B.S. Computer Science",
-      school: "UC Berkeley",
-      year: "2014",
-    },
-  ],
-  certifications: [
-    { name: "Google Cloud Professional ML Engineer", issuer: "Google", year: "2023" },
-    { name: "AWS Certified Machine Learning", issuer: "Amazon", year: "2022" },
-    { name: "Deep Learning Specialization", issuer: "Coursera/DeepLearning.AI", year: "2021" },
-  ],
-  portfolio: {
-    links: [
-      { type: "github", url: "https://github.com/sarahchen", title: "GitHub" },
-      { type: "linkedin", url: "https://linkedin.com/in/sarahchen", title: "LinkedIn" },
-      { type: "website", url: "https://sarahchen.dev", title: "Personal Website" },
-      { type: "twitter", url: "https://twitter.com/sarahchen_ai", title: "Twitter" },
-    ],
-    projects: [
-      {
-        title: "AI-Powered Document Assistant",
-        description: "Built a RAG-based document Q&A system processing 10M+ documents for a Fortune 500 company. Achieved 95% accuracy on complex queries.",
-        techStack: ["Python", "LangChain", "GPT-4", "Pinecone", "FastAPI"],
-        imageUrl: null,
-        repoUrl: "https://github.com/sarahchen/doc-assistant",
-        liveUrl: null,
-      },
-      {
-        title: "Real-time Fraud Detection System",
-        description: "Designed and deployed an ML pipeline processing 1M+ transactions/day with 99.7% accuracy and <50ms latency.",
-        techStack: ["PyTorch", "Kafka", "Kubernetes", "Redis"],
-        imageUrl: null,
-        repoUrl: null,
-        liveUrl: null,
-      },
-      {
-        title: "Computer Vision Quality Control",
-        description: "Developed an automated visual inspection system for manufacturing, reducing defect rates by 60%.",
-        techStack: ["TensorFlow", "OpenCV", "Edge Deployment", "NVIDIA Jetson"],
-        imageUrl: null,
-        repoUrl: null,
-        liveUrl: null,
-      },
-    ],
-    files: [
-      { type: "pdf", name: "AI Strategy Whitepaper.pdf", url: "#" },
-      { type: "video", name: "Conference Talk - MLOps Best Practices", url: "#" },
-    ],
-  },
-  reviews: [
-    {
-      clientName: "John M.",
-      clientCompany: "TechCorp Inc.",
-      rating: 5,
-      date: "Nov 2024",
-      comment: "Sarah is exceptional. She delivered a complex ML pipeline ahead of schedule and provided thorough documentation. Her communication was clear throughout the project. Highly recommend!",
-      projectType: "AI/ML Development",
-    },
-    {
-      clientName: "Emily R.",
-      clientCompany: "FinanceAI",
-      rating: 5,
-      date: "Oct 2024",
-      comment: "Outstanding work on our fraud detection system. Sarah's expertise in ML and her ability to translate business requirements into technical solutions is remarkable.",
-      projectType: "Data Science",
-    },
-    {
-      clientName: "Michael K.",
-      clientCompany: "HealthTech Solutions",
-      rating: 5,
-      date: "Sep 2024",
-      comment: "Sarah helped us implement an AI-powered diagnostic tool. Her knowledge of both ML and healthcare regulations was invaluable. Will definitely work with her again.",
-      projectType: "AI Consulting",
-    },
-  ],
-  stats: {
-    onTimeDelivery: 100,
-    onBudget: 98,
-    repeatClients: 85,
-  },
-};
+interface TalentProfile {
+  id: string;
+  name: string;
+  email?: string;
+  image?: string;
+  title: string;
+  tagline?: string;
+  location?: string;
+  timezone?: string;
+  hourlyRate?: number;
+  rating?: number;
+  totalReviews?: number;
+  jobsCompleted?: number;
+  successRate?: number;
+  responseTime?: string;
+  memberSince: string;
+  verified?: boolean;
+  available?: boolean;
+  availableFrom?: string;
+  weeklyAvailability?: string;
+  bio?: string;
+  skills?: Array<{ name: string; level?: string; years?: number }>;
+  languages?: Array<{ name: string; level?: string }>;
+  experience?: Array<{
+    title: string;
+    company: string;
+    location?: string;
+    period: string;
+    description?: string;
+  }>;
+  education?: Array<{
+    degree: string;
+    school: string;
+    year?: string;
+  }>;
+  certifications?: Array<{
+    name: string;
+    issuer: string;
+    year?: string;
+  }>;
+  portfolio?: {
+    headline?: string;
+    summary?: string;
+    links?: Array<{ type: string; url: string; title?: string }>;
+    projects?: Array<{
+      title: string;
+      description?: string;
+      techStack?: string[];
+      imageUrl?: string;
+      repoUrl?: string;
+      liveUrl?: string;
+    }>;
+    files?: Array<{ fileType?: string; fileName: string; fileUrl: string }>;
+  };
+  stats?: {
+    onTimeDelivery?: number;
+    onBudget?: number;
+    repeatClients?: number;
+  };
+}
 
 export default function TalentProfilePage() {
+  const params = useParams();
+  const talentId = params.id as string;
+  
+  const [talent, setTalent] = useState<TalentProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "portfolio" | "reviews">("overview");
   const [showAIInterviewModal, setShowAIInterviewModal] = useState(false);
-  const talent = talentData;
+
+  useEffect(() => {
+    async function fetchTalent() {
+      try {
+        const response = await fetch(`/api/talent/public/${talentId}`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          setError(data.error || "Failed to load profile");
+          return;
+        }
+        
+        // Transform API response to match our interface
+        const profile = data.profile;
+        setTalent({
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          image: profile.image,
+          title: profile.title || "AI Professional",
+          tagline: profile.talentProfile?.tagline,
+          location: profile.talentProfile?.location,
+          timezone: profile.talentProfile?.timezone,
+          hourlyRate: profile.hourlyRate,
+          rating: profile.talentProfile?.rating,
+          totalReviews: profile.talentProfile?.totalReviews || 0,
+          jobsCompleted: profile.talentProfile?.jobsCompleted || 0,
+          successRate: profile.talentProfile?.successRate,
+          responseTime: profile.talentProfile?.responseTime,
+          memberSince: new Date(profile.memberSince).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+          verified: profile.verified,
+          available: profile.talentProfile?.available,
+          availableFrom: profile.talentProfile?.availableFrom,
+          weeklyAvailability: profile.talentProfile?.weeklyAvailability,
+          bio: profile.bio,
+          skills: profile.skills || [],
+          languages: profile.talentProfile?.languages || [],
+          experience: profile.talentProfile?.experience || [],
+          education: profile.talentProfile?.education || [],
+          certifications: profile.talentProfile?.certifications || [],
+          portfolio: profile.portfolio || null,
+          stats: profile.talentProfile?.stats,
+        });
+      } catch (err) {
+        console.error("Error fetching talent:", err);
+        setError("Failed to load profile");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (talentId) {
+      fetchTalent();
+    }
+  }, [talentId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error || !talent) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="max-w-4xl mx-auto px-4 py-20 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-red-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Profile Not Found</h1>
+          <p className="text-muted-foreground mb-6">{error || "This talent profile doesn't exist or has been removed."}</p>
+          <Button onClick={() => window.history.back()} variant="outline" className="rounded-xl">
+            Go Back
+          </Button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const getLinkIcon = (type: string) => {
     switch (type) {
@@ -330,6 +325,7 @@ export default function TalentProfilePage() {
                   </div>
 
                   {/* Skills */}
+                  {talent.skills && talent.skills.length > 0 && (
                   <div className="bg-card rounded-2xl border border-border p-6">
                     <h2 className="text-lg font-semibold text-foreground mb-4">Skills & Expertise</h2>
                     <div className="flex flex-wrap gap-2">
@@ -339,17 +335,20 @@ export default function TalentProfilePage() {
                           className="group relative px-4 py-2 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/30 transition-colors cursor-default"
                         >
                           <span className="text-sm font-medium text-foreground">{skill.name}</span>
-                          <span className="ml-2 text-xs text-muted-foreground">• {skill.level}</span>
-                          {/* Tooltip on hover */}
+                            {skill.level && <span className="ml-2 text-xs text-muted-foreground">• {skill.level}</span>}
+                            {skill.years && (
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                             {skill.years} years experience
                           </div>
+                            )}
                         </div>
                       ))}
                     </div>
                   </div>
+                  )}
 
                   {/* Experience */}
+                  {talent.experience && talent.experience.length > 0 && (
                   <div className="bg-card rounded-2xl border border-border p-6">
                     <h2 className="text-lg font-semibold text-foreground mb-6">Work Experience</h2>
                     <div className="space-y-6">
@@ -362,17 +361,20 @@ export default function TalentProfilePage() {
                             <h3 className="font-semibold text-foreground">{exp.title}</h3>
                             <p className="text-sm text-primary font-medium">{exp.company}</p>
                             <p className="text-xs text-muted-foreground mt-0.5">
-                              {exp.location} • {exp.period}
+                                {exp.location && `${exp.location} • `}{exp.period}
                             </p>
-                            <p className="text-sm text-muted-foreground mt-2">{exp.description}</p>
+                              {exp.description && <p className="text-sm text-muted-foreground mt-2">{exp.description}</p>}
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
+                  )}
 
                   {/* Education & Certifications */}
+                  {((talent.education && talent.education.length > 0) || (talent.certifications && talent.certifications.length > 0)) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {talent.education && talent.education.length > 0 && (
                     <div className="bg-card rounded-2xl border border-border p-6">
                       <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                         <GraduationCap className="w-5 h-5 text-primary" />
@@ -382,12 +384,14 @@ export default function TalentProfilePage() {
                         {talent.education.map((edu, i) => (
                           <div key={i}>
                             <p className="font-medium text-foreground">{edu.degree}</p>
-                            <p className="text-sm text-muted-foreground">{edu.school} • {edu.year}</p>
+                                <p className="text-sm text-muted-foreground">{edu.school}{edu.year && ` • ${edu.year}`}</p>
                           </div>
                         ))}
                       </div>
                     </div>
+                      )}
 
+                      {talent.certifications && talent.certifications.length > 0 && (
                     <div className="bg-card rounded-2xl border border-border p-6">
                       <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                         <Award className="w-5 h-5 text-primary" />
@@ -397,14 +401,17 @@ export default function TalentProfilePage() {
                         {talent.certifications.map((cert, i) => (
                           <div key={i}>
                             <p className="font-medium text-foreground">{cert.name}</p>
-                            <p className="text-sm text-muted-foreground">{cert.issuer} • {cert.year}</p>
+                                <p className="text-sm text-muted-foreground">{cert.issuer}{cert.year && ` • ${cert.year}`}</p>
                           </div>
                         ))}
                       </div>
                     </div>
+                      )}
                   </div>
+                  )}
 
                   {/* Languages */}
+                  {talent.languages && talent.languages.length > 0 && (
                   <div className="bg-card rounded-2xl border border-border p-6">
                     <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                       <Globe className="w-5 h-5 text-primary" />
@@ -414,17 +421,19 @@ export default function TalentProfilePage() {
                       {talent.languages.map((lang, i) => (
                         <div key={i} className="px-4 py-2 rounded-xl bg-muted">
                           <span className="font-medium text-foreground">{lang.name}</span>
-                          <span className="ml-2 text-sm text-muted-foreground">({lang.level})</span>
+                            {lang.level && <span className="ml-2 text-sm text-muted-foreground">({lang.level})</span>}
                         </div>
                       ))}
                     </div>
                   </div>
+                  )}
                 </>
               )}
 
               {activeTab === "portfolio" && (
                 <>
                   {/* Projects */}
+                  {talent.portfolio?.projects && talent.portfolio.projects.length > 0 && (
                   <div className="space-y-6">
                     <h2 className="text-lg font-semibold text-foreground">Projects</h2>
                     {talent.portfolio.projects.map((project, i) => (
@@ -436,7 +445,8 @@ export default function TalentProfilePage() {
                         className="bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-lg transition-all"
                       >
                         <h3 className="text-lg font-semibold text-foreground mb-2">{project.title}</h3>
-                        <p className="text-muted-foreground mb-4">{project.description}</p>
+                          {project.description && <p className="text-muted-foreground mb-4">{project.description}</p>}
+                          {project.techStack && project.techStack.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
                           {project.techStack.map((tech, j) => (
                             <span key={j} className="px-2.5 py-1 rounded-lg bg-muted text-xs font-medium text-muted-foreground">
@@ -444,6 +454,7 @@ export default function TalentProfilePage() {
                             </span>
                           ))}
                         </div>
+                          )}
                         <div className="flex gap-3">
                           {project.repoUrl && (
                             <a
@@ -471,32 +482,33 @@ export default function TalentProfilePage() {
                       </motion.div>
                     ))}
                   </div>
+                  )}
 
                   {/* Files & Media */}
-                  {talent.portfolio.files.length > 0 && (
+                  {talent.portfolio?.files && talent.portfolio.files.length > 0 && (
                     <div className="space-y-4">
                       <h2 className="text-lg font-semibold text-foreground">Files & Media</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {talent.portfolio.files.map((file, i) => (
                           <a
                             key={i}
-                            href={file.url}
+                            href={file.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border hover:border-primary/30 transition-colors"
                           >
                             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                              {file.type === "pdf" ? (
+                              {file.fileType === "pdf" ? (
                                 <FileText className="w-5 h-5 text-primary" />
-                              ) : file.type === "video" ? (
+                              ) : file.fileType === "video" ? (
                                 <Play className="w-5 h-5 text-primary" />
                               ) : (
                                 <ImageIcon className="w-5 h-5 text-primary" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
-                              <p className="text-xs text-muted-foreground capitalize">{file.type}</p>
+                              <p className="text-sm font-medium text-foreground truncate">{file.fileName}</p>
+                              <p className="text-xs text-muted-foreground capitalize">{file.fileType}</p>
                             </div>
                             <ExternalLink className="w-4 h-4 text-muted-foreground" />
                           </a>
@@ -506,6 +518,7 @@ export default function TalentProfilePage() {
                   )}
 
                   {/* Social Links */}
+                  {talent.portfolio?.links && talent.portfolio.links.length > 0 && (
                   <div className="space-y-4">
                     <h2 className="text-lg font-semibold text-foreground">Links & Profiles</h2>
                     <div className="flex flex-wrap gap-3">
@@ -520,12 +533,20 @@ export default function TalentProfilePage() {
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors"
                           >
                             <Icon className="w-4 h-4 text-primary" />
-                            <span className="text-sm font-medium text-foreground">{link.title}</span>
+                              <span className="text-sm font-medium text-foreground">{link.title || link.type}</span>
                           </a>
                         );
                       })}
                     </div>
                   </div>
+                  )}
+
+                  {/* Empty Portfolio State */}
+                  {(!talent.portfolio?.projects?.length && !talent.portfolio?.files?.length && !talent.portfolio?.links?.length) && (
+                    <div className="bg-card rounded-2xl border border-border p-12 text-center">
+                      <p className="text-muted-foreground">No portfolio items yet.</p>
+                    </div>
+                  )}
                 </>
               )}
 
@@ -537,64 +558,33 @@ export default function TalentProfilePage() {
                       <div className="text-center">
                         <div className="flex items-center gap-2 justify-center mb-1">
                           <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-                          <span className="text-3xl font-bold text-foreground">{talent.rating}</span>
+                          <span className="text-3xl font-bold text-foreground">{talent.rating || "N/A"}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{talent.totalReviews} reviews</p>
+                        <p className="text-sm text-muted-foreground">{talent.totalReviews || 0} reviews</p>
                       </div>
+                      {talent.stats && (
                       <div className="flex-1 grid grid-cols-3 gap-4">
                         <div className="text-center p-3 rounded-xl bg-muted">
-                          <div className="text-xl font-bold text-foreground">{talent.stats.onTimeDelivery}%</div>
+                            <div className="text-xl font-bold text-foreground">{talent.stats.onTimeDelivery || 0}%</div>
                           <p className="text-xs text-muted-foreground">On-time delivery</p>
                         </div>
                         <div className="text-center p-3 rounded-xl bg-muted">
-                          <div className="text-xl font-bold text-foreground">{talent.stats.onBudget}%</div>
+                            <div className="text-xl font-bold text-foreground">{talent.stats.onBudget || 0}%</div>
                           <p className="text-xs text-muted-foreground">On budget</p>
                         </div>
                         <div className="text-center p-3 rounded-xl bg-muted">
-                          <div className="text-xl font-bold text-foreground">{talent.stats.repeatClients}%</div>
+                            <div className="text-xl font-bold text-foreground">{talent.stats.repeatClients || 0}%</div>
                           <p className="text-xs text-muted-foreground">Repeat clients</p>
                         </div>
                       </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Reviews List */}
-                  {talent.reviews.map((review, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="bg-card rounded-2xl border border-border p-6"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                            {review.clientName.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="font-medium text-foreground">{review.clientName}</p>
-                            <p className="text-xs text-muted-foreground">{review.clientCompany}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="flex items-center gap-1">
-                            {[...Array(5)].map((_, j) => (
-                              <Star
-                                key={j}
-                                className={`w-4 h-4 ${j < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted"}`}
-                              />
-                            ))}
-                          </div>
-                          <p className="text-xs text-muted-foreground mt-1">{review.date}</p>
-                        </div>
+                  {/* No Reviews Message */}
+                  <div className="bg-card rounded-2xl border border-border p-12 text-center">
+                    <p className="text-muted-foreground">No reviews yet.</p>
                       </div>
-                      <p className="text-muted-foreground mb-3">{review.comment}</p>
-                      <span className="inline-block px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground">
-                        {review.projectType}
-                      </span>
-                    </motion.div>
-                  ))}
                 </div>
               )}
             </div>
@@ -690,6 +680,7 @@ export default function TalentProfilePage() {
                       <p className="text-xs text-muted-foreground">{talent.successRate}% job success</p>
                     </div>
                   </div>
+                  {talent.stats?.repeatClients && (
                   <div className="flex items-start gap-3">
                     <Users className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <div>
@@ -697,6 +688,7 @@ export default function TalentProfilePage() {
                       <p className="text-xs text-muted-foreground">{talent.stats.repeatClients}% repeat clients</p>
                     </div>
                   </div>
+                  )}
                 </div>
               </div>
             </div>

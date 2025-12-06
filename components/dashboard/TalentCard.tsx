@@ -94,11 +94,11 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
       {/* Actions */}
       <div className="mt-5 pt-4 border-t border-border/50 flex gap-2">
         <Link href={`/talent/${talent.id}`} className="flex-1">
-          <Button variant="outline" size="sm" className="w-full rounded-xl text-sm bg-white/50 border-white/30 hover:bg-white/80">
+          <Button size="sm" className="w-full rounded-xl text-sm bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90">
             View Profile
           </Button>
         </Link>
-        <Button size="sm" className="flex-1 rounded-xl text-sm bg-gradient-to-r from-blue-500 to-primary shadow-md shadow-primary/20">
+        <Button variant="outline" size="sm" className="flex-1 rounded-xl text-sm border-2 border-primary text-primary bg-transparent hover:bg-primary/10">
           Contact
         </Button>
       </div>
