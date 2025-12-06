@@ -5,18 +5,26 @@ import AIInterview from "@/models/AIInterview";
 import JobDescription from "@/models/JobDescription";
 import User from "@/models/User";
 
+// Question type for interview
+type InterviewQuestion = {
+  question: string;
+  category: "technical" | "behavioral" | "situational" | "general";
+  expectedTopics: string[];
+  order: number;
+};
+
 // Sample interview questions generator based on JD
-function generateInterviewQuestions(jd: { title: string; skills?: string[]; experienceLevel?: string }) {
-  const questions = [
+function generateInterviewQuestions(jd: { title: string; skills?: string[]; experienceLevel?: string }): InterviewQuestion[] {
+  const questions: InterviewQuestion[] = [
     {
       question: `Tell me about yourself and why you're interested in the ${jd.title} position.`,
-      category: "general" as const,
+      category: "general",
       expectedTopics: ["background", "motivation", "career goals"],
       order: 1,
     },
     {
       question: "Walk me through a challenging project you've worked on recently. What was your role and how did you handle obstacles?",
-      category: "behavioral" as const,
+      category: "behavioral",
       expectedTopics: ["problem-solving", "leadership", "technical skills"],
       order: 2,
     },
@@ -25,10 +33,10 @@ function generateInterviewQuestions(jd: { title: string; skills?: string[]; expe
   // Add skill-based questions
   if (jd.skills && jd.skills.length > 0) {
     const skillsToAsk = jd.skills.slice(0, 3);
-    skillsToAsk.forEach((skill, index) => {
+    skillsToAsk.forEach((skill) => {
       questions.push({
         question: `Can you describe your experience with ${skill}? Share a specific example of how you've applied it.`,
-        category: "technical" as const,
+        category: "technical",
         expectedTopics: [skill, "practical application", "depth of knowledge"],
         order: questions.length + 1,
       });
@@ -38,14 +46,14 @@ function generateInterviewQuestions(jd: { title: string; skills?: string[]; expe
   // Add situational questions
   questions.push({
     question: "Describe a situation where you had to work with a difficult team member. How did you handle it?",
-    category: "situational" as const,
+    category: "situational",
     expectedTopics: ["conflict resolution", "communication", "teamwork"],
     order: questions.length + 1,
   });
 
   questions.push({
     question: "Where do you see yourself in 5 years, and how does this role fit into your career plans?",
-    category: "general" as const,
+    category: "general",
     expectedTopics: ["career growth", "ambition", "company fit"],
     order: questions.length + 1,
   });
