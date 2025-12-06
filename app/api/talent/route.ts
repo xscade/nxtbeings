@@ -65,7 +65,10 @@ export async function GET(request: NextRequest) {
         name: t.name,
         email: t.email,
         image: t.image,
-        ...t.talentProfile,
+        title: t.talentProfile?.title,
+        bio: t.talentProfile?.bio,
+        experience: t.talentProfile?.availability,
+        skills: (t.talentProfile?.skills || []).map((s: { name: string }) => s.name),
         createdAt: t.createdAt,
       })),
       pagination: {
