@@ -240,7 +240,7 @@ export default function DashboardTalentProfilePage() {
       <div className="bg-primary rounded-2xl overflow-hidden">
         <div className="relative p-6 md:p-8">
           {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,white_1px,transparent_1px)] bg-[size:40px_40px]" />
           </div>
 
@@ -326,27 +326,27 @@ export default function DashboardTalentProfilePage() {
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mt-6 border-t border-white/20 pt-4">
-            {[
-              { id: "overview", label: "Overview" },
-              { id: "portfolio", label: "Portfolio" },
-              { id: "reviews", label: `Reviews (${talent.totalReviews || 0})` },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  activeTab === tab.id
-                    ? "bg-white/20 text-white"
-                    : "text-white/60 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {/* Tabs */}
+            <div className="flex gap-1 mt-6 border-t border-white/20 pt-4 w-full">
+              {[
+                { id: "overview", label: "Overview" },
+                { id: "portfolio", label: "Portfolio" },
+                { id: "reviews", label: `Reviews (${talent.totalReviews || 0})` },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                    activeTab === tab.id
+                      ? "bg-white/20 text-white"
+                      : "text-white/60 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
