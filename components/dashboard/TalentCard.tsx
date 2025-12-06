@@ -93,7 +93,7 @@ export function TalentCard({ talent, isShortlisted, onShortlist }: TalentCardPro
 
       {/* Actions */}
       <div className="mt-5 pt-4 border-t border-border/50 flex gap-2">
-        <Link href={`/talent/${talent.id}`} className="flex-1">
+        <Link href={`/dashboard/talent/${talent.id}`} className="flex-1">
           <Button size="sm" className="w-full rounded-xl text-sm bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90">
             View Profile
           </Button>
