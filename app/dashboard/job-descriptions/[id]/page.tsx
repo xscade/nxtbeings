@@ -393,7 +393,7 @@ export default function JDEditorPage() {
 
       <div className="flex gap-6">
         {/* Main Editor */}
-        <div className={`flex-1 transition-all ${showSettings ? "pr-80" : ""}`}>
+        <div className={`flex-1 min-w-0 transition-all ${showSettings ? "pr-80" : ""}`}>
           {/* Title */}
           <input
             ref={titleRef}
@@ -405,7 +405,7 @@ export default function JDEditorPage() {
           />
 
           {/* Content Blocks */}
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-hidden">
             {jd.content.length === 0 && (
               <div className="relative group">
                 <button
@@ -574,8 +574,8 @@ export default function JDEditorPage() {
                     onChange={(e) => updateBlock(index, { content: e.target.value })}
                     placeholder="Write something..."
                     rows={1}
-                    className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed"
-                    style={{ minHeight: "1.5rem" }}
+                    className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed break-words whitespace-pre-wrap"
+                    style={{ minHeight: "1.5rem", wordBreak: "break-word" }}
                     onInput={(e) => {
                       const target = e.target as HTMLTextAreaElement;
                       target.style.height = "auto";
@@ -585,18 +585,17 @@ export default function JDEditorPage() {
                 )}
 
                 {(block.type === "bulletList" || block.type === "numberedList") && (
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     {(block.items || [""]).map((item, itemIndex) => (
                       <div key={itemIndex} className="flex items-start gap-2 group/item">
-                        <span className="mt-1.5 text-muted-foreground">
+                        <span className="mt-0.5 text-muted-foreground flex-shrink-0">
                           {block.type === "bulletList" ? "•" : `${itemIndex + 1}.`}
                         </span>
-                        <input
-                          type="text"
+                        <textarea
                           value={item}
                           onChange={(e) => updateListItem(index, itemIndex, e.target.value)}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") {
+                            if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
                               addListItem(index);
                             }
@@ -606,11 +605,18 @@ export default function JDEditorPage() {
                             }
                           }}
                           placeholder="List item"
-                          className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50"
+                          rows={1}
+                          className="flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 resize-none leading-relaxed"
+                          style={{ minHeight: "1.5rem" }}
+                          onInput={(e) => {
+                            const target = e.target as HTMLTextAreaElement;
+                            target.style.height = "auto";
+                            target.style.height = target.scrollHeight + "px";
+                          }}
                         />
                         <button
                           onClick={() => removeListItem(index, itemIndex)}
-                          className="p-1 rounded opacity-0 group-hover/item:opacity-100 hover:bg-red-50 text-red-500 transition-all"
+                          className="p-1 rounded opacity-0 group-hover/item:opacity-100 hover:bg-red-50 text-red-500 transition-all flex-shrink-0"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>
