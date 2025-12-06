@@ -41,7 +41,7 @@ import {
 // Sample talent data (in production, this would come from API based on ID)
 const talentData = {
   id: "1",
-  name: "Sarah Chen",
+  name: "Sarah Chenn",
   title: "Senior AI Engineer & Machine Learning Specialist",
   tagline: "Building intelligent systems that solve real-world problems",
   location: "San Francisco, USA",
