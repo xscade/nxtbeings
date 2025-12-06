@@ -391,50 +391,55 @@ export default function JobDescriptionsPage() {
               </div>
 
               {/* Menu Button */}
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className={`absolute top-2 right-2 transition-opacity ${
+                activeMenu === jd.id ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              }`}>
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     setActiveMenu(activeMenu === jd.id ? null : jd.id);
                   }}
-                  className="p-1.5 rounded-lg bg-white/80 backdrop-blur-sm hover:bg-white transition-colors shadow-sm"
+                  className="p-1.5 rounded-lg bg-white/90 backdrop-blur-sm hover:bg-white transition-colors shadow-sm"
                 >
                   <MoreVertical className="w-4 h-4 text-muted-foreground" />
                 </button>
-
-                <AnimatePresence>
-                  {activeMenu === jd.id && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="absolute right-0 mt-1 w-40 bg-card rounded-xl border border-border shadow-lg py-1 z-20"
-                    >
-                      <Link
-                        href={`/dashboard/job-descriptions/${jd.id}`}
-                        className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/5 transition-colors"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => duplicateJD(jd)}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/5 transition-colors"
-                      >
-                        <Copy className="w-4 h-4" />
-                        Duplicate
-                      </button>
-                      <button
-                        onClick={() => deleteJD(jd.id)}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
+
+              {/* Dropdown Menu - positioned outside the hover container */}
+              <AnimatePresence>
+                {activeMenu === jd.id && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="absolute top-10 right-2 w-40 bg-card rounded-xl border border-border shadow-lg py-1 z-30"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      href={`/dashboard/job-descriptions/${jd.id}`}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/5 transition-colors"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => duplicateJD(jd)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/5 transition-colors"
+                    >
+                      <Copy className="w-4 h-4" />
+                      Duplicate
+                    </button>
+                    <button
+                      onClick={() => deleteJD(jd.id)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>
