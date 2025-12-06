@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed:talents": "npx tsx scripts/seed-talents.ts"
+    "seed:talents": "npx tsx scripts/seed-talents.ts",
+    "seed:portfolios": "npx tsx scripts/seed-portfolios.ts",
+    "seed:all": "npm run seed:talents && npm run seed:portfolios"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",

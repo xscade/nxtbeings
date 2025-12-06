@@ -29,19 +29,55 @@ export async function GET(
     // Get portfolio data
     const portfolio = await Portfolio.findOne({ userId: id });
 
-    // Build public profile response
+    // Build public profile response with all talentProfile fields
     const profile = {
       id: user._id.toString(),
       name: user.name,
-      email: user.email, // For contact purposes
+      email: user.email,
       image: user.image,
       title: user.talentProfile?.title || "AI Professional",
-      skills: user.talentProfile?.skills || [],
-      experience: user.talentProfile?.experience || "",
       bio: user.talentProfile?.bio || "",
       hourlyRate: user.talentProfile?.hourlyRate || null,
-      availability: user.talentProfile?.availability || "Available",
       verified: user.talentProfile?.verified || false,
+      memberSince: user.createdAt,
+      
+      // Include the full talentProfile for nested access
+      talentProfile: {
+        title: user.talentProfile?.title,
+        tagline: user.talentProfile?.tagline,
+        bio: user.talentProfile?.bio,
+        location: user.talentProfile?.location,
+        timezone: user.talentProfile?.timezone,
+        available: user.talentProfile?.available,
+        availableFrom: user.talentProfile?.availableFrom,
+        weeklyAvailability: user.talentProfile?.weeklyAvailability,
+        hourlyRate: user.talentProfile?.hourlyRate,
+        rating: user.talentProfile?.rating,
+        totalReviews: user.talentProfile?.totalReviews || 0,
+        jobsCompleted: user.talentProfile?.jobsCompleted || 0,
+        successRate: user.talentProfile?.successRate,
+        responseTime: user.talentProfile?.responseTime,
+        verified: user.talentProfile?.verified,
+        
+        // Skills, languages, experience, education, certifications
+        skills: user.talentProfile?.skills || [],
+        languages: user.talentProfile?.languages || [],
+        experience: user.talentProfile?.experience || [],
+        education: user.talentProfile?.education || [],
+        certifications: user.talentProfile?.certifications || [],
+        
+        // Stats
+        stats: user.talentProfile?.stats || {
+          onTimeDelivery: 0,
+          onBudget: 0,
+          repeatClients: 0,
+        },
+      },
+      
+      // Skills at top level for backward compatibility
+      skills: user.talentProfile?.skills || [],
+      
+      // Portfolio data
       portfolio: portfolio ? {
         headline: portfolio.headline,
         summary: portfolio.summary,
@@ -49,7 +85,6 @@ export async function GET(
         projects: portfolio.projects || [],
         files: portfolio.files || [],
       } : null,
-      memberSince: user.createdAt,
     };
 
     return NextResponse.json({ profile });
@@ -61,4 +96,3 @@ export async function GET(
     );
   }
 }
-
