@@ -454,18 +454,18 @@ export default function JDEditorPage() {
                 className="group relative"
               >
                 {/* Block Controls */}
-                <div className="absolute -left-10 top-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute -left-8 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => setShowAddBlock(index)}
-                    className="p-1 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+                    className="p-1 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => setShowBlockMenu(showBlockMenu === index ? null : index)}
-                    className="p-1 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors cursor-grab"
+                    className="p-1 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors cursor-grab"
                   >
-                    <GripVertical className="w-4 h-4" />
+                    <GripVertical className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
@@ -476,8 +476,60 @@ export default function JDEditorPage() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="absolute -left-10 top-8 w-40 bg-card rounded-xl border border-border shadow-lg py-1 z-20"
+                      className="absolute -left-8 top-full mt-1 w-44 bg-card rounded-xl border border-border shadow-lg py-1 z-20"
                     >
+                      {/* Heading level options */}
+                      {block.type === "heading" && (
+                        <>
+                          <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">Heading Size</div>
+                          <div className="flex gap-1 px-2 pb-2">
+                            {[1, 2, 3].map((level) => (
+                              <button
+                                key={level}
+                                onClick={() => {
+                                  updateBlock(index, { level });
+                                  setShowBlockMenu(null);
+                                }}
+                                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                                  block.level === level
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-muted hover:bg-primary/10 text-foreground"
+                                }`}
+                              >
+                                H{level}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="border-t border-border my-1" />
+                        </>
+                      )}
+                      
+                      {/* Callout type options */}
+                      {block.type === "callout" && (
+                        <>
+                          <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">Callout Type</div>
+                          <div className="flex gap-1 px-2 pb-2">
+                            {(["info", "warning", "success"] as const).map((type) => (
+                              <button
+                                key={type}
+                                onClick={() => {
+                                  updateBlock(index, { calloutType: type });
+                                  setShowBlockMenu(null);
+                                }}
+                                className={`flex-1 py-1.5 text-xs font-medium rounded-lg capitalize transition-colors ${
+                                  block.calloutType === type
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-muted hover:bg-primary/10 text-foreground"
+                                }`}
+                              >
+                                {type}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="border-t border-border my-1" />
+                        </>
+                      )}
+                      
                       <button
                         onClick={() => moveBlock(index, "up")}
                         disabled={index === 0}
@@ -505,26 +557,15 @@ export default function JDEditorPage() {
 
                 {/* Block Content */}
                 {block.type === "heading" && (
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={block.level || 1}
-                      onChange={(e) => updateBlock(index, { level: parseInt(e.target.value) })}
-                      className="text-xs text-muted-foreground bg-transparent border-none outline-none opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <option value={1}>H1</option>
-                      <option value={2}>H2</option>
-                      <option value={3}>H3</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={block.content}
-                      onChange={(e) => updateBlock(index, { content: e.target.value })}
-                      placeholder="Heading"
-                      className={`flex-1 bg-transparent border-none outline-none font-bold text-foreground placeholder:text-muted-foreground/50 ${
-                        block.level === 1 ? "text-2xl" : block.level === 2 ? "text-xl" : "text-lg"
-                      }`}
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={block.content}
+                    onChange={(e) => updateBlock(index, { content: e.target.value })}
+                    placeholder="Heading"
+                    className={`w-full bg-transparent border-none outline-none font-bold text-foreground placeholder:text-muted-foreground/50 ${
+                      block.level === 1 ? "text-2xl" : block.level === 2 ? "text-xl" : "text-lg"
+                    }`}
+                  />
                 )}
 
                 {block.type === "paragraph" && (
@@ -591,20 +632,9 @@ export default function JDEditorPage() {
                 {block.type === "callout" && (
                   <div className={`p-4 rounded-xl border ${getCalloutStyles(block.calloutType || "info")}`}>
                     <div className="flex items-start gap-3">
-                      <div className="flex items-center gap-2">
-                        {React.createElement(getCalloutIcon(block.calloutType || "info"), {
-                          className: "w-5 h-5",
-                        })}
-                        <select
-                          value={block.calloutType || "info"}
-                          onChange={(e) => updateBlock(index, { calloutType: e.target.value as "info" | "warning" | "success" })}
-                          className="text-xs bg-transparent border-none outline-none opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                        >
-                          <option value="info">Info</option>
-                          <option value="warning">Warning</option>
-                          <option value="success">Success</option>
-                        </select>
-                      </div>
+                      {React.createElement(getCalloutIcon(block.calloutType || "info"), {
+                        className: "w-5 h-5 flex-shrink-0 mt-0.5",
+                      })}
                       <textarea
                         value={block.content}
                         onChange={(e) => updateBlock(index, { content: e.target.value })}
