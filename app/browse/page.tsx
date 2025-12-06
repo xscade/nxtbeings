@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/landing/Navbar";
@@ -13,7 +13,6 @@ import {
   Star,
   Briefcase,
   ChevronDown,
-  ChevronRight,
   Filter,
   SlidersHorizontal,
   CheckCircle2,
@@ -30,7 +29,8 @@ import {
   Scale,
   GraduationCap,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Loader2
 } from "lucide-react";
 
 // Categories with subcategories
@@ -91,87 +91,21 @@ const categories = [
   },
 ];
 
-// Sample talent data (in real app, this would come from API)
-const sampleTalent = [
-  {
-    id: 1,
-    name: "Sarah Chen",
-    title: "Senior AI Engineer",
-    location: "San Francisco, USA",
-    hourlyRate: 150,
-    rating: 4.9,
-    jobs: 47,
-    skills: ["Machine Learning", "Python", "TensorFlow", "LLMs"],
-    bio: "Ex-Google AI engineer with 8+ years experience building production ML systems. Specialized in LLMs, RAG systems, and AI product development.",
-    verified: true,
-    image: null,
-  },
-  {
-    id: 2,
-    name: "Marcus Johnson",
-    title: "Full Stack Developer",
-    location: "London, UK",
-    hourlyRate: 120,
-    rating: 4.8,
-    jobs: 63,
-    skills: ["React", "Node.js", "TypeScript", "AWS"],
-    bio: "Building scalable web applications for 6+ years. Expert in React ecosystems and cloud architecture. Delivered 50+ successful projects.",
-    verified: true,
-    image: null,
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    title: "Product Designer",
-    location: "New York, USA",
-    hourlyRate: 130,
-    rating: 5.0,
-    jobs: 38,
-    skills: ["UI/UX", "Figma", "Design Systems", "User Research"],
-    bio: "Award-winning product designer from IDEO. I create intuitive, beautiful experiences that users love and businesses trust.",
-    verified: true,
-    image: null,
-  },
-  {
-    id: 4,
-    name: "David Kim",
-    title: "Data Scientist",
-    location: "Seoul, South Korea",
-    hourlyRate: 110,
-    rating: 4.9,
-    jobs: 52,
-    skills: ["Python", "SQL", "Machine Learning", "Analytics"],
-    bio: "Data scientist helping companies make data-driven decisions. Expertise in predictive modeling, A/B testing, and business intelligence.",
-    verified: true,
-    image: null,
-  },
-  {
-    id: 5,
-    name: "Lisa Thompson",
-    title: "Growth Marketing Lead",
-    location: "Austin, USA",
-    hourlyRate: 95,
-    rating: 4.7,
-    jobs: 29,
-    skills: ["SEO", "Content Strategy", "Paid Ads", "Analytics"],
-    bio: "Helped 20+ startups achieve 10x growth. Specialized in B2B SaaS marketing, content-led growth, and performance marketing.",
-    verified: true,
-    image: null,
-  },
-  {
-    id: 6,
-    name: "James Wright",
-    title: "DevOps Engineer",
-    location: "Toronto, Canada",
-    hourlyRate: 140,
-    rating: 4.8,
-    jobs: 41,
-    skills: ["Kubernetes", "Docker", "CI/CD", "Terraform"],
-    bio: "Infrastructure architect with experience at scale. Built and managed systems serving millions of users at Fortune 500 companies.",
-    verified: true,
-    image: null,
-  },
-];
+// Talent interface for type safety
+interface Talent {
+  id: string;
+  name: string;
+  title: string;
+  location: string;
+  hourlyRate: number;
+  rating: number;
+  completedJobs: number;
+  skills: string[];
+  bio: string;
+  verified: boolean;
+  image: string | null;
+  availability: string;
+}
 
 // Trust badges
 const trustBadges = [
@@ -194,6 +128,104 @@ export default function BrowseTalentPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedCategory, setExpandedCategory] = useState<string | null>("ai");
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  const [talents, setTalents] = useState<Talent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [sortBy, setSortBy] = useState("relevant");
+  const [minRate, setMinRate] = useState("");
+  const [maxRate, setMaxRate] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+
+  const fetchTalents = useCallback(async (pageNum: number = 1, append: boolean = false) => {
+    try {
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      const params = new URLSearchParams();
+      params.set("page", pageNum.toString());
+      params.set("limit", "12");
+      params.set("sort", sortBy);
+      
+      if (searchQuery) params.set("search", searchQuery);
+      if (selectedSubcategory) params.set("category", selectedSubcategory);
+      if (minRate) params.set("minRate", minRate);
+      if (maxRate) params.set("maxRate", maxRate);
+      if (locationFilter) params.set("location", locationFilter);
+
+      const response = await fetch(`/api/talent/browse?${params.toString()}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        if (append) {
+          setTalents(prev => [...prev, ...data.talents]);
+        } else {
+          setTalents(data.talents);
+        }
+        setTotalPages(data.pagination.totalPages);
+        setTotalCount(data.pagination.total);
+        setPage(pageNum);
+      }
+    } catch (error) {
+      console.error("Error fetching talents:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [searchQuery, selectedSubcategory, sortBy, minRate, maxRate, locationFilter]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchTalents(1, false);
+  }, [fetchTalents]);
+
+  // Handle search
+  const handleSearch = () => {
+    setPage(1);
+    fetchTalents(1, false);
+  };
+
+  // Handle subcategory selection
+  const handleSubcategorySelect = (sub: string | null) => {
+    setSelectedSubcategory(sub);
+    setPage(1);
+  };
+
+  // Handle load more
+  const handleLoadMore = () => {
+    if (page < totalPages) {
+      fetchTalents(page + 1, true);
+    }
+  };
+
+  // Handle apply filters
+  const handleApplyFilters = () => {
+    setPage(1);
+    fetchTalents(1, false);
+  };
+
+  // Handle sort change
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value);
+    setPage(1);
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setSelectedSubcategory(null);
+    setExpandedCategory("ai");
+    setMinRate("");
+    setMaxRate("");
+    setLocationFilter("");
+    setSortBy("relevant");
+    setPage(1);
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -287,10 +319,14 @@ export default function BrowseTalentPage() {
                   placeholder="Search for skills, roles, or keywords..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="border-0 shadow-none focus-visible:ring-0 text-base placeholder:text-muted-foreground/60"
                 />
               </div>
-              <Button className="rounded-xl px-6 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+              <Button 
+                onClick={handleSearch}
+                className="rounded-xl px-6 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+              >
                 <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
@@ -354,7 +390,12 @@ export default function BrowseTalentPage() {
                     <Filter className="w-4 h-4" />
                     Categories
                   </h3>
-                  <button className="text-sm text-primary hover:underline">Clear all</button>
+                  <button 
+                    onClick={clearAllFilters}
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Clear all
+                  </button>
                 </div>
 
                 <div className="space-y-1">
@@ -387,7 +428,7 @@ export default function BrowseTalentPage() {
                           {category.subcategories.map((sub) => (
                             <button
                               key={sub}
-                              onClick={() => setSelectedSubcategory(selectedSubcategory === sub ? null : sub)}
+                              onClick={() => handleSubcategorySelect(selectedSubcategory === sub ? null : sub)}
                               className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${
                                 selectedSubcategory === sub
                                   ? "bg-primary text-primary-foreground"
@@ -413,16 +454,35 @@ export default function BrowseTalentPage() {
                     <div>
                       <label className="text-sm text-muted-foreground mb-2 block">Hourly Rate</label>
                       <div className="flex items-center gap-2">
-                        <Input placeholder="$0" className="rounded-xl h-9" />
+                        <Input 
+                          placeholder="$0" 
+                          className="rounded-xl h-9"
+                          value={minRate}
+                          onChange={(e) => setMinRate(e.target.value)}
+                        />
                         <span className="text-muted-foreground">-</span>
-                        <Input placeholder="$500" className="rounded-xl h-9" />
+                        <Input 
+                          placeholder="$500" 
+                          className="rounded-xl h-9"
+                          value={maxRate}
+                          onChange={(e) => setMaxRate(e.target.value)}
+                        />
                       </div>
                     </div>
                     <div>
                       <label className="text-sm text-muted-foreground mb-2 block">Location</label>
-                      <Input placeholder="Any location" className="rounded-xl h-9" />
+                      <Input 
+                        placeholder="Any location" 
+                        className="rounded-xl h-9"
+                        value={locationFilter}
+                        onChange={(e) => setLocationFilter(e.target.value)}
+                      />
                     </div>
-                    <Button variant="outline" className="w-full rounded-xl">
+                    <Button 
+                      variant="outline" 
+                      className="w-full rounded-xl"
+                      onClick={handleApplyFilters}
+                    >
                       Apply Filters
                     </Button>
                   </div>
@@ -434,107 +494,171 @@ export default function BrowseTalentPage() {
             <div className="lg:col-span-3">
               <div className="flex items-center justify-between mb-6">
                 <p className="text-muted-foreground">
-                  Showing <span className="font-medium text-foreground">{sampleTalent.length}</span> professionals
+                  Showing <span className="font-medium text-foreground">{talents.length}</span> 
+                  {totalCount > talents.length && <span> of {totalCount}</span>} professionals
                   {selectedSubcategory && (
                     <span> in <span className="text-primary">{selectedSubcategory}</span></span>
                   )}
                 </p>
-                <select className="text-sm border border-border rounded-xl px-3 py-2 bg-background">
-                  <option>Most Relevant</option>
-                  <option>Highest Rated</option>
-                  <option>Most Jobs</option>
-                  <option>Lowest Rate</option>
-                  <option>Highest Rate</option>
+                <select 
+                  className="text-sm border border-border rounded-xl px-3 py-2 bg-background"
+                  value={sortBy}
+                  onChange={handleSortChange}
+                >
+                  <option value="relevant">Most Relevant</option>
+                  <option value="highest-rated">Highest Rated</option>
+                  <option value="most-jobs">Most Jobs</option>
+                  <option value="lowest-rate">Lowest Rate</option>
+                  <option value="highest-rate">Highest Rate</option>
                 </select>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {sampleTalent.map((talent, i) => (
-                  <motion.div
-                    key={talent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className="group bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
-                  >
-                    {/* Header */}
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="relative">
-                        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-lg">
-                          {talent.name.split(" ").map(n => n[0]).join("")}
+              {/* Loading State */}
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
+                  <p className="text-muted-foreground">Finding the best talent...</p>
+                </div>
+              ) : talents.length === 0 ? (
+                <div className="text-center py-20">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">No professionals found</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Try adjusting your search or filters to find more talent.
+                  </p>
+                  <Button onClick={clearAllFilters} variant="outline" className="rounded-xl">
+                    Clear All Filters
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {talents.map((talent, i) => (
+                    <motion.div
+                      key={talent.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      className="group bg-card rounded-2xl border border-border p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
+                    >
+                      {/* Header */}
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="relative">
+                          {talent.image ? (
+                            <img 
+                              src={talent.image} 
+                              alt={talent.name}
+                              className="w-14 h-14 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-lg">
+                              {talent.name.split(" ").map(n => n[0]).join("")}
+                            </div>
+                          )}
+                          {talent.verified && (
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                              <CheckCircle2 className="w-3 h-3 text-white" />
+                            </div>
+                          )}
                         </div>
-                        {talent.verified && (
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                            <CheckCircle2 className="w-3 h-3 text-white" />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                            {talent.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">{talent.title}</p>
+                          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {talent.location}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="flex items-center gap-4 mb-4 py-3 border-y border-border">
+                        {talent.hourlyRate > 0 && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-lg font-bold text-foreground">${talent.hourlyRate}</span>
+                            <span className="text-xs text-muted-foreground">/hr</span>
                           </div>
                         )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {talent.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">{talent.title}</p>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {talent.location}
-                          </span>
+                        {talent.rating > 0 && (
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            <span className="font-medium text-foreground">{talent.rating}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Briefcase className="w-4 h-4" />
+                          <span className="text-sm">{talent.completedJobs} jobs</span>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Stats */}
-                    <div className="flex items-center gap-4 mb-4 py-3 border-y border-border">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg font-bold text-foreground">${talent.hourlyRate}</span>
-                        <span className="text-xs text-muted-foreground">/hr</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        <span className="font-medium text-foreground">{talent.rating}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <Briefcase className="w-4 h-4" />
-                        <span className="text-sm">{talent.jobs} jobs</span>
-                      </div>
-                    </div>
+                      {/* Bio */}
+                      {talent.bio && (
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {talent.bio}
+                        </p>
+                      )}
 
-                    {/* Bio */}
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                      {talent.bio}
-                    </p>
+                      {/* Skills */}
+                      {talent.skills && talent.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {talent.skills.slice(0, 4).map((skill) => (
+                            <span
+                              key={skill}
+                              className="px-2.5 py-1 rounded-lg bg-muted text-xs font-medium text-muted-foreground"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                          {talent.skills.length > 4 && (
+                            <span className="px-2.5 py-1 rounded-lg bg-muted text-xs font-medium text-primary">
+                              +{talent.skills.length - 4}
+                            </span>
+                          )}
+                        </div>
+                      )}
 
-                    {/* Skills */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {talent.skills.slice(0, 4).map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2.5 py-1 rounded-lg bg-muted text-xs font-medium text-muted-foreground"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* CTA */}
-                    <Link href={`/talent/${talent.id}`}>
-                      <Button className="w-full rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
-                        View Profile
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+                      {/* CTA */}
+                      <Link href={`/talent/${talent.id}`}>
+                        <Button className="w-full rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
+                          View Profile
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
 
               {/* Load More */}
-              <div className="mt-12 text-center">
-                <Button variant="outline" size="lg" className="rounded-full px-8">
-                  Load More Talent
-                  <ChevronDown className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
+              {!loading && talents.length > 0 && page < totalPages && (
+                <div className="mt-12 text-center">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="rounded-full px-8"
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        Load More Talent
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
