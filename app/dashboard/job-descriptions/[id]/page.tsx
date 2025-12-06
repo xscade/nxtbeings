@@ -27,6 +27,9 @@ import {
   DollarSign,
   Tags,
   ChevronDown,
+  Sparkles,
+  X,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -80,6 +83,10 @@ export default function JDEditorPage() {
   const [showAddBlock, setShowAddBlock] = useState<number | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [newSkill, setNewSkill] = useState("");
+  const [showAIPrompt, setShowAIPrompt] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   
   const titleRef = useRef<HTMLInputElement>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -259,6 +266,48 @@ export default function JDEditorPage() {
     }
   };
 
+  const generateWithAI = async () => {
+    if (!aiPrompt.trim() || !jd) return;
+    
+    setAiGenerating(true);
+    setAiError(null);
+    
+    try {
+      const response = await fetch("/api/job-descriptions/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          jobTitle: jd.title || undefined,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate content");
+      }
+      
+      if (data.content && Array.isArray(data.content)) {
+        // Append or replace content based on whether there's existing content
+        if (jd.content.length === 0) {
+          updateJD({ content: data.content });
+        } else {
+          // Append to existing content
+          updateJD({ content: [...jd.content, ...data.content] });
+        }
+        
+        setShowAIPrompt(false);
+        setAiPrompt("");
+      }
+    } catch (error) {
+      console.error("AI generation error:", error);
+      setAiError(error instanceof Error ? error.message : "Failed to generate content");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -319,6 +368,14 @@ export default function JDEditorPage() {
           >
             <Settings className="w-5 h-5" />
           </button>
+          <Button
+            onClick={() => setShowAIPrompt(true)}
+            variant="outline"
+            className="rounded-xl border-primary/20 hover:bg-primary/10 hover:text-primary"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI Generate
+          </Button>
           <Button
             onClick={saveJobDescription}
             disabled={saving || !hasChanges}
@@ -788,6 +845,132 @@ export default function JDEditorPage() {
           }}
         />
       )}
+
+      {/* AI Prompt Modal */}
+      <AnimatePresence>
+        {showAIPrompt && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !aiGenerating && setShowAIPrompt(false)}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            />
+            
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg"
+            >
+              <div className="bg-card rounded-2xl border border-border shadow-xl overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-border">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">AI Content Generator</h3>
+                      <p className="text-xs text-muted-foreground">Describe what you want to generate</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => !aiGenerating && setShowAIPrompt(false)}
+                    disabled={aiGenerating}
+                    className="p-2 rounded-xl hover:bg-primary/10 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                {/* Content */}
+                <div className="p-4 space-y-4">
+                  {/* Prompt Input */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">Your prompt</label>
+                    <textarea
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      placeholder="e.g., Create a job description for a Senior React Developer with 5+ years experience, focusing on fintech applications..."
+                      rows={4}
+                      disabled={aiGenerating}
+                      className="w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground text-sm placeholder:text-muted-foreground resize-none focus:border-primary focus:ring-1 focus:ring-primary outline-none disabled:opacity-50"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && e.metaKey) {
+                          generateWithAI();
+                        }
+                      }}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Tip: Press ⌘+Enter to generate
+                    </p>
+                  </div>
+
+                  {/* Quick Prompts */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-muted-foreground">Quick prompts</label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Full job description with requirements",
+                        "Focus on technical skills",
+                        "Add benefits and perks section",
+                        "Include company culture section",
+                      ].map((prompt) => (
+                        <button
+                          key={prompt}
+                          onClick={() => setAiPrompt(prompt)}
+                          disabled={aiGenerating}
+                          className="px-3 py-1.5 rounded-lg bg-primary/5 hover:bg-primary/10 text-primary text-xs font-medium transition-colors disabled:opacity-50"
+                        >
+                          {prompt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Error Message */}
+                  {aiError && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                      {aiError}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Footer */}
+                <div className="flex items-center justify-between p-4 border-t border-border bg-muted/30">
+                  <p className="text-xs text-muted-foreground">
+                    {jd?.content.length === 0 
+                      ? "Content will be added to the document" 
+                      : "Content will be appended to existing blocks"}
+                  </p>
+                  <Button
+                    onClick={generateWithAI}
+                    disabled={aiGenerating || !aiPrompt.trim()}
+                    className="rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                  >
+                    {aiGenerating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Generate
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
