@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
         hourlyRate: t.talentProfile?.hourlyRate || 0,
         rating: t.talentProfile?.rating || 0,
         completedJobs: t.talentProfile?.jobsCompleted || 0,
-        skills: t.talentProfile?.skills || [],
+        skills: (t.talentProfile?.skills || []).map((s: { name: string }) => s.name),
         verified: t.talentProfile?.verified || false,
         availability: t.talentProfile?.availability || "available",
       })),
