@@ -358,6 +358,34 @@ export default function JDEditorPage() {
                   <Plus className="w-5 h-5" />
                   Add content block
                 </button>
+                
+                {/* Add Block Dropdown for empty state */}
+                <AnimatePresence>
+                  {showAddBlock === -1 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-card rounded-xl border border-border shadow-lg py-2 z-20"
+                    >
+                      {blockTypes.map((blockType) => (
+                        <button
+                          key={blockType.type}
+                          onClick={() => addBlock(blockType.type, -1)}
+                          className="w-full flex items-center gap-3 px-4 py-2 hover:bg-primary/5 transition-colors"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <blockType.icon className="w-4 h-4 text-primary" />
+                          </div>
+                          <div className="text-left">
+                            <p className="text-sm font-medium text-foreground">{blockType.label}</p>
+                            <p className="text-xs text-muted-foreground">{blockType.description}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
 
